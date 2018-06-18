@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title> Bootstrap the CDN Way </title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 bg-warning"> 
+                    <p>this is an outer div</p>
+                    <div class="row">
+                        <div class="col-lg-12 bg-primary">
+                            <p>this is the inner div</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-success" onclick="$(this).hide();">Click Me</button>
+        <!-- Javascript -->
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+    </body>
+
+
+</html>
