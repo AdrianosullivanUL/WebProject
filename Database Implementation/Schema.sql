@@ -1,12 +1,5 @@
--- -------------------------------------------------------
--- Create Schema
--- -------------------------------------------------------
- 
--- Create a new Schema for the database
-CREATE SCHEMA if not exists `first_chance_saloon` ;
-
 -- Select the schema
-USE first_chance_saloon;
+USE group05;
 
 -- -------------------------------------------------------
 -- Create Tables
@@ -21,10 +14,10 @@ create table user_profile(
     sur_name varchar(100) NOT NULL,
     email varchar(100) NOT NULL,
     date_of_birth date,
-    sex bool,
+    sex boolean,
     gender_preference varchar(20) NOT NULL,
     Black_listed_date date,
-    black_listed_user bool,
+    black_listed_user boolean,
     black_listed_reason varchar(100) NOT NULL,
     black_listed_date date,
     user_status varchar(50) NOT NULL,
@@ -45,8 +38,7 @@ create table match_table(
     reciprocating_response_date datetime,
     reciprocating_response varchar(2000) NOT NULL,
     reciprocating_interest_level int,
-    PRIMARY KEY(initiating_user_id),
-    PRIMARY KEY(reciprocating_user_id)
+    PRIMARY KEY(initiating_user_id, reciprocating_user_id)
     );
     
     
@@ -61,10 +53,10 @@ create table user_communication(
     com_status varchar(20) NOT NULL,
     to_user_id int,
     replying_to_communication_id int,
-    black_listed bool,
+    black_listed boolean,
     black_listed_date datetime,
 	black_listed_word_id int,
-    PRIMARY KEY(from_user_id)
+    PRIMARY KEY(communication_id)
     );
    
 -- Create the Preferred Age range table
@@ -107,18 +99,15 @@ drop table if exists user_interests;
 create table user_interests(
 	user_id	int NOT NULL AUTO_INCREMENT,
 	interest_id int,
-    PRIMARY KEY(user_id),
-    PRIMARY KEY(interest_id)
+    PRIMARY KEY(user_id, interest_id)
     );
     
 -- Create the Interests Table
 drop table if exists interests;
-create table user_interests(
+create table interests(
 	interest_id	int NOT NULL AUTO_INCREMENT,
     type	Varchar(100) NOT NULL,
 	description	Varchar(200) NOT NULL,
     PRIMARY KEY(interest_id)
     );
-    
-    
-
+     
