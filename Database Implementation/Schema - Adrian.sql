@@ -110,4 +110,38 @@ create table interests(
 	description	Varchar(200) NOT NULL,
     PRIMARY KEY(interest_id)
     );
+    
+    -- Create the Gender Table
+drop table if exists gender;
+create table gender(
+	id	int NOT NULL AUTO_INCREMENT,
+   	gender_name	Varchar(200) NOT NULL,
+    PRIMARY KEY(id)
+    );
+ 
+ -- Create the city Table
+drop table if exists city;
+    create table city(
+	id	int NOT NULL AUTO_INCREMENT,
+   	city Varchar(200) NOT NULL,
+    county Varchar(200) NOT NULL,
+    PRIMARY KEY(id)
+    );
+
+-- Create the Relationship Type
+drop table if exists relationship_type;
+    create table relationship_type(
+	id	int NOT NULL AUTO_INCREMENT,
+   	relationship_type Varchar(200) NOT NULL,
+    PRIMARY KEY(id)
+    );
+
+-- Create the Status Type
+drop table if exists status;
+    create table status(
+	id	int NOT NULL AUTO_INCREMENT,
+   	status Varchar(200) NOT NULL,
+    PRIMARY KEY(id)
+    );
+
      
