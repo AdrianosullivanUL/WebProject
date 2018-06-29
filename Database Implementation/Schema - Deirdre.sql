@@ -24,7 +24,7 @@ create table user_profile(
     PRIMARY KEY (id)
     );
 
--- Create teh Match table
+-- Create the Match table
 drop table if exists match_table;
 create table match_table(
     initiating_user_id int NOT NULL AUTO_INCREMENT,
