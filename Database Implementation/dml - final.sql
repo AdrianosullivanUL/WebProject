@@ -1,8 +1,10 @@
 use group05;
+set SQL_SAFE_UPDATES = 0;
 start transaction;
 begin;
 -- Gender
 -- ------------------------------------------------
+delete from gender;
 insert into gender (gender_name) values  ('Male');
 insert into gender (gender_name) values  ('Female');
 insert into gender (gender_name) values  ('Trans Gender (M/F');
@@ -12,6 +14,7 @@ insert into gender (gender_name) values  ('Trans Gender (F/M');
 
 -- City
 -- ------------------------------------------------
+delete from city;
 insert into city (City,County,geo_x , geo_y) values  ('Belfast','Antrim',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Armagh','Armagh',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Carlow','Carlow',0,0);
@@ -51,6 +54,7 @@ insert into city (City,County,geo_x , geo_y) values  ('Arklow','Wicklow',0,0);
 
 -- relationship_type
 -- ------------------------------------------------
+delete from relationship_type;
 insert into relationship_type (relationship_type) values  ('love');
 insert into relationship_type (relationship_type) values  ('casual');
 insert into relationship_type (relationship_type) values  ('friendship');
@@ -60,6 +64,7 @@ insert into relationship_type (relationship_type) values  ('relationship');
 
 -- interests
 -- ------------------------------------------------
+delete from interests;
 insert into interests (description) values  ('Music');
 insert into interests (description) values  ('Sport');
 insert into interests (description) values  ('Travelling');
@@ -74,6 +79,7 @@ insert into interests (description) values  ('Gym');
 
 -- black_list_words
 -- ------------------------------------------------
+delete from black_list_word;
 insert into black_list_word (word) values  ('a55');
 insert into black_list_word (word) values  ('a55hole');
 insert into black_list_word (word) values  ('aeolus');
@@ -179,7 +185,6 @@ insert into black_list_word (word) values  ('butt');
 insert into black_list_word (word) values  ('butt fuck');
 insert into black_list_word (word) values  ('buttfuck');
 insert into black_list_word (word) values  ('buttfucker');
-insert into black_list_word (word) values  ('buttfucker');
 insert into black_list_word (word) values  ('buttplug');
 insert into black_list_word (word) values  ('c.0.c.k');
 insert into black_list_word (word) values  ('c.o.c.k.');
@@ -194,7 +199,6 @@ insert into black_list_word (word) values  ('cawk');
 insert into black_list_word (word) values  ('cervix');
 insert into black_list_word (word) values  ('chinc');
 insert into black_list_word (word) values  ('chincs');
-insert into black_list_word (word) values  ('chink');
 insert into black_list_word (word) values  ('chink');
 insert into black_list_word (word) values  ('chode');
 insert into black_list_word (word) values  ('chodes');
@@ -238,7 +242,6 @@ insert into black_list_word (word) values  ('cumstain');
 insert into black_list_word (word) values  ('cunilingus');
 insert into black_list_word (word) values  ('cunnilingus');
 insert into black_list_word (word) values  ('cunny');
-insert into black_list_word (word) values  ('cunt');
 insert into black_list_word (word) values  ('cunt');
 insert into black_list_word (word) values  ('c-u-n-t');
 insert into black_list_word (word) values  ('cuntface');
@@ -345,7 +348,6 @@ insert into black_list_word (word) values  ('fubar');
 insert into black_list_word (word) values  ('fuck');
 insert into black_list_word (word) values  ('f-u-c-k');
 insert into black_list_word (word) values  ('fuckass');
-insert into black_list_word (word) values  ('fucked');
 insert into black_list_word (word) values  ('fucked');
 insert into black_list_word (word) values  ('fucker');
 insert into black_list_word (word) values  ('fuckface');
@@ -522,7 +524,6 @@ insert into black_list_word (word) values  ('niggah');
 insert into black_list_word (word) values  ('niggas');
 insert into black_list_word (word) values  ('niggaz');
 insert into black_list_word (word) values  ('nigger');
-insert into black_list_word (word) values  ('nigger');
 insert into black_list_word (word) values  ('niggers');
 insert into black_list_word (word) values  ('niggle');
 insert into black_list_word (word) values  ('niglet');
@@ -601,7 +602,6 @@ insert into black_list_word (word) values  ('pussy');
 insert into black_list_word (word) values  ('pussypounder');
 insert into black_list_word (word) values  ('puto');
 insert into black_list_word (word) values  ('queaf');
-insert into black_list_word (word) values  ('queef');
 insert into black_list_word (word) values  ('queef');
 insert into black_list_word (word) values  ('queer');
 insert into black_list_word (word) values  ('queero');
@@ -802,72 +802,77 @@ insert into black_list_word (word) values  ('zoophile');
 
 -- status
 -- ------------------------------------------------
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Registered',1,0,0);
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Active',1,0,0);
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Suspended',1,0,0);
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Barred',1,0,0);
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Matched',0,1,0);
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Like',0,1,0);
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Maybe',0,1,0);
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Goodbye',0,1,0);
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Message Sent',0,0,1);
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Message Received',0,0,1);
-insert into status (status_description,is_user_status,is_match_table_status ) values  ('Responded',0,0,1);
+delete from status;
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Registered',1,0,0);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Active',1,0,0);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Suspended',1,0,0);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Barred',1,0,0);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status) values  ('Matched',0,1,0);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status) values  ('Like',0,1,0);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Maybe',0,1,0);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Goodbye',0,1,0);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Message Sent',0,0,1);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Message Received',0,0,1);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Responded',0,0,1);
+insert into status (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Blacklisted',0,0,1);
 
 -- user_profile
 -- ------------------------------------------------
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Adrian','O''Sullivan','16230124@ul.ie','1990-01-01','1','1','0','','1',1);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','John','Doe','john.doe@gmail.com','2000-01-01','1','1','0','','2',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Gavin','Hunter','Gavin.Hunter@gmail.com','1990-01-01','1','1','0','','3',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Carol','James','Carol.James@gmail.com','1990-01-01','2','2','0','','4',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Yvonne','Edmunds','Yvonne.Edmunds@gmail.com','1990-01-01','2','2','0','','5',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Max','Glover','Max.Glover@gmail.com','1990-01-01','1','1','0','','6',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Dan','King','Dan.King@gmail.com','1990-01-01','1','1','0','','7',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Carolyn','Thomson','Carolyn.Thomson@gmail.com','1990-01-01','2','2','0','','8',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Angela','Martin','Angela.Martin@gmail.com','1990-01-01','2','2','0','','9',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Melanie','Slater','Melanie.Slater@gmail.com','1990-01-01','2','2','0','','10',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Jennifer','Langdon','Jennifer.Langdon@gmail.com','1990-01-01','2','2','0','','11',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Paul','Alsop','Paul.Alsop@gmail.com','1990-01-01','1','1','0','','12',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Owen','Wilkins','Owen.Wilkins@gmail.com','1990-01-01','1','1','0','','13',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Ella','Taylor','Ella.Taylor@gmail.com','1990-01-01','2','2','0','','14',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Amanda','Young','Amanda.Young@gmail.com','1990-01-01','2','2','0','','15',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Abigail','Mackay','Abigail.Mackay@gmail.com','1990-01-01','2','2','0','','16',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Lily','Avery','Lily.Avery@gmail.com','1990-01-01','2','2','0','','17',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Madeleine','Wilson','Madeleine.Wilson@gmail.com','1990-01-01','2','2','0','','18',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Carl','Stewart','Carl.Stewart@gmail.com','1990-01-01','1','1','0','','19',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Faith','James','Faith.James@gmail.com','1990-01-01','2','2','0','','20',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Lisa','Sharp','Lisa.Sharp@gmail.com','1990-01-01','2','2','0','','21',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Lucas','Short','Lucas.Short@gmail.com','1990-01-01','1','1','0','','22',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Una','Nash','Una.Nash@gmail.com','1990-01-01','2','2','0','','23',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Jacob','Newman','Jacob.Newman@gmail.com','1990-01-01','1','1','0','','24',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Dorothy','Mathis','Dorothy.Mathis@gmail.com','1990-01-01','2','2','0','','25',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Irene','Hemmings','Irene.Hemmings@gmail.com','1990-01-01','2','2','0','','26',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Caroline','Davies','Caroline.Davies@gmail.com','1990-01-01','2','2','0','','27',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Phil','Sharp','Phil.Sharp@gmail.com','1990-01-01','1','1','0','','28',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Ella','Hughes','Ella.Hughes@gmail.com','1990-01-01','2','2','0','','29',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Samantha','Ferguson','Samantha.Ferguson@gmail.com','1990-01-01','2','2','0','','30',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Warren','Rutherford','Warren.Rutherford@gmail.com','1990-01-01','1','1','0','','31',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Elizabeth','Lewis','Elizabeth.Lewis@gmail.com','1990-01-01','2','2','0','','32',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Jane','Langdon','Jane.Langdon@gmail.com','1990-01-01','2','2','0','','33',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Ava','Pullman','Ava.Pullman@gmail.com','1990-01-01','2','2','0','','34',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Vanessa','Campbell','Vanessa.Campbell@gmail.com','1990-01-01','2','2','0','','35',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Diane','Henderson','Diane.Henderson@gmail.com','1990-01-01','2','2','0','','36',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Madeleine','Duncan','Madeleine.Duncan@gmail.com','1990-01-01','2','2','0','','37',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Diana','Mackay','Diana.Mackay@gmail.com','1990-01-01','2','2','0','','38',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Una','Rutherford','Una.Rutherford@gmail.com','1990-01-01','2','2','0','','39',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Jessica','Walsh','Jessica.Walsh@gmail.com','1990-01-01','2','2','0','','40',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Ella','Terry','Ella.Terry@gmail.com','1990-01-01','2','2','0','','41',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Robert','Wilkins','Robert.Wilkins@gmail.com','1990-01-01','1','1','0','','42',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Bella','Walsh','Bella.Walsh@gmail.com','1990-01-01','2','2','0','','43',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Penelope','Mackay','Penelope.Mackay@gmail.com','1990-01-01','2','2','0','','44',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Amanda','Hart','Amanda.Hart@gmail.com','1990-01-01','2','2','0','','45',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Virginia','Randall','Virginia.Randall@gmail.com','1990-01-01','2','2','0','','46',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Gabrielle','Edmunds','Gabrielle.Edmunds@gmail.com','1990-01-01','2','2','0','','47',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Jessica','Anderson','Jessica.Anderson@gmail.com','1990-01-01','2','2','0','','48',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Jan','Buckland','Jan.Buckland@gmail.com','1990-01-01','1','1','0','','49',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Stewart','James','Stewart.James@gmail.com','1990-01-01','1','1','0','','50',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Emma','White','Emma.White@gmail.com','1990-01-01','2','2','0','','51',0);
-insert into user_profile (password_hash,first_name,sur_name,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  ('','Lily','Paige','Lily.Paige@gmail.com','1990-01-01','2','2','0','','52',0);
+delete from user_profile;
+
+
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE01#',256),'Adrian','O''Sullivan','16230124@ul.ie','1990-01-01','1','1','0','','1',1);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE02#',256),'John','Doe','john.doe@gmail.com','2000-01-01','1','1','0','','2',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE03#',256),'Gavin','Hunter','Gavin.Hunter@gmail.com','1990-01-01','1','1','0','','3',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE04#',256),'Carol','James','Carol.James@gmail.com','1990-01-01','2','2','0','','4',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE05#',256),'Yvonne','Edmunds','Yvonne.Edmunds@gmail.com','1990-01-01','2','2','0','','5',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE06#',256),'Max','Glover','Max.Glover@gmail.com','1990-01-01','1','1','0','','6',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE07#',256),'Dan','King','Dan.King@gmail.com','1990-01-01','1','1','0','','7',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE08#',256),'Carolyn','Thomson','Carolyn.Thomson@gmail.com','1990-01-01','2','2','0','','8',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE09#',256),'Angela','Martin','Angela.Martin@gmail.com','1990-01-01','2','2','0','','9',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE10#',256),'Melanie','Slater','Melanie.Slater@gmail.com','1990-01-01','2','2','0','','10',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE11#',256),'Jennifer','Langdon','Jennifer.Langdon@gmail.com','1990-01-01','2','2','0','','11',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE12#',256),'Paul','Alsop','Paul.Alsop@gmail.com','1990-01-01','1','1','0','','12',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE13#',256),'Owen','Wilkins','Owen.Wilkins@gmail.com','1990-01-01','1','1','0','','13',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE14#',256),'Ella','Taylor','Ella.Taylor@gmail.com','1990-01-01','2','2','0','','14',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE15#',256),'Amanda','Young','Amanda.Young@gmail.com','1990-01-01','2','2','0','','15',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE16#',256),'Abigail','Mackay','Abigail.Mackay@gmail.com','1990-01-01','2','2','0','','16',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE17#',256),'Lily','Avery','Lily.Avery@gmail.com','1990-01-01','2','2','0','','17',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE18#',256),'Madeleine','Wilson','Madeleine.Wilson@gmail.com','1990-01-01','2','2','0','','18',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE19#',256),'Carl','Stewart','Carl.Stewart@gmail.com','1990-01-01','1','1','0','','19',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE20#',256),'Faith','James','Faith.James@gmail.com','1990-01-01','2','2','0','','20',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE21#',256),'Lisa','Sharp','Lisa.Sharp@gmail.com','1990-01-01','2','2','0','','21',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE22#',256),'Lucas','Short','Lucas.Short@gmail.com','1990-01-01','1','1','0','','22',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE23#',256),'Una','Nash','Una.Nash@gmail.com','1990-01-01','2','2','0','','23',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE24#',256),'Jacob','Newman','Jacob.Newman@gmail.com','1990-01-01','1','1','0','','24',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE25#',256),'Dorothy','Mathis','Dorothy.Mathis@gmail.com','1990-01-01','2','2','0','','25',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE26#',256),'Irene','Hemmings','Irene.Hemmings@gmail.com','1990-01-01','2','2','0','','26',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE27#',256),'Caroline','Davies','Caroline.Davies@gmail.com','1990-01-01','2','2','0','','27',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE28#',256),'Phil','Sharp','Phil.Sharp@gmail.com','1990-01-01','1','1','0','','28',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE29#',256),'Ella','Hughes','Ella.Hughes@gmail.com','1990-01-01','2','2','0','','29',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE30#',256),'Samantha','Ferguson','Samantha.Ferguson@gmail.com','1990-01-01','2','2','0','','30',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE31#',256),'Warren','Rutherford','Warren.Rutherford@gmail.com','1990-01-01','1','1','0','','31',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE32#',256),'Elizabeth','Lewis','Elizabeth.Lewis@gmail.com','1990-01-01','2','2','0','','32',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE33#',256),'Jane','Langdon','Jane.Langdon@gmail.com','1990-01-01','2','2','0','','33',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE34#',256),'Ava','Pullman','Ava.Pullman@gmail.com','1990-01-01','2','2','0','','34',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE35#',256),'Vanessa','Campbell','Vanessa.Campbell@gmail.com','1990-01-01','2','2','0','','35',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE36#',256),'Diane','Henderson','Diane.Henderson@gmail.com','1990-01-01','2','2','0','','36',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE37#',256),'Madeleine','Duncan','Madeleine.Duncan@gmail.com','1990-01-01','2','2','0','','37',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE38#',256),'Diana','Mackay','Diana.Mackay@gmail.com','1990-01-01','2','2','0','','38',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE39#',256),'Una','Rutherford','Una.Rutherford@gmail.com','1990-01-01','2','2','0','','39',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE40#',256),'Jessica','Walsh','Jessica.Walsh@gmail.com','1990-01-01','2','2','0','','40',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE41#',256),'Ella','Terry','Ella.Terry@gmail.com','1990-01-01','2','2','0','','41',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE42#',256),'Robert','Wilkins','Robert.Wilkins@gmail.com','1990-01-01','1','1','0','','42',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE43#',256),'Bella','Walsh','Bella.Walsh@gmail.com','1990-01-01','2','2','0','','43',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE44#',256),'Penelope','Mackay','Penelope.Mackay@gmail.com','1990-01-01','2','2','0','','44',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE45#',256),'Amanda','Hart','Amanda.Hart@gmail.com','1990-01-01','2','2','0','','45',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE46#',256),'Virginia','Randall','Virginia.Randall@gmail.com','1990-01-01','2','2','0','','46',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE47#',256),'Gabrielle','Edmunds','Gabrielle.Edmunds@gmail.com','1990-01-01','2','2','0','','47',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE48#',256),'Jessica','Anderson','Jessica.Anderson@gmail.com','1990-01-01','2','2','0','','48',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE49#',256),'Jan','Buckland','Jan.Buckland@gmail.com','1990-01-01','1','1','0','','49',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE50#',256),'Stewart','James','Stewart.James@gmail.com','1990-01-01','1','1','0','','50',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE51#',256),'Emma','White','Emma.White@gmail.com','1990-01-01','2','2','0','','51',0);
+insert into user_profile (password_hash,first_name,surname,email,date_of_birth,gender_id,gender_preference_id,black_listed_user,black_listed_reason,user_status_id,is_administrator) values  (sha2('welcomE52#',256),'Lily','Paige','Lily.Paige@gmail.com','1990-01-01','2','2','0','','52',0);
 
 
 -- user_communication
