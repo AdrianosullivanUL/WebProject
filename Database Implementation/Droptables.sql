@@ -1,0 +1,10 @@
+drop table black_list_word;
+drop table city;
+drop table gender;
+drop table interests;
+drop table match_table;
+drop table relationship_type;
+drop table status;
+drop table user_communication;
+drop table user_interests;
+drop table user_profile;
