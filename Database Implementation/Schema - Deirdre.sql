@@ -15,8 +15,8 @@ type Varchar(100) NOT NULL,
 PRIMARY KEY(user_interests_id)
 );
 
--- Need to delete table with foreign key constraint first
-drop table if exists relationship_type;
+
+
 -- Create the Interests Table
 drop table if exists interests;
 create table interests(
@@ -26,7 +26,8 @@ description Varchar(200) NOT NULL,
 PRIMARY KEY(interests_id)
 );    
 
-
+-- Need to delete table with foreign key constraint first
+drop table if exists relationship_type;
 -- Create the Relationship_Type Table 
 drop table if exists relationship_type; 
 create table relationship_type( 

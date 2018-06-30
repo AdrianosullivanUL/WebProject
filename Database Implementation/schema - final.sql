@@ -1,14 +1,45 @@
+use group05;
 -- Gender
 -- ------------------------------------------------
-
+drop table if exists gender;
+CREATE TABLE `gender` (
+  `id` int(11) NOT NULL,
+  `Gender_name` varchar(200) NOT NULL
+);
 -- City
 -- ------------------------------------------------
+drop table if exists city;
+create table city(
+user_id  int NOT NULL AUTO_INCREMENT,
+city Varchar(100) NOT NULL,
+county Varchar(100) NOT NULL,
+geo_x float,
+geo_y float,
+Primary Key(user_id)
+);
 
 -- relationship_type
 -- ------------------------------------------------
+drop table if exists relationship_type;
+-- Create the Interests Table
+drop table if exists interests;
+create table interests(
+interests_id int NOT NULL AUTO_INCREMENT,
+type Varchar(100) NOT NULL,
+description Varchar(200) NOT NULL,
+PRIMARY KEY(interests_id)
+);    
+
 
 -- interests
 -- ------------------------------------------------
+drop table if exists interests;
+create table interests(
+interests_id int NOT NULL AUTO_INCREMENT,
+type Varchar(100) NOT NULL,
+description Varchar(200) NOT NULL,
+PRIMARY KEY(interests_id)
+);  
 
 -- black_list_words
 -- ------------------------------------------------
@@ -36,6 +67,30 @@ create table status_master(
 
 -- user_profile
 -- ------------------------------------------------
+drop table if exists user_profile;
+CREATE TABLE `user_profile` (
+  `id` int(11) NOT NULL,
+  `password_hash` varchar(200) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `surname` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `gender_id` int(11) DEFAULT NULL,
+  `gender_preference_id` int(11) DEFAULT NULL,
+  `From_age` int(11) DEFAULT NULL,
+  `to_age` int(11) DEFAULT NULL,
+  `city_id` int(11) DEFAULT NULL,
+  `county` varchar(100) DEFAULT NULL,
+  `Travel_distance` int(11) DEFAULT NULL,
+  `relationship_type_id` int(11) DEFAULT NULL,
+  `picture` blob,
+  `my_bio` varchar(1000) DEFAULT NULL,
+  `black_listed_user` tinyint(1) DEFAULT NULL,
+  `black_listed_reason` varchar(100) NOT NULL,
+  `black_listed_date` date DEFAULT NULL,
+  `user_status` varchar(50) NOT NULL,
+  `is_administrator` boolean NOT NULL
+);
 
 -- user_communication
 -- ------------------------------------------------
@@ -78,8 +133,14 @@ create table match_table(
     FOREIGN KEY (match_user_id_1) REFERENCES user_profile(id),
     FOREIGN KEY (match_status_id) REFERENCES status_master(id),
     FOREIGN KEY (communication_id) REFERENCES user_communication(id),
-    UNIQUE KEY(initiating_user_id, reciprocating_user_id)
+    UNIQUE KEY(match_user_id_1, match_user_id_2)
     );
 
 -- user_interests
 -- ------------------------------------------------
+drop table if exists user_interests;
+create table user_interests(
+user_interests_id int NOT NULL AUTO_INCREMENT,
+type Varchar(100) NOT NULL,
+PRIMARY KEY(user_interests_id)
+);
