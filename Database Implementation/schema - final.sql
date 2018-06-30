@@ -1,4 +1,56 @@
 use group05;
+
+-- user_communication
+-- ------------------------------------------------
+drop table if exists user_communication;
+create table user_communication(
+	id int NOT NULL AUTO_INCREMENT,
+    from_user_id int,
+    communication_datetime datetime,
+    message varchar(140) NOT NULL,
+    status_id varchar(20) NOT NULL,
+    to_user_id int,
+    replying_to_communication_id int,
+    black_listed boolean,
+    black_listed_date datetime,
+	black_listed_word_id int,
+    PRIMARY KEY(id),
+    FOREIGN KEY (from_user_id) REFERENCES user_profile(id),
+    FOREIGN KEY (to_user_id) REFERENCES user_profile(id),
+    FOREIGN KEY (status_id) REFERENCES status_master(id),
+    FOREIGN KEY (black_listed_word_id) REFERENCES black_list_word(id)
+	);
+
+
+-- user_profile
+-- ------------------------------------------------
+drop table if exists user_profile;
+CREATE TABLE `user_profile` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `password_hash` varchar(200) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `surname` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `gender_id` int(11) DEFAULT NULL,
+  `gender_preference_id` int(11) DEFAULT NULL,
+  `From_age` int(11) DEFAULT NULL,
+  `to_age` int(11) DEFAULT NULL,
+  `city_id` int(11) DEFAULT NULL,
+  `county` varchar(100) DEFAULT NULL,
+  `Travel_distance` int(11) DEFAULT NULL,
+  `relationship_type_id` int(11) DEFAULT NULL,
+  `picture` blob,
+  `my_bio` varchar(1000) DEFAULT NULL,
+  `black_listed_user` tinyint(1) DEFAULT NULL,
+  `black_listed_reason` varchar(100) NOT NULL,
+  `black_listed_date` date DEFAULT NULL,
+  `user_status_id` varchar(50) NOT NULL,
+  `is_administrator` boolean NOT NULL,
+   PRIMARY KEY(id),
+   UNIQUE KEY(email)
+);
+
 -- Gender
 -- ------------------------------------------------
 drop table if exists gender;
@@ -62,55 +114,6 @@ create table status(
     UNIQUE KEY(status_description)
     );
 
--- user_profile
--- ------------------------------------------------
-drop table if exists user_profile;
-CREATE TABLE `user_profile` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `password_hash` varchar(200) NOT NULL,
-  `first_name` varchar(50) NOT NULL,
-  `surname` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `date_of_birth` date DEFAULT NULL,
-  `gender_id` int(11) DEFAULT NULL,
-  `gender_preference_id` int(11) DEFAULT NULL,
-  `From_age` int(11) DEFAULT NULL,
-  `to_age` int(11) DEFAULT NULL,
-  `city_id` int(11) DEFAULT NULL,
-  `county` varchar(100) DEFAULT NULL,
-  `Travel_distance` int(11) DEFAULT NULL,
-  `relationship_type_id` int(11) DEFAULT NULL,
-  `picture` blob,
-  `my_bio` varchar(1000) DEFAULT NULL,
-  `black_listed_user` tinyint(1) DEFAULT NULL,
-  `black_listed_reason` varchar(100) NOT NULL,
-  `black_listed_date` date DEFAULT NULL,
-  `user_status_id` varchar(50) NOT NULL,
-  `is_administrator` boolean NOT NULL,
-   PRIMARY KEY(id),
-   UNIQUE KEY(email)
-);
-
--- user_communication
--- ------------------------------------------------
-drop table if exists user_communication;
-create table user_communication(
-	id int NOT NULL AUTO_INCREMENT,
-    from_user_id int,
-    communication_datetime datetime,
-    message varchar(140) NOT NULL,
-    status_id varchar(20) NOT NULL,
-    to_user_id int,
-    replying_to_communication_id int,
-    black_listed boolean,
-    black_listed_date datetime,
-	black_listed_word_id int,
-    PRIMARY KEY(id),
-    FOREIGN KEY (from_user_id) REFERENCES user_profile(id),
-    FOREIGN KEY (to_user_id) REFERENCES user_profile(id),
-    FOREIGN KEY (status_id) REFERENCES status_master(id),
-    FOREIGN KEY (black_listed_word_id) REFERENCES black_list_word(id)
-    );
 
 -- match_table
 -- ------------------------------------------------
@@ -129,7 +132,7 @@ create table match_table(
     system_generated_match boolean,
     PRIMARY KEY(id),
     FOREIGN KEY (match_user_id_1) REFERENCES user_profile(id),
-    FOREIGN KEY (match_user_id_1) REFERENCES user_profile(id),
+    FOREIGN KEY (match_user_id_2) REFERENCES user_profile(id),
     FOREIGN KEY (match_status_id) REFERENCES status_master(id),
     FOREIGN KEY (communication_id) REFERENCES user_communication(id),
     UNIQUE KEY(match_user_id_1, match_user_id_2)
