@@ -90,7 +90,6 @@ CREATE TABLE `user_profile` (
   `From_age` int(11) DEFAULT NULL,
   `to_age` int(11) DEFAULT NULL,
   `city_id` int(11) DEFAULT NULL,
-  `county` varchar(100) DEFAULT NULL,
   `Travel_distance` int(11) DEFAULT NULL,
   `relationship_type_id` int(11) DEFAULT NULL,
   `picture` blob,
