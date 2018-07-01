@@ -1,7 +1,20 @@
 use group05;
+
+-- Drop Tables (in reverse order of creation
+drop table if exists user_interests;
+drop table if exists match_table;
+drop table if exists user_communication;
+drop table if exists user_profile;
+drop table if exists status_master;
+drop table if exists black_list_word;
+drop table if exists interests;
+drop table if exists relationship_type;
+drop table if exists city;
+drop table if exists gender;
+
 -- Gender
 -- ------------------------------------------------
-drop table if exists gender;
+
 CREATE TABLE `gender` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `gender_name` varchar(200) NOT NULL,
@@ -9,7 +22,7 @@ CREATE TABLE `gender` (
 );
 -- City
 -- ------------------------------------------------
-drop table if exists city;
+
 create table city(
 user_id  int NOT NULL AUTO_INCREMENT,
 city Varchar(100) NOT NULL,
@@ -21,7 +34,7 @@ Primary Key(user_id)
 
 -- relationship_type
 -- ------------------------------------------------
-drop table if exists relationship_type;
+
 create table relationship_type(
 id int NOT NULL AUTO_INCREMENT,
 relationship_type Varchar(200) NOT NULL,
@@ -31,7 +44,7 @@ PRIMARY KEY(id)
 
 -- interests
 -- ------------------------------------------------
-drop table if exists interests;
+
 create table interests(
 interests_id int NOT NULL AUTO_INCREMENT,
 description Varchar(200) NOT NULL,
@@ -40,7 +53,7 @@ PRIMARY KEY(interests_id)
 
 -- black_list_words
 -- ------------------------------------------------
-drop table if exists black_list_word;
+
 create table black_list_word(
 	id int NOT NULL AUTO_INCREMENT,
 	word varchar(100) NOT NULL,
@@ -51,8 +64,8 @@ create table black_list_word(
 
 -- status
 -- ------------------------------------------------
-drop table if exists status;
-create table status(
+
+create table status_master(
 	id int NOT NULL AUTO_INCREMENT,
 	status_description varchar(100) NOT NULL,
     is_user_status boolean,
@@ -64,7 +77,7 @@ create table status(
 
 -- user_profile
 -- ------------------------------------------------
-drop table if exists user_profile;
+
 CREATE TABLE `user_profile` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `password_hash` varchar(200) NOT NULL,
@@ -85,21 +98,22 @@ CREATE TABLE `user_profile` (
   `black_listed_user` tinyint(1) DEFAULT NULL,
   `black_listed_reason` varchar(100) NOT NULL,
   `black_listed_date` date DEFAULT NULL,
-  `user_status_id` varchar(50) NOT NULL,
+  `user_status_id` int NOT NULL,
   `is_administrator` boolean NOT NULL,
    PRIMARY KEY(id),
+   FOREIGN KEY (user_status_id) REFERENCES status_master(id),
    UNIQUE KEY(email)
 );
 
 -- user_communication
 -- ------------------------------------------------
-drop table if exists user_communication;
+
 create table user_communication(
 	id int NOT NULL AUTO_INCREMENT,
     from_user_id int,
     communication_datetime datetime,
     message varchar(140) NOT NULL,
-    status_id varchar(20) NOT NULL,
+    status_id int NOT NULL,
     to_user_id int,
     replying_to_communication_id int,
     black_listed boolean,
@@ -114,7 +128,7 @@ create table user_communication(
 
 -- match_table
 -- ------------------------------------------------
-drop table if exists match_table;
+
 create table match_table(
     id int NOT NULL AUTO_INCREMENT,
     match_user_id_1 int,
@@ -129,7 +143,7 @@ create table match_table(
     system_generated_match boolean,
     PRIMARY KEY(id),
     FOREIGN KEY (match_user_id_1) REFERENCES user_profile(id),
-    FOREIGN KEY (match_user_id_1) REFERENCES user_profile(id),
+    FOREIGN KEY (match_user_id_2) REFERENCES user_profile(id),
     FOREIGN KEY (match_status_id) REFERENCES status_master(id),
     FOREIGN KEY (communication_id) REFERENCES user_communication(id),
     UNIQUE KEY(match_user_id_1, match_user_id_2)
@@ -137,7 +151,7 @@ create table match_table(
 
 -- user_interests
 -- ------------------------------------------------
-drop table if exists user_interests;
+
 create table user_interests(
 user_interests_id int NOT NULL AUTO_INCREMENT,
 type Varchar(100) NOT NULL,
