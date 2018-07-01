@@ -1,6 +1,6 @@
 use group05;
 
--- Drop Tables (in reverse order of creation
+-- Drop Tables (in reverse order of creation 
 drop table if exists user_interests;
 drop table if exists match_table;
 drop table if exists user_communication;
