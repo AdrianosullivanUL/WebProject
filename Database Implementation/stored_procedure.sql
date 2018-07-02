@@ -17,24 +17,20 @@ BEGIN
   declare loc_From_age int(11) ;
   declare loc_to_age int(11) ;
   declare loc_city_id int(11) ;
-  declare loc_county varchar(100) ;
   declare loc_Travel_distance int(11) ;
   declare loc_relationship_type_id int(11) ;
-  declare loc_my_bio varchar(1000) ;
-  declare loc_black_listed_user tinyint(1) ;
-  declare loc_black_listed_reason varchar(100);
-  declare loc_black_listed_date date ;
-  declare loc_user_status_id varchar(50) ;
-  declare loc_is_administrator boolean ;
+  declare loc_geo_x float;
+  declare loc_geo_y float;
     declare done bit(1);
 
 -- Create a cursor to get all un-processed engine usage entries for period 
 	DECLARE cur1 CURSOR FOR  
-    select *
+    select id, date_of_birth, gender_id, gender_preference_id, from_age,  to_age, city_id, travel_distance, relationship_type_id, c.geo_x, c.geo_y
     from user_profile up
+    left join city c on c.id = up.city_id
     where id >= prm_from_user_id and id <= prm_to_user_id
     and is_administrator = false
-    and user_status_id in (select id from status where is_user_status - true and status_description in ('Registered','Active'));
+    and user_status_id in (select id from status where is_user_status = true and status_description in ('Registered','Active'));
     
     
 -- Declare the continue handler     
@@ -56,19 +52,37 @@ BEGIN
 OPEN cur1;
 
 read_loop: LOOP
-    FETCH cur1 INTO loc_engine_usage_id,
-					loc_year,
-					loc_month,
-					loc_cycles,
-					loc_usage_rate_id,
-					loc_rate,
-					loc_harsh_environment,
-					loc_harsh_environment_loading;
+    FETCH cur1 INTO loc_id,  loc_date_of_birth, loc_gender_id, loc_gender_preference_id, 
+    loc_from_age,  loc_to_age, loc_city_id, loc_travel_distance, loc_relationship_type_id, loc_geo_x, loc_geo_y ;
+    
+
 -- All rows processed to exist loop
     IF done THEN
       LEAVE read_loop;
     END IF;                    
-                   
+               
+	-- Insert a list of matching 
+    insert into match_table (
+        match_user_id_1, match_user_id_2, match_date, match_status_id, match_status_date,system_generated_match)
+        select loc_id
+        from user_profile
+        where id != loc_id
+        and is_administrator = false
+        and user_status_id in (select id from status where is_user_status = true and status_description in ('Registered','Active'))
+        and floor(datediff(curdate(),date_of_birth) / 365) >= loc_from_age and floor(datediff(curdate(),date_of_birth) / 365) <= loc_to_age
+        and gender_id = loc_gender_preference_id
+        and relationship_type_id = loc_relationship_type_id
+        and ( 3959 * acos( cos( radians(42.290763) ) * cos( radians( loc_geo_x ) ) 
+   * cos( radians(loc_geo_y) - radians(-71.35368)) + sin(radians(42.290763)) 
+   * sin( radians(loc_geo_x)))) <= loc_Travel_distance
+        ;
+        
+ )
+    
+    
+    
+    
+    
 		-- get the matching rate id and rate for this engine usage entry
 	select usage_rate_id, rate into loc_usage_rate_id, loc_rate 
 			from usage_rate 
