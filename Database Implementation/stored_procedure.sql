@@ -1,3 +1,4 @@
+use group05;
 -- Generate Maintenace Reserve Billing entries for period
 -- -------------------------------------------------------
 DROP PROCEDURE if exists `group05`.`generate_matches` ;
