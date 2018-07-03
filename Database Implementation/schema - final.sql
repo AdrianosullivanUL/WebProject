@@ -24,12 +24,13 @@ CREATE TABLE `gender` (
 -- ------------------------------------------------
 
 create table city(
-user_id  int NOT NULL AUTO_INCREMENT,
+id  int NOT NULL AUTO_INCREMENT,
 city Varchar(100) NOT NULL,
 county Varchar(100) NOT NULL,
 geo_x float,
 geo_y float,
-Primary Key(user_id)
+Primary Key(id),
+unique key (city)
 );
 
 -- relationship_type
@@ -38,7 +39,8 @@ Primary Key(user_id)
 create table relationship_type(
 id int NOT NULL AUTO_INCREMENT,
 relationship_type Varchar(200) NOT NULL,
-PRIMARY KEY(id)
+PRIMARY KEY(id),
+unique key(relationship_type)
 );    
 
 
@@ -46,9 +48,9 @@ PRIMARY KEY(id)
 -- ------------------------------------------------
 
 create table interests(
-interests_id int NOT NULL AUTO_INCREMENT,
+id int NOT NULL AUTO_INCREMENT,
 description Varchar(200) NOT NULL,
-PRIMARY KEY(interests_id)
+PRIMARY KEY(id)
 );  
 
 -- black_list_words
@@ -71,8 +73,7 @@ create table status_master(
     is_user_status boolean,
     is_match_table_status boolean,
     is_user_communication_status boolean,
-    PRIMARY KEY(id),
-    UNIQUE KEY(status_description)
+    PRIMARY KEY(id)
     );
 
 -- user_profile
@@ -100,6 +101,10 @@ CREATE TABLE `user_profile` (
   `user_status_id` int NOT NULL,
   `is_administrator` boolean NOT NULL,
    PRIMARY KEY(id),
+   FOREIGN KEY (gender_id) REFERENCES gender(id),
+   FOREIGN KEY (gender_preference_id) REFERENCES gender(id),
+   FOREIGN KEY (city_id) REFERENCES city(id),
+   FOREIGN KEY (relationship_type_id) REFERENCES relationship_type(id),
    FOREIGN KEY (user_status_id) REFERENCES status_master(id),
    UNIQUE KEY(email)
 );
@@ -137,13 +142,16 @@ create table match_table(
     user_id_1_interest_level int,
     user_id_2_interest_level int,
     communication_id int,
-    match_status_id int NOT NULL,
-    match_status_date datetime,
+    user_1_match_status_id int NOT NULL,
+    user_1_match_status_date datetime,
+    user_2_match_status_id int NOT NULL,
+    user_2_match_status_date datetime,
     system_generated_match boolean,
     PRIMARY KEY(id),
     FOREIGN KEY (match_user_id_1) REFERENCES user_profile(id),
     FOREIGN KEY (match_user_id_2) REFERENCES user_profile(id),
-    FOREIGN KEY (match_status_id) REFERENCES status_master(id),
+    FOREIGN KEY (user_1_match_status_id) REFERENCES status_master(id),
+    FOREIGN KEY (user_2_match_status_id) REFERENCES status_master(id),
     FOREIGN KEY (communication_id) REFERENCES user_communication(id),
     UNIQUE KEY(match_user_id_1, match_user_id_2)
     );
@@ -152,7 +160,11 @@ create table match_table(
 -- ------------------------------------------------
 
 create table user_interests(
-user_interests_id int NOT NULL AUTO_INCREMENT,
-type Varchar(100) NOT NULL,
-PRIMARY KEY(user_interests_id)
+id int NOT NULL AUTO_INCREMENT,
+interest_id int not null,
+user_id int NOT NULL,
+PRIMARY KEY(id),
+FOREIGN KEY (user_id) REFERENCES user_profile(id),
+FOREIGN KEY (interest_id) REFERENCES interests(id),
+UNIQUE KEY(interest_id, user_id)
 );

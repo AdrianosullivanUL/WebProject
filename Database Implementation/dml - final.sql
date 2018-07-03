@@ -29,7 +29,6 @@ insert into city (City,County,geo_x , geo_y) values  ('Enniskillen','Fermanagh',
 insert into city (City,County,geo_x , geo_y) values  ('Galway','Galway',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Killarney','Kerry',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Newbridge','Kildare',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Killarney','Kilkenny',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Portlaoise','Laois',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Carrick on Shannon','Leitrim',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Limerick','Limerick',0,0);
@@ -45,7 +44,6 @@ insert into city (City,County,geo_x , geo_y) values  ('Tipperary','Tipperary',0,
 insert into city (City,County,geo_x , geo_y) values  ('Omagh','Tyrone',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Waterford','Waterford',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Athlone','Westmeath',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Waterford','Wexford',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Arklow','Wicklow',0,0);
 
 
