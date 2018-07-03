@@ -70,7 +70,8 @@ read_loop: LOOP
                              system_generated_match)
         select loc_id, up.id, now(), 1, now(),1, now(),true
         from user_profile up
-        where id != loc_id
+        join city c on c.id = up.city_id
+        where up.id != loc_id
         and loc_id not in (select match_user_id_1 
 								from match_table 
                                 where (match_user_id_1 = loc_id and match_user_id_2 = up.id)
@@ -84,8 +85,8 @@ read_loop: LOOP
         and floor(datediff(curdate(),date_of_birth) / 365) >= loc_from_age and floor(datediff(curdate(),date_of_birth) / 365) <= loc_to_age
         and gender_id = loc_gender_preference_id
         and relationship_type_id = loc_relationship_type_id
-        and ( 6372.795 * acos( cos( radians(42.290763) ) * cos( radians( loc_geo_x ) ) 
-				* cos( radians(loc_geo_y) - radians(-71.35368)) + sin(radians(42.290763)) 
+        and ( 6372.795 * acos( cos( radians(c.geo_x) ) * cos( radians( loc_geo_x ) ) 
+				* cos( radians(loc_geo_y) - radians(c.geo_y)) + sin(radians(c.geo_x)) 
 				* sin( radians(loc_geo_x)))) <= loc_Travel_distance;
         
     -- reset done so that next cursor read controls it again
