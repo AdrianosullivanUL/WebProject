@@ -15,36 +15,37 @@ insert into gender (gender_name) values  ('Trans Gender (F/M');
 -- City
 -- ------------------------------------------------
 delete from city;
+
 insert into city (City,County,geo_x , geo_y) values  ('Belfast','Antrim',0,0);
 insert into city (City,County,geo_x , geo_y) values  ('Armagh','Armagh',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Carlow','Carlow',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Cavan','Cavan',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Ennis','Clare',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Cork','Cork',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Derry','Derry',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Donegal','Donegal',0,0);
+insert into city (City,County,geo_x , geo_y) values  ('Carlow','Carlow',52.8408333,-6.9261111);
+insert into city (City,County,geo_x , geo_y) values  ('Cavan','Cavan',53.9908333,-7.3605556);
+insert into city (City,County,geo_x , geo_y) values  ('Ennis','Clare',52.8436111,-8.9863889);
+insert into city (City,County,geo_x , geo_y) values  ('Cork','Cork',51.8986111,-8.4958333);
+insert into city (City,County,geo_x , geo_y) values  ('Derry','Derry',53.9922222,-7.5458333);
+insert into city (City,County,geo_x , geo_y) values  ('Donegal','Donegal',54.65,-8.1166667);
 insert into city (City,County,geo_x , geo_y) values  ('Newry','Down',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Dublin','Dublin',0,0);
+insert into city (City,County,geo_x , geo_y) values  ('Dublin','Dublin',53.3330556,-6.2488889);
 insert into city (City,County,geo_x , geo_y) values  ('Enniskillen','Fermanagh',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Galway','Galway',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Killarney','Kerry',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Newbridge','Kildare',0,0);
+insert into city (City,County,geo_x , geo_y) values  ('Galway','Galway',53.2719444,-9.0488889);
+insert into city (City,County,geo_x , geo_y) values  ('Killarney','Kerry',52.05,-9.5166667);
+insert into city (City,County,geo_x , geo_y) values  ('Newbridge','Kildare',53.1116667,-8.3177778);
 insert into city (City,County,geo_x , geo_y) values  ('Portlaoise','Laois',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Carrick on Shannon','Leitrim',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Limerick','Limerick',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Longford','Longford',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Dundalk','Louth',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Westport','Mayo',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Drogheda','Meath',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Monaghan','Monaghan',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Tullamore','Offaly',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Roscommon','Roscommon',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Sligo','Sligo',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Tipperary','Tipperary',0,0);
+insert into city (City,County,geo_x , geo_y) values  ('Carrick on Shannon','Leitrim',53.9469444,-8.09);
+insert into city (City,County,geo_x , geo_y) values  ('Limerick','Limerick',52.6647222,-8.6230556);
+insert into city (City,County,geo_x , geo_y) values  ('Longford','Longford',53.1261111,-7.4919444);
+insert into city (City,County,geo_x , geo_y) values  ('Dundalk','Louth',54,-6.4166667);
+insert into city (City,County,geo_x , geo_y) values  ('Westport','Mayo',53.8,-9.5166667);
+insert into city (City,County,geo_x , geo_y) values  ('Drogheda','Meath',53.7188889,-6.3477778);
+insert into city (City,County,geo_x , geo_y) values  ('Monaghan','Monaghan',54.25,-6.9666667);
+insert into city (City,County,geo_x , geo_y) values  ('Tullamore','Offaly',54.5211111,-8.1780556);
+insert into city (City,County,geo_x , geo_y) values  ('Roscommon','Roscommon',53.6333333,-8.1833333);
+insert into city (City,County,geo_x , geo_y) values  ('Sligo','Sligo',54.2666667,-8.4833333);
+insert into city (City,County,geo_x , geo_y) values  ('Tipperary','Tipperary',52.4733333,-8.1558333);
 insert into city (City,County,geo_x , geo_y) values  ('Omagh','Tyrone',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Waterford','Waterford',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Athlone','Westmeath',0,0);
-insert into city (City,County,geo_x , geo_y) values  ('Arklow','Wicklow',0,0);
+insert into city (City,County,geo_x , geo_y) values  ('Waterford','Waterford',52.2583333,-7.1119444);
+insert into city (City,County,geo_x , geo_y) values  ('Athlone','Westmeath',53.4227778,-7.9372222);
+insert into city (City,County,geo_x , geo_y) values  ('Arklow','Wicklow',52.7930556,-6.1413889);
 
 
 
