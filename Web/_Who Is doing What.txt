@@ -1,13 +1,13 @@
 
-Screen			Who		Status
-adminscreen
-chatline
-index			Adrian	
-logon
-matchfind
+Screen				Who		Status
+adminscreen			Niall
+chatline			Niall
+index				Adrian	
+logon				Niall
+matchfind			Niall
 meetingspace		Adrian
 passwordreset
-register		Deirdre
+register			Deirdre
 removeaccount
 searchformatches
 updateprofile		Deirdre
