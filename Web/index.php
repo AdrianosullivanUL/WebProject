@@ -12,9 +12,8 @@
 
 <div class="container">
   <h1>Welcome to meeting your future partner</h1>
-  <p>This is some text.</p>
-  <button>Log in</button>
-  <button>Register</button>
+  <a href="Logon.php">Logon</a> 
+  <a href="Register.php">Register</a>
 </div>
 
 </body>
