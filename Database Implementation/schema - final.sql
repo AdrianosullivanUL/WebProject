@@ -93,7 +93,7 @@ CREATE TABLE `user_profile` (
   `city_id` int(11) DEFAULT NULL,
   `Travel_distance` int(11) DEFAULT NULL,
   `relationship_type_id` int(11) DEFAULT NULL,
-  `picture` blob,
+  `picture` mediumblob,
   `my_bio` varchar(1000) DEFAULT NULL,
   `black_listed_user` tinyint(1) DEFAULT NULL,
   `black_listed_reason` varchar(100) NOT NULL,
