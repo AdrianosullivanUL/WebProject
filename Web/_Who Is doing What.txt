@@ -11,3 +11,4 @@ register		Deirdre
 removeaccount           Mary
 updateprofile		Deirdre
 viewmatchprofile        Mary 
+stylesheet		Mary
