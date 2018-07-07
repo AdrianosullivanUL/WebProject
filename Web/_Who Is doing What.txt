@@ -10,4 +10,4 @@ passwordreset           Mary
 register		Deirdre
 removeaccount           Mary
 updateprofile		Deirdre
-viewmatchprofile        Mary
+viewmatchprofile        Mary 
