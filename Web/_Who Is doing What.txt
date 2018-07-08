@@ -8,7 +8,7 @@ matchfind               Niall
 meetingspace		Adrian
 passwordreset           Mary
 register		Deirdre
-removeaccount           Mary
+removeaccount           Adrian
 updateprofile		Deirdre
 viewmatchprofile        Mary 
 stylesheet		Mary
