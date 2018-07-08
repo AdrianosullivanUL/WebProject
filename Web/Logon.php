@@ -13,7 +13,7 @@
 <div class="container">
   <h1>Login Details</h1>
   
-  <form action="UpdateProfile.php" method="post">
+  <form action="CheckEmailandPassword.php" method="post">
   <label><b>email address</b></label>
   <input type="text" name="uname" placeholder="email address"><br><br>
   <label><b>Password</b></label>
