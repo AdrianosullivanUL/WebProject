@@ -880,11 +880,16 @@ update user_profile set password_hash = sha2(password_hash,256);
 -- user_communication
 -- ------------------------------------------------
 
--- match_table
--- ------------------------------------------------
+
 
 
 -- user_interests
 -- ------------------------------------------------
 
 commit;
+
+-- match_table
+-- ------------------------------------------------
+
+CALL `group05`.`generate_matches`(1, 999);
+
