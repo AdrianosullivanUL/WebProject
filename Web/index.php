@@ -25,7 +25,7 @@
 
         <div class="container">
             <h1>Reach Out to your future partner</h1>
-            <a href="Logon.php">Logon</a> 
+            <a href="Logon.php?userid=24">Logon</a> 
             <a href="Register.php">Register</a>
         </div>
 

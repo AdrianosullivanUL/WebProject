@@ -192,6 +192,7 @@ select
     ms1.status_description user_profile2_match_status,
     mt.user_2_match_status_date ,
     mt.system_generated_match ,
+    
   up1.first_name user_profile_1_first_name,
   up1.surname user_profile_1_surname,
   up1.date_of_birth user_profile_1_date_of_birth,
@@ -210,6 +211,7 @@ select
   up1.my_bio user_profile_1_my_bio,
   up1.user_status_id user_profile_1_user_status_id,
   us1.status_description user_profile_1_status,
+  
   up2.first_name user_profile_2_first_name,
   up2.surname user_profile_2_surname,
   up2.date_of_birth user_profile_2_date_of_birth,
