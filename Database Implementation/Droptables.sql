@@ -1,0 +1,10 @@
+drop table if exists black_list_word;
+drop table if exists city;
+drop table if exists gender;
+drop table if exists interests;
+drop table if exists match_table;
+drop table if exists relationship_type;
+drop table if exists status;
+drop table if exists user_communication;
+drop table if exists user_interests;
+drop table if exists user_profile;
