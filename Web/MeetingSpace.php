@@ -19,12 +19,13 @@
             require_once 'database_config.php';
 
             // Attempt select query execution
-            $sql = "SELECT * FROM user_profile where is_administrator = false and is_automated = true";
+            $sql = "SELECT * FROM matches_view where is_automated = true";
+            echo($sql);
             if ($result = mysqli_query($db_connection, $sql)) {
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_array($result)) {
                       //  echo "<table class='table table-bordered table-striped'>";
-                         echo '<img src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/>'; 
+                       //  echo '<img src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/>'; 
                         echo "<tr><td>" . $row['first_name'] . "</td>";
                     }
                 }
