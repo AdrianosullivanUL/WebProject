@@ -118,8 +118,8 @@
                         <h1>Meeting Space</h1>
                     </div>
                     <div class="col-sm-2 container border border-primary rounded bg-light text-dark">
-                        <button>Edit Profile</button>
-                        <button>Logoff</button>
+                        <button class="btn btn-primary">Edit Profile</button>
+                        <button class="btn btn-secondary">Logoff</button>
                     </div>
 
                 </div>
@@ -170,6 +170,15 @@
                             echo ("bad result");
                         }
                         ?>
+                                        <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
+                    <p>Click on Photograph and do one of the following:</p>
+                    <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
+                    <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
+                    <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
+                    <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
+                    <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                    <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button></div>    
+            </div>
                     </div>
                     <div class="col-sm-4 container border border-primary rounded bg-light text-dark" ><h3>Interested in Me</h3>
                         <?php
@@ -209,15 +218,18 @@
                         }
                         ?>
                     </div>
+                                <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
+                    <p>Click on Photograph and do one of the following:</p>
+                    <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
+                    <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
+                    <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
+                    <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
+                    <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                    <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button></div>    
+            </div>
                 </div>
                 <br>
-                <div class="col-sm-4 container border border-primary rounded bg-light text-dark"><p>Click on Photograph and do one of the followings</p>
-                    <button name="btnAction" type="submit" value="View">View</button>
-                    <button name="btnAction" type="submit" value="Maybe">Maybe</button>
-                    <button name="btnAction" type="submit" value="Goodbye">Goodbye</button>
-                    <button name="btnAction" type="submit" value="Report"> Report!</button>
-                    <button name="btnAction" type="submit" value="MatchFinder">Match Finder</button></div>    
-            </div>
+
         </form>        
     </body>
 </html> 
