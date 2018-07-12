@@ -43,10 +43,17 @@
                         if ($result = mysqli_query($db_connection, $sql)) {
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_array($result)) {
-                                    echo("<h3>" . $row['first_name']" *$row['sur_name']</h3>");
+                                    echo("<h3>".$row['first_name']." ".$row['sur_name']. "</h3>");
                                     echo("<br>");
+                                    //Display Image
                                     if (strlen($row['picture']) > 0) {
-                                            echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
+                                            echo '<img class="portrait rounded-circle"src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
+                                        } else {
+                                            echo ("<img class='portrait rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
+                                        }
+                                        // Display Bio
+                                        if (strlen($row['my_bio']) > 0) {
+                                            echo '<container class="portrait rounded-circle"src="data:image/jpeg;base64,' . base64_encode($row['my_bio']) . '"/><i></i>';
                                         } else {
                                             echo ("<img class='portrait rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
                                         }
