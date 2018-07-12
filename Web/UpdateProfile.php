@@ -35,6 +35,7 @@
                 </div>
                 <div class="container border border-primary rounded bg-light text-dark col-sm-6">
                     <?php
+                    $surname = "";
                    $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
                //    echo ("sql" . $sql);
                    if ($result = mysqli_query($db_connection, $sql)) {
@@ -44,7 +45,8 @@
                                //     echo ($row['first_name']);
                                                         echo('<div class="form-group">');
                       echo('<label for="nameInput">Name</label>');
-                       echo('<input type="text" class="form-control" id="nameInput" placeholder="'.$row['first_name'].'">');
+                       echo('<input type="text" class="form-control" id="firstnameInput" placeholder="'.$row['first_name'].'">');
+                       $surname = $row['first_name'];
                     //     echo ($row['first_name']);
                      //    echo('</input>');
                    echo('</div>');
@@ -55,7 +57,7 @@
                                     ?>
                     <div class="form-group">
                         <label for="nameInput">Name</label>
-                        <input type="text" class="form-control" id="nameInput" placeholder="Name">
+                        <input type="text" class="form-control" id="surnameInput" placeholder="<?php $surname ?>">
                     </div>
 
                     <div class="form-group">

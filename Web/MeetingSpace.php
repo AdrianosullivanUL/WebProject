@@ -12,7 +12,7 @@
 
         <style>
             body{color:#444;font:100%/1.4 sans-serif;}
-                        body {
+            body {
                 background-image:    url(images/backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
                 background-repeat:   no-repeat;
@@ -118,24 +118,29 @@
                         <h1>Meeting Space</h1>
                     </div>
                     <div class="col-sm-2 container border border-primary rounded bg-light text-dark">
+                        <br>
+                        
                         <button class="btn btn-primary">Edit Profile</button>
-                        <button class="btn btn-secondary">Logoff</button>
+                            <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button>                        
+                        <button class="btn btn-danger">Logoff</button>
+                        <br>
                     </div>
 
                 </div>
                 <br>    
                 <div class="row">
-                    <div class="col-sm-7 container border border-primary rounded bg-light text-dark">
-                        <h3>System Matches</h3>
-
+                    <div class="col-sm-12 container border border-primary rounded bg-light text-dark">
+                        <h3>Chatting with</h3>
                         <?php
                         $user_id = $_GET["userid"];
 
                         require_once 'database_config.php';
                         ?>
                         <?php
-                        $sql = "SELECT * FROM matches_view where system_generated_match = true and (match_user_id_1 =" . $user_id
-                                . " or  match_user_id_2 =" . $user_id . ");";
+                        $sql = "SELECT * FROM matches_view where (match_user_id_1 =" . $user_id
+                                . " or  match_user_id_2 =" . $user_id . ")"
+                                . " and (user_profile_1_match_status = 'Chatting'"
+                                . " or user_profile_2_match_status = 'Chatting');";
                         if ($result = mysqli_query($db_connection, $sql)) {
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_array($result)) {
@@ -170,23 +175,83 @@
                             echo ("bad result");
                         }
                         ?>
-                                        <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
-                    <p>Click on Photograph and do one of the following:</p>
-                    <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
-                    <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
-                    <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
-                    <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
-                    <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
-                    <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button></div>    
-            </div>
+                        <div class="col-sm-12">
+                            <p>Click on Photograph and do one of the following:</p>
+                            <button name="btnAction" class="btn btn-success" type="submit" value="Chat">Chat</button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
+                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+
+                        </div>
+
                     </div>
-                    <div class="col-sm-4 container border border-primary rounded bg-light text-dark" ><h3>Interested in Me</h3>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-9 container border border-primary rounded bg-light text-dark">
+                        <h3>System Matches</h3>
+
                         <?php
-                        $sql = "SELECT * FROM matches_view where system_generated_match = false and (match_user_id_1 =" . $user_id
-                                . " or  match_user_id_2 =" . $user_id . ");";
+                        $user_id = $_GET["userid"];
+
+                        require_once 'database_config.php';
+                        ?>
+                        <?php
+                        $sql = "SELECT * FROM matches_view where system_generated_match = true and (match_user_id_1 =" . $user_id
+                                . " or  match_user_id_2 =" . $user_id . ")"
+                                . " and user_profile_1_match_status not in ('Chatting','Goodbye');";
                         if ($result = mysqli_query($db_connection, $sql)) {
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_array($result)) {
+                                    if ($row['match_user_id_1'] == $user_id) {
+                                        echo ("<label class='rad'>");
+                                        echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_2'] . "'>");
+                                        echo("");
+                                        if (strlen($row['user_profile_2_picture']) > 0) {
+                                            echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['user_profile_2_picture']) . '"/><i></i>';
+                                        } else {
+                                            echo ("<img class='portrait rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
+                                        }
+                                        echo ("<figcaption>" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</figcaption>");
+                                        echo ("");
+                                        echo ("</label>");
+                                    } else {
+                                        echo ("<figcaption>" . $row['user_profile_1_first_name'] . "</figcaption>");
+                                        echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_1'] . "'>");
+                                        if (strlen($row['user_profile_2_picture']) > 0) {
+                                            echo ("<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_1_picture']) . "/><i></i>");
+                                        } else {
+                                            echo ("<img class='portrait  rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
+                                        }
+                                        echo ("<figcaption>" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</figcaption>");
+                                        echo ("</label>");
+                                    }
+                                }
+                            } else {
+                                echo ("No matches found");
+                            }
+                        } else {
+                            echo ("bad result");
+                        }
+                        ?>
+                        <div class="col-sm-12">
+                            <p>Click on Photograph and do one of the following:</p>
+                            <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
+                            <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
+                            <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
+                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                        </div>    
+                    </div>
+
+                    <div class="col-sm-2 container border border-primary rounded bg-light text-dark" ><h3>Interested in Me</h3>
+                        <?php
+                        $sql = "SELECT * FROM matches_view where system_generated_match = false and (match_user_id_1 =" . $user_id
+                                . " or  match_user_id_2 =" . $user_id . ")"
+                                . " and user_profile_1_match_status not in ('Chatting','Goodbye');";
+                        if ($result = mysqli_query($db_connection, $sql)) {
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_array($result)) {
+                                    echo("<div class='row'>");
                                     if ($row['match_user_id_1'] == $user_id) {
                                         echo ("<label class='rad'>");
                                         echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_2'] . "'>");
@@ -209,6 +274,7 @@
                                         echo ("<figcaption>" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</figcaption>");
                                         echo ("</label>");
                                     }
+                                    echo("</div>");
                                 }
                             } else {
                                 echo ("No matches found");
@@ -217,19 +283,20 @@
                             echo ("bad result");
                         }
                         ?>
+                        <div class="col-sm-12 ">
+                            <p>Click on Photograph and do one of the following:</p>
+                            <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
+                            <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
+                            <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
+                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                        </div>
                     </div>
-                                <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
-                    <p>Click on Photograph and do one of the following:</p>
-                    <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
-                    <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
-                    <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
-                    <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
-                    <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
-                    <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button></div>    
-            </div>
                 </div>
-                <br>
+            </div>
+        </div>
+        <br>
 
-        </form>        
-    </body>
+    </form>        
+</body>
 </html> 

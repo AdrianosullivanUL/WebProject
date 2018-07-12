@@ -2,13 +2,13 @@
 Screen			Who		Status
 adminscreen             Niall
 chatline                Niall
-index			Adrian          WIP
-logon                   Niall
+index			Adrian          Prototype Complete
+logon                   Niall           WIP
 matchfind               Niall
-meetingspace		Adrian
+meetingspace		Adrian          WIP
 passwordreset           Mary
-register		Deirdre
-removeaccount           Adrian
-updateprofile		Deirdre
-viewmatchprofile        Mary 
+register		Deirdre         WIP
+removeaccount           Adrian          Prototype Complete
+updateprofile		Deirdre         WIP
+viewmatchprofile        Mary            WIP
 stylesheet		Mary
