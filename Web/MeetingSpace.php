@@ -12,7 +12,7 @@
 
         <style>
             body{color:#444;font:100%/1.4 sans-serif;}
-                        body {
+            body {
                 background-image:    url(images/backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
                 background-repeat:   no-repeat;
@@ -170,16 +170,16 @@
                             echo ("bad result");
                         }
                         ?>
-                                        <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
-                    <p>Click on Photograph and do one of the following:</p>
-                    <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
-                    <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
-                    <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
-                    <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
-                    <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
-                    <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button></div>    
-            </div>
+                        <div class="col-sm-12">
+                            <p>Click on Photograph and do one of the following:</p>
+                            <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
+                            <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
+                            <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
+                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                            <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button></div>    
                     </div>
+
                     <div class="col-sm-4 container border border-primary rounded bg-light text-dark" ><h3>Interested in Me</h3>
                         <?php
                         $sql = "SELECT * FROM matches_view where system_generated_match = false and (match_user_id_1 =" . $user_id
@@ -217,19 +217,21 @@
                             echo ("bad result");
                         }
                         ?>
+                        <div class="col-sm-12 ">
+                            <p>Click on Photograph and do one of the following:</p>
+                            <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
+                            <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
+                            <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
+                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                            <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button>
+                        </div>
                     </div>
-                                <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
-                    <p>Click on Photograph and do one of the following:</p>
-                    <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
-                    <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
-                    <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
-                    <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
-                    <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
-                    <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button></div>    
-            </div>
                 </div>
-                <br>
+            </div>
+        </div>
+        <br>
 
-        </form>        
-    </body>
+    </form>        
+</body>
 </html> 
