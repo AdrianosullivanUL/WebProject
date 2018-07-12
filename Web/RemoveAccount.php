@@ -18,34 +18,55 @@
         </style>
     </head>
     <body>
-<form action="/ProcessRemoveAccount.php" method="Post">
-        <div class="container">
-            <br>
-            <div class="container border border-primary rounded bg-light text-dark col-sm-6">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h1>Remove Account</h1>
-                    </div>
-                    <div class="col-sm-12">
-                        <p>Please note, if you remove your account then all information related to you and your account will be removed and cannot be recovered.
-                            This includes your profile, images, communications history and matches. 
-                            <br><br>If you are happy with this, press the Remove button below.
-                            If you would like to keep your account, press Cancel.</p>
-                    </div>
-                    <br>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <button  class="btn btn-danger" name="btnAction" type="submit" value="Remove">Remove Account</button>
-                        <button class="btn btn-secondary" name="btnAction" type="submit" value="Cancel">Cancel</button>
-                        <br>
+        <?php
+        $user_id = $_GET["userid"];
 
+        require_once 'database_config.php';
+        ?>
+        <form action="/ProcessRemoveAccount.php?userid=<?php echo $user_id ?>" method="Post">
+
+            <div class="container">
+                <br>
+                <div class="container border border-primary rounded bg-light text-dark col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h1>Remove Account</h1>
+                        </div>
+                        <div class="col-sm-12">
+                            <?php
+                            $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
+                            if ($result = mysqli_query($db_connection, $sql)) {
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_array($result)) {
+                                        if ($row['id'] == $user_id) {
+                                            echo("<h3>" . $row['first_name'] . " " . $row['surname'] . "</h3>");
+                                            echo("<p>(" . $row['email'] . ")</p>");
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </div>                    
+                        <div class="col-sm-12">
+                            <p>Please note, if you remove your account then all information related to you and your account will be removed and cannot be recovered.
+                                This includes your profile, images, communications history and matches. 
+                                <br><br>If you are happy with this, press the Remove button below.
+                                If you would like to keep your account, press Cancel.</p>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button  class="btn btn-danger" name="btnAction" type="submit" value="Remove">Remove Account</button>
+                            <button class="btn btn-secondary" name="btnAction" type="submit" value="Cancel">Cancel</button>
+                            <br>
+
+                        </div>
+                        <br>
                     </div>
                     <br>
                 </div>
-                <br>
             </div>
-        </div>
-</form>
+        </form>
     </body>
 </html> 

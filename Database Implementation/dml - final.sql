@@ -806,10 +806,13 @@ insert into status_master (status_description,is_user_status,is_match_table_stat
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Active',1,0,0);
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Suspended',1,0,0);
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Barred',1,0,0);
+
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status) values  ('Matched',0,1,0);
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status) values  ('Like',0,1,0);
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Maybe',0,1,0);
+insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Chatting',0,1,0);
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Goodbye',0,1,0);
+
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Message Sent',0,0,1);
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Message Received',0,0,1);
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Responded',0,0,1);
@@ -894,10 +897,16 @@ commit;
 CALL `group05`.`generate_matches`(1, 999);
 
 insert into match_table (match_user_id_1, match_user_id_2, match_date, response_date, user_id_1_interest_level, user_id_2_interest_level, communication_id, user_1_match_status_id, user_1_match_status_date, user_2_match_status_id, user_2_match_status_date, system_generated_match)
-values('24', '10', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-10 13:22:19', '1', '2018-07-10 13:22:19', '0');
+values('24', '10', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-10 13:22:19', '5', '2018-07-10 13:22:19', '1');
 insert into match_table (match_user_id_1, match_user_id_2, match_date, response_date, user_id_1_interest_level, user_id_2_interest_level, communication_id, user_1_match_status_id, user_1_match_status_date, user_2_match_status_id, user_2_match_status_date, system_generated_match)
-values('24', '11', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-10 13:22:19', '1', '2018-07-10 13:22:19', '0');
+values('24', '11', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-10 13:22:19', '5', '2018-07-10 13:22:19', '1');
 insert into match_table (match_user_id_1, match_user_id_2, match_date, response_date, user_id_1_interest_level, user_id_2_interest_level, communication_id, user_1_match_status_id, user_1_match_status_date, user_2_match_status_id, user_2_match_status_date, system_generated_match)
-values('24', '13', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-10 13:22:19', '1', '2018-07-10 13:22:19', '0');
+values('24', '13', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-10 13:22:19', '5', '2018-07-10 13:22:19', '1');
+commit;
+insert into match_table (match_user_id_1, match_user_id_2, match_date, response_date, user_id_1_interest_level, user_id_2_interest_level, communication_id, user_1_match_status_id, user_1_match_status_date, user_2_match_status_id, user_2_match_status_date, system_generated_match)
+values('24', '14', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-10 13:22:19', '5', '2018-07-10 13:22:19', '0');
+commit;
+insert into match_table (match_user_id_1, match_user_id_2, match_date, response_date, user_id_1_interest_level, user_id_2_interest_level, communication_id, user_1_match_status_id, user_1_match_status_date, user_2_match_status_id, user_2_match_status_date, system_generated_match)
+values('24', '15', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-10 13:22:19', '8', '2018-07-10 13:22:19', '0');
 commit;
 
