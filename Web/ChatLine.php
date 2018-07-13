@@ -14,7 +14,7 @@
 		background-color: white;
 		margin-top: 70px;
 	}
-	.optput{
+	.output{
 		background-color: white;
 		box-shadow: 0px 1px 1px #000;
 		height: 250px;
