@@ -4,6 +4,7 @@ include 'group05_library.php';
 session_start();
 
 $_SESSION['user_id'] = 24;
+$_SESSION['matching_user_id'] = 24;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // check the button selected (these are at the end of this form
