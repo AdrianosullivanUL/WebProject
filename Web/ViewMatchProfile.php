@@ -74,7 +74,7 @@
                 require_once 'database_config.php';
                 ?>
                 <div class ="row">
-                    <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;"</div>
+                    <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
                     <p> " "/p>
                 </div>
                 <div class="col-xs-6 col-sm-4" style="background-color:whitesmoke; opacity: 0.9;">
