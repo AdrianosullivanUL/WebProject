@@ -127,13 +127,21 @@
                     <p> " "/p>
                 </div>
                 <div class ="col-xs-4 col-sm-4"style="background-color:lavender; opacity: 0.9;">
-                    <?php
-                    echo("<h3>Interests/Hobbies</h3>");
-                    echo("<p>Check Box Interest 1</p>");
-                    echo("<p>Check Box Interest 2</p>");
-                    echo("<p>Check Box Interest 3</p>");
-                    echo("<p>Check Box Interest 4</p>");
-                    ?>
+                   // <?php
+                    //$sql="SELECT interests.description
+                      //  FROM interests
+                        //LEFT JOIN user_interests ON user_interest_id = interests.id
+                        //where user_id = " . $user_id . ";";
+                    //$interest = "";
+                    //if ($result = mysqli_query($db_connection, $sql)) {
+                      //  if (mysqli_num_rows($result) > 0) {
+                        //    while ($row = mysqli_fetch_array($result)) {
+                          //      $interests = $row['interests'];             
+                    
+                    //echo("<h3>. $interest</h3>");
+                        //    }
+                      //  }
+                    //?>
                 </div>
                 <div class="col-xs-6 col-sm-6"style="background-color:whitesmoke; opacity: 0.9;">
                     <br>

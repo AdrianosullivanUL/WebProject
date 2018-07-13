@@ -11,6 +11,16 @@ insert into gender (gender_name) values  ('Trans Gender (M/F');
 insert into gender (gender_name) values  ('Trans Gender (F/M');
 
 
+-- user interests
+-- ---------------
+insert into user_interests (interest_id, user_id) values (1,24);
+insert into user_interests (interest_id, user_id) values (2,24);
+insert into user_interests (interest_id, user_id) values (3,24);
+insert into user_interests (interest_id, user_id) values (4,24);
+insert into user_interests (interest_id, user_id) values (5,24); 
+ 
+
+
 
 -- City
 -- ------------------------------------------------
