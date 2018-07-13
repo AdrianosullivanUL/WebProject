@@ -15,18 +15,30 @@
                 background-repeat:   no-repeat;
                 background-position: center center;              /* optional, center the image */
             }
-
-
         </style>
     </head>
     <body>
-        <form action="/ProcessMeetingSpace.php" method="Post">
+        <form action="/ViewMatchProfile.php" method="Post">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Matched Profile</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+      </ul>
+           
+        </div>
+</nav>
             <div class="container-fluid">
                 <div class="row">
-
-                    <div  class="col-sm-6 container border border-primary rounded bg-light text-dark" >
-                        <h1>Matched Profile</h1>
-                    </div>
 
                 </div>
                 <br>
@@ -36,34 +48,44 @@
                 require_once 'database_config.php';
                 ?>
                 <div class ="row">
-                    <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
+                    <div class="col-sm-4 container border border-primary rounded bg-light text-dark">
                         <?php
                         $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
-                        echo($sql);
+                        $mibio = "";
+                        $picture = "";
+                        $first_name = "";
+                        $surname = "";
                         if ($result = mysqli_query($db_connection, $sql)) {
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_array($result)) {
-                                    echo("<h3>".$row['first_name']." ".$row['sur_name']. "</h3>");
-                                    echo("<br>");
-                                    //Display Image
+                                    $mybio = $row['my_bio'];
                                     if (strlen($row['picture']) > 0) {
-                                            echo '<img class="portrait rounded-circle"src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
-                                        } else {
-                                            echo ("<img class='portrait rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
-                                        }
-                                        // Display Bio
-                                        if (strlen($row['my_bio']) > 0) {
-                                            echo '<container class="portrait rounded-circle"src="data:image/jpeg;base64,' . base64_encode($row['my_bio']) . '"/><i></i>';
-                                        } else {
-                                            echo ("<img class='portrait rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
-                                        }
-                                    //echo ("<img class='portrait rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
-                                    //echo("<p>My Bio</p>");
-                                    //echo("<p>Slider Age Gap</p>");
+                                        $picture = base64_encode($row['picture']);
+                                    } else {
+                                        
+                                    }
+                                    $first_name = $row['first_name'];
+                                    $surname = $row['surname'];
                                 }
                             }
                         }
                         ?>
+                        <h3><?php echo $first_name . " " . $surname ?> </h3>
+                        <br>
+                        <!-- Display Image -->
+                        <?php
+                        if (strlen($picture) > 0) {
+                            echo '<img class="portrait rounded-circle"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
+                        } else {
+                            echo ("<img class='portrait rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
+                        }
+                        ?>
+                    </div>
+
+                    <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
+                        <h3><?php echo $first_name ?>'s bio</h3>
+                        <p><?php echo $mybio ?></p>
+
                     </div>
                 </div>
                 <div class ="row">
