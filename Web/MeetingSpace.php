@@ -1,4 +1,90 @@
 <!DOCTYPE html>
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (empty($_POST['userid'])) {
+        $user_id = 0;
+    } else {
+        $user_id = $_POST["userid"];
+    }
+    if (empty($_POST['matchinguserid'])) {
+        $matching_user_id = 0;
+                } else {
+        $matching_user_id = $_POST["matchinguserid"];
+        
+    }
+        // check the button selected (these are at the end of this form
+        echo "EditPRofile call";
+        if ($_POST['btnAction'] == "EditProfile") { // Call Edit Profile
+            header("Location: UpdateProfile.php");
+            PostPage('UpdateProfile.php', $user_id, $matching_user_id);
+            exit();
+        }
+        if ($_POST['btnAction'] == "MatchFinder") { // Call MatchFinder
+            header("Location: MatchFind.php");
+            PostPage('MatchFind.php', $user_id, $matching_user_id);
+            exit();
+        }
+        if ($_POST['btnAction'] == "Logoff") { // Logoff
+            header("Location: index.php");
+            PostPage('index.php', 0, 0);
+            exit();
+        }
+        if ($_POST['btnAction'] == "RemoveAccount") { // Call RemoveAccount
+            header("Location: RemoveAccount.php");
+            PostPage('RemoveAccount.php', $user_id, $matching_user_id);
+            exit();
+        }
+        if ($_POST['btnAction'] == "Chat") { // Call RemoveAccount
+            header("Location: ChatLine.php");
+            PostPage('ChatLine.php', $user_id, $matching_user_id);
+            exit();
+        }        
+                if ($_POST['btnAction'] == "View") { // Call RemoveAccount
+            header("Location: ViewMatchProfile.php");
+            PostPage('ViewMatchProfile.php', $user_id, $matching_user_id);
+            exit();
+        }
+        if ($_POST['btnAction'] == "Goodbye") { // Update Status
+
+        }   
+        if ($_POST['btnAction'] == "Like") { // Update Status
+
+        }           
+        if ($_POST['btnAction'] == "Maybe") { // Update Status
+
+        }           
+        if ($_POST['btnAction'] == "Report") { // Update Status
+
+        }                  
+        
+} else {
+    if (empty($_POST['userid'])) {
+        $user_id = 0;
+        $message = "User ID not populated, cannot delete this account";
+    } else {
+        $user_id = $_POST["userid"];
+        $Message = "";
+    }
+}
+
+function PostPage($address, $user_id, $matching_user_id) {
+    $url = $address;
+    $data = array('user_id' => $user_id, 'matching_user_id' => $matching_user_id);
+    $options = array(
+        'http' => array(
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($data),
+        )
+    );
+
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    var_dump($result);
+}
+?>
+
 <html lang="en">
     <head>
         <title>meeting space</title>
@@ -110,7 +196,7 @@
         </style>
     </head>
     <body>
-        <form action="/ProcessMeetingSpace.php" method="Post">
+        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
             <div class="container-fluid">
                 <div class="row">
 
@@ -119,10 +205,11 @@
                     </div>
                     <div class="col-sm-2 container border border-primary rounded bg-light text-dark">
                         <br>
-                        
-                        <button class="btn btn-primary">Edit Profile</button>
-                            <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button>                        
-                        <button class="btn btn-danger">Logoff</button>
+
+                        <button class="btn btn-primary" name="btnAction" type="submit" value="EditProfile">Edit Profile</button>
+                        <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button>                        
+                        <button name="btnAction" class="btn btn-warning" type="submit" value="Logoff">Logoff</button>
+                        <button name="btnAction" class="btn btn-danger" type="submit" value="RemoveAccount">Remove Account</button>
                         <br>
                     </div>
 
@@ -132,8 +219,6 @@
                     <div class="col-sm-12 container border border-primary rounded bg-light text-dark">
                         <h3>Chatting with</h3>
                         <?php
-                        $user_id = $_GET["userid"];
-
                         require_once 'database_config.php';
                         ?>
                         <?php
@@ -191,8 +276,6 @@
                         <h3>System Matches</h3>
 
                         <?php
-                        $user_id = $_GET["userid"];
-
                         require_once 'database_config.php';
                         ?>
                         <?php
