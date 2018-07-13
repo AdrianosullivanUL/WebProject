@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user_id = 0;
             $message = "User ID not populated, cannot delete this account";
         } else {
-            $user_id = $_GET["userid"];
+            $user_id = $_POST["userid"];
         }
         // Get a database connection
         require_once 'database_config.php';
@@ -29,10 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Remove User Interests
         $sql = "delete from match_table where match__user_id_1 =" . $user_id . " or match_user_id_2 = " . $user_id . ";";
         $sql = "delete from user_profile where id =" . $user_id . ";";
-        
+
         // Tell the user that the profile has been deleted
         $Message = "User Profile deleted";
-        
+
         // only show return button
         $account_removed = true;
         //header("Removed");
@@ -40,11 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 } else {
     // First time screen is loaded so hide the return button and present a message
+
     $account_removed = false;
-    $Message = "<p>Please note, if you remove your account then all information related to you and your account will be removed and cannot be recovered."
-            . "This includes your profile, images, communications history and matches."
-            . "<br><br>If you are happy with this, press the Remove button below."
-            . "If you would like to keep your account, press Cancel.</p>";
+
+    if (empty($_POST['userid'])) {
+        $user_id = 0;
+        $message = "User ID not populated, cannot delete this account";
+    } else {
+        $user_id = $_POST["userid"];
+        $Message = "<p>Please note, if you remove your account then all information related to you and your account will be removed and cannot be recovered."
+                . "This includes your profile, images, communications history and matches."
+                . "<br><br>If you are happy with this, press the Remove button below."
+                . "If you would like to keep your account, press Cancel.</p>";
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -68,12 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </head>
     <body>
         <?php
-        if (isset($_GET['userid'])) {
-            $user_id = $_GET["userid"];
-        } else {
-            $user_id = 0;
-        }
-
         require_once 'database_config.php';
         ?>
         <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
