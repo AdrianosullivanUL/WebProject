@@ -15,28 +15,54 @@
                 background-repeat:   no-repeat;
                 background-position: center center;              /* optional, center the image */
             }
+            /* Add a black background color to the top navigation */
+            .topnav {
+                background-color: #333;
+                overflow: hidden;
+            }
+
+            /* Style the links inside the navigation bar */
+            .topnav a {
+                float: left;
+                color: #F0F8FF;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 17px;
+            }
+
+            /* Change the color of links on hover */
+            .topnav a:hover {
+                background-color: #ddd;
+                color: grey;
+            }
+
+            /* Add a color to the active/current link */
+            .topnav a.active {
+                background-color: #A9A9A9;
+                color: white;
+            }
+
+            /* Right-aligned section inside the top navigation */
+            .topnav-right {
+                float: right;
+            }
+            iv.first {
+                opacity: 0.1;
+                filter: alpha(opacity=10); 
+            }
         </style>
     </head>
     <body>
         <form action="/ViewMatchProfile.php" method="Post">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Matched Profile</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
-      </ul>
-           
-        </div>
-</nav>
+            <div class="topnav">
+                <a class="active">MATCHED PROFILE</a>
+                <a href="#Home">Home</a>
+                <div class="topnav-right">
+                    <a href="#report">Report</a>
+                    <a href="#logout">Log Out</a>
+                </div>
+            </div>
             <div class="container-fluid">
                 <div class="row">
 
@@ -48,56 +74,79 @@
                 require_once 'database_config.php';
                 ?>
                 <div class ="row">
-                    <div class="col-sm-4 container border border-primary rounded bg-light text-dark">
-                        <?php
-                        $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
-                        $mibio = "";
-                        $picture = "";
-                        $first_name = "";
-                        $surname = "";
-                        if ($result = mysqli_query($db_connection, $sql)) {
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_array($result)) {
-                                    $mybio = $row['my_bio'];
-                                    if (strlen($row['picture']) > 0) {
-                                        $picture = base64_encode($row['picture']);
-                                    } else {
-                                        
-                                    }
-                                    $first_name = $row['first_name'];
-                                    $surname = $row['surname'];
+                    <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;"</div>
+                    <p> " "/p>
+                </div>
+                <div class="col-xs-6 col-sm-4" style="background-color:whitesmoke; opacity: 0.9;">
+                    <?php
+                    $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
+                    $mibio = "";
+                    $picture = "";
+                    $first_name = "";
+                    $surname = "";
+                    if ($result = mysqli_query($db_connection, $sql)) {
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_array($result)) {
+                                $mybio = $row['my_bio'];
+                                if (strlen($row['picture']) > 0) {
+                                    $picture = base64_encode($row['picture']);
+                                } else {
+                                    
                                 }
+                                $first_name = $row['first_name'];
+                                $surname = $row['surname'];
                             }
                         }
-                        ?>
-                        <h3><?php echo $first_name . " " . $surname ?> </h3>
-                        <br>
-                        <!-- Display Image -->
-                        <?php
-                        if (strlen($picture) > 0) {
-                            echo '<img class="portrait rounded-circle"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
-                        } else {
-                            echo ("<img class='portrait rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
-                        }
-                        ?>
-                    </div>
-
-                    <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
-                        <h3><?php echo $first_name ?>'s bio</h3>
-                        <p><?php echo $mybio ?></p>
-
-                    </div>
+                    }
+                    ?>
+                    <h3><?php echo $first_name . " " . $surname ?> </h3>
+                    <br>
+                    <!-- Display Image -->
+                    <?php
+                    if (strlen($picture) > 0) {
+                        echo '<img class="portrait"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
+                    } else {
+                        echo ("<img class='portrait' src='images/camera-photo-7.png'/><i></i>'");
+                    }
+                    ?>
                 </div>
-                <div class ="row">
-                    <div class ="col">
-                        <?php
-                        echo("<h3>Interests/Hobbies</h3>");
-                        echo("<p>Check Box Interest 1</p>");
-                        echo("<p>Check Box Interest 2</p>");
-                        echo("<p>Check Box Interest 3</p>");
-                        echo("<p>Check Box Interest 4</p>");
-                        ?>
-                    </div>
+                <div class="col-xs-6 col-sm-6" style="background-color:lavender; opacity: 0.9;">
+                    <h3><?php echo $first_name ?>'s bio</h3>
+                    <p><?php echo $mybio ?></p>
+
+                </div>
+            </div>
+            <div class ="row">
+                <div class="col-sm-12" style="background-color:transparent; opacity: 0.0;">
+
+                </div>
+            </div>
+
+            <div class ="row">
+                <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
+                    <p> " "/p>
+                </div>
+                <div class ="col-xs-4 col-sm-4"style="background-color:lavender; opacity: 0.9;">
+                    <?php
+                    echo("<h3>Interests/Hobbies</h3>");
+                    echo("<p>Check Box Interest 1</p>");
+                    echo("<p>Check Box Interest 2</p>");
+                    echo("<p>Check Box Interest 3</p>");
+                    echo("<p>Check Box Interest 4</p>");
+                    ?>
+                </div>
+                <div class="col-xs-6 col-sm-6"style="background-color:whitesmoke; opacity: 0.9;">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
+                    <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
+                    <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
+                    <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
+                    <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
                 </div>
 
 
