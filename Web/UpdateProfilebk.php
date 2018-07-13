@@ -35,25 +35,6 @@
                 </div>
                 <div class="container border border-primary rounded bg-light text-dark col-sm-6">
                     <?php
-                     $firstname = "";
-                   $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
-               //    echo ("sql" . $sql);
-                   if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                if ($row['id'] == $user_id) {
-                               //     echo ($row['first_name']);
-                                                        echo('<div class="form-group">');
-                      echo('<label for="firstnameInput">Name</label>');
-                       echo('<input type="text" class="form-control" id="firstnameInput" placeholder="'.$row['first_name'].'">');
-                       $surname = $row['first_name'];
-                    //     echo ($row['first_name']);
-                     //    echo('</input>');
-                   echo('</div>');
-                                }
-                            }
-                        }
-                   }
                     $surname = "";
                    $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
                //    echo ("sql" . $sql);
@@ -63,9 +44,9 @@
                                 if ($row['id'] == $user_id) {
                                //     echo ($row['first_name']);
                                                         echo('<div class="form-group">');
-                      echo('<label for="surnameInput">Surname</label>');
-                       echo('<input type="text" class="form-control" id="surnameInput" placeholder="'.$row['surname'].'">');
-                       $surname = $row['surname'];
+                      echo('<label for="nameInput">Name</label>');
+                       echo('<input type="text" class="form-control" id="firstnameInput" placeholder="'.$row['first_name'].'">');
+                       $surname = $row['first_name'];
                     //     echo ($row['first_name']);
                      //    echo('</input>');
                    echo('</div>');
@@ -73,80 +54,43 @@
                             }
                         }
                    }
-                     
                                     ?>
-                  
+                    <div class="form-group">
+                        <label for="nameInput">Name</label>
+                        <input type="text" class="form-control" id="surnameInput" placeholder="<?php $surname ?>">
+                    </div>
 
                     <div class="form-group">
                         <label for="dateOfBirthInput">Date of Birth</label>
                         <input type="date" class="form-control" id="dateOfBirthInput">
                     </div>
                     <div class="form-group">
-                 
-                     <?php
-                        $gender = "";
-                   $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
-               //    echo ("sql" . $sql);
-                   if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                if ($row['id'] == $user_id) {
-                               //     echo ($row['first_name']);
-                                                        echo('<div class="form-group">');
-                      echo('<label for="genderInput">Gender</label>');
-                      echo('<input type="text" class="form-control" id="genderInput" placeholder="'.$row['gender_id'].'">');
-                       $gender = $row['gender_id'];
-                    //     echo ($row['first_name']);
-                     //    echo('</input>');
-                   echo('</div>');
-                                }
-                            }
-                        }
-                   }
-                      $genderSelection = "";
-                   $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
-               //    echo ("sql" . $sql);
-                   if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                if ($row['id'] == $user_id) {
-                               //     echo ($row['first_name']);
-                                                        echo('<div class="form-group">');
-                      echo('<label for="genderSelectionInput">Preferred Partner Gender</label>');
-                      echo('<input type="text" class="form-control" id="genderSelectionInput" placeholder="'.$row['gender_id'].'">');
-                       $genderSelection = $row['gender_id'];
-                    //     echo ($row['first_name']);
-                     //    echo('</input>');
-                   echo('</div>');
-                                }
-                            }
-                        }
-                   }
-                
-                     ?>
-                         <?php
-                    $location = "";
-                   $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
-               //    echo ("sql" . $sql);
-                   if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                if ($row['id'] == $user_id) {
-                               //     echo ($row['first_name']);
-                                                        echo('<div class="form-group">');
-                      echo('<label for="locationInput">Preferred Location</label>');
-                       echo('<input type="text" class="form-control" id="locationInput" placeholder="'.$row['city_id'].'">');
-                       $location = $row['city_id'];
-                    //     echo ($row['first_name']);
-                     //    echo('</input>');
-                   echo('</div>');
-                                }
-                            }
-                        }
-                   }
-                                    ?>
-                    
-                    
+                        <label for="genderInput">Gender</label>
+                        <select class="form-control" id="genderInput">
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="genderSelection">Preferred Partner Gender</label>
+                        <select class="form-control" id="genderSelection">
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Etc.</option>
+                            <!-- More options to add -->
+                            <!-- Change to connect to DB -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="locationSelection">Preferred Location</label>
+                        <select class="form-control" id="locationSelection">
+                            <option>Limerick</option>
+                            <option>Cork</option>
+                            <option>Etc.</option>
+                            <!-- More options to add -->
+                            <!-- Change to connect to DB -->
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="seekingAgeSelection">Seeking Age Profile</label>
                         <input type="range" min="1" max="100" value="50" class="slider" id="seekingAgeSelection">
