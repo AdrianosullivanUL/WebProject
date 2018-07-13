@@ -11,7 +11,7 @@
 <body>
 
 <div class="container">
-  <h1>chaline Screen</h1>
+  <h1>chatline Screen</h1>
 </div>
 
 <div id="main">
