@@ -1,88 +1,68 @@
 <!DOCTYPE html>
 <?php
+require_once 'database_config.php';
+
+session_start();
+$user_id = $_SESSION['user_id'];
+$matching_user_id = $_SESSION['matching_user_id'];
+//echo "session user " . $user_id;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (empty($_POST['userid'])) {
-        $user_id = 0;
-    } else {
-        $user_id = $_POST["userid"];
+
+    // check the button selected (these are at the end of this form
+    echo "EditPRofile call";
+    if ($_POST['btnAction'] == "EditProfile") { // Call Edit Profile
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['matching_user_id'] = $matching_user_id;
+        header("Location: UpdateProfile.php");
+        PostPage('UpdateProfile.php', $user_id, $matching_user_id);
+        exit();
     }
-    if (empty($_POST['matchinguserid'])) {
-        $matching_user_id = 0;
-                } else {
-        $matching_user_id = $_POST["matchinguserid"];
-        
+    if ($_POST['btnAction'] == "MatchFinder") { // Call MatchFinder
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['matching_user_id'] = $matching_user_id;
+        header("Location: MatchFind.php");
+        PostPage('MatchFind.php', $user_id, $matching_user_id);
+        exit();
     }
-        // check the button selected (these are at the end of this form
-        echo "EditPRofile call";
-        if ($_POST['btnAction'] == "EditProfile") { // Call Edit Profile
-            header("Location: UpdateProfile.php");
-            PostPage('UpdateProfile.php', $user_id, $matching_user_id);
-            exit();
-        }
-        if ($_POST['btnAction'] == "MatchFinder") { // Call MatchFinder
-            header("Location: MatchFind.php");
-            PostPage('MatchFind.php', $user_id, $matching_user_id);
-            exit();
-        }
-        if ($_POST['btnAction'] == "Logoff") { // Logoff
-            header("Location: index.php");
-            PostPage('index.php', 0, 0);
-            exit();
-        }
-        if ($_POST['btnAction'] == "RemoveAccount") { // Call RemoveAccount
-            header("Location: RemoveAccount.php");
-            PostPage('RemoveAccount.php', $user_id, $matching_user_id);
-            exit();
-        }
-        if ($_POST['btnAction'] == "Chat") { // Call RemoveAccount
-            header("Location: ChatLine.php");
-            PostPage('ChatLine.php', $user_id, $matching_user_id);
-            exit();
-        }        
-                if ($_POST['btnAction'] == "View") { // Call RemoveAccount
-            header("Location: ViewMatchProfile.php");
-            PostPage('ViewMatchProfile.php', $user_id, $matching_user_id);
-            exit();
-        }
-        if ($_POST['btnAction'] == "Goodbye") { // Update Status
-
-        }   
-        if ($_POST['btnAction'] == "Like") { // Update Status
-
-        }           
-        if ($_POST['btnAction'] == "Maybe") { // Update Status
-
-        }           
-        if ($_POST['btnAction'] == "Report") { // Update Status
-
-        }                  
-        
+    if ($_POST['btnAction'] == "Logoff") { // Logoff
+        header("Location: index.php");
+        PostPage('index.php', 0, 0);
+        exit();
+    }
+    if ($_POST['btnAction'] == "RemoveAccount") { // Call RemoveAccount
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['matching_user_id'] = $matching_user_id;
+        header("Location: RemoveAccount.php");
+        PostPage('RemoveAccount.php', $user_id, $matching_user_id);
+        exit();
+    }
+    if ($_POST['btnAction'] == "Chat") { // Call RemoveAccount
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['matching_user_id'] = $matching_user_id;
+        header("Location: ChatLine.php");
+        PostPage('ChatLine.php', $user_id, $matching_user_id);
+        exit();
+    }
+    if ($_POST['btnAction'] == "View") { // Call RemoveAccount
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['matching_user_id'] = $matching_user_id;
+        header("Location: ViewMatchProfile.php");
+        PostPage('ViewMatchProfile.php', $user_id, $matching_user_id);
+        exit();
+    }
+    if ($_POST['btnAction'] == "Goodbye") { // Update Status
+    }
+    if ($_POST['btnAction'] == "Like") { // Update Status
+    }
+    if ($_POST['btnAction'] == "Maybe") { // Update Status
+    }
+    if ($_POST['btnAction'] == "Report") { // Update Status
+    }
 } else {
-    if (empty($_POST['userid'])) {
-        $user_id = 0;
-        $message = "User ID not populated, cannot delete this account";
-    } else {
-        $user_id = $_POST["userid"];
-        $Message = "";
-    }
+    
 }
 
-function PostPage($address, $user_id, $matching_user_id) {
-    $url = $address;
-    $data = array('user_id' => $user_id, 'matching_user_id' => $matching_user_id);
-    $options = array(
-        'http' => array(
-            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method' => 'POST',
-            'content' => http_build_query($data),
-        )
-    );
-
-    $context = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
-    var_dump($result);
-}
 ?>
 
 <html lang="en">
@@ -219,9 +199,7 @@ function PostPage($address, $user_id, $matching_user_id) {
                     <div class="col-sm-12 container border border-primary rounded bg-light text-dark">
                         <h3>Chatting with</h3>
                         <?php
-                        require_once 'database_config.php';
-                        ?>
-                        <?php
+                        echo "session check " . $user_id;
                         $sql = "SELECT * FROM matches_view where (match_user_id_1 =" . $user_id
                                 . " or  match_user_id_2 =" . $user_id . ")"
                                 . " and (user_profile_1_match_status = 'Chatting'"

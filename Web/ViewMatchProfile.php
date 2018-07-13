@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<?php
+require_once 'database_config.php';
+
+session_start();
+$user_id = $_SESSION['user_id'];
+$matching_user_id = $_SESSION['matching_user_id'];
+?>
 <html lang="en">
     <head>
         <title>view matching profile</title>
@@ -68,18 +75,14 @@
 
                 </div>
                 <br>
-                <?php
-                $user_id = $_GET["userid"];
-
-                require_once 'database_config.php';
-                ?>
                 <div class ="row">
                     <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
                     <p> " "/p>
                 </div>
                 <div class="col-xs-6 col-sm-4" style="background-color:whitesmoke; opacity: 0.9;">
                     <?php
-                    $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
+                    $sql = "SELECT * FROM user_profile where id =" . $matching_user_id . ";";
+                    echo $sql;
                     $mibio = "";
                     $picture = "";
                     $first_name = "";
@@ -127,13 +130,21 @@
                     <p> " "/p>
                 </div>
                 <div class ="col-xs-4 col-sm-4"style="background-color:lavender; opacity: 0.9;">
-                    <?php
-                    echo("<h3>Interests/Hobbies</h3>");
-                    echo("<p>Check Box Interest 1</p>");
-                    echo("<p>Check Box Interest 2</p>");
-                    echo("<p>Check Box Interest 3</p>");
-                    echo("<p>Check Box Interest 4</p>");
-                    ?>
+                   // <?php
+                    //$sql="SELECT interests.description
+                      //  FROM interests
+                        //LEFT JOIN user_interests ON user_interest_id = interests.id
+                        //where user_id = " . $matching_user_id . ";";
+                    //$interest = "";
+                    //if ($result = mysqli_query($db_connection, $sql)) {
+                      //  if (mysqli_num_rows($result) > 0) {
+                        //    while ($row = mysqli_fetch_array($result)) {
+                          //      $interests = $row['interests'];             
+                    
+                    //echo("<h3>. $interest</h3>");
+                        //    }
+                      //  }
+                    //?>
                 </div>
                 <div class="col-xs-6 col-sm-6"style="background-color:whitesmoke; opacity: 0.9;">
                     <br>

@@ -1,3 +1,23 @@
+<?php
+require_once 'database_config.php';
+include 'group05_library.php';
+session_start();
+
+$_SESSION['user_id'] = 24;
+$_SESSION['matching_user_id'] = 24;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // check the button selected (these are at the end of this form
+    if ($_POST['btnAction'] == "MeetingSpace") { // Call Edit Profile
+        header("Location: MeetingSpace.php");
+        exit();
+    }
+    if ($_POST['btnAction'] == "ViewMatchingProfile") { // Call Edit Profile
+        header("Location: ViewMatchProfile.php");
+        exit();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -28,5 +48,17 @@
             &nbsp
             <a href="Register.php">Register</a>
         </div>
+        <br><br>
+        <div class="container border border-primary rounded bg-light text-dark col-sm-6">
+            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+                <h1>Test Links (to be removed later)</h1>
+                <br><br>
+                <button name="btnAction" class="btn btn-success" type="submit" value="MeetingSpace">Meeting Space</button>
+                <button name="btnAction" class="btn btn-success" type="submit" value="ViewMatchingProfile">View Matching Profile</button>
+
+            </form>
+
+        </div>
+
     </body>
 </html> 
