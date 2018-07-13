@@ -50,19 +50,37 @@
 
 <div id="main">
 
-<h1 style="background-color: #6495ed;color: white;"> -online</h1>
+<h1 style="background-color: #6495ed;color: white;"><?php echo $_SESSION['$user_id']?>-online</h1>
 	<div class="output">
+	
+		<?php   
+				// session_start();
+				// $user_id = $_SESSION['user_id'];
+				// $matching_user_id = $_SESSION['matching_user_id'];
+				// echo "session user " . $user_id;
+				// $sql = "SELECT * from user_communication WHERE " . $to_user_id ." = " . $matching_user_id ." AND " . $from_user_id ." =" . $user_id ." ;";
+				// if ($result->num_rows > 0) {
+					//output data of each row
+					// while($row = $result->fetch_assoc()){
+						// echo "" . $row["message"]." --" .$row["date"]. "<br>";
+						// echo "<br>";
+					// }
+				// } else {
+					// echo "0 results";
+				// }
+				// $conn->close();
+		?>
 
 
 	</div>
 
-<form method="post" action="send.php">
+<form method="post" action="Send.php">
 <textarea name="msg" placeholder="Type to send message...."
 class="form-control"></textarea><br>
 <input type="submit" value="Send">
 </form>
 <br>
-<form action="logout.php">
+<form action="Logout.php">
 
 <input stype="width: 100%;background-color: #6495ed;color:
     white;font-size: 20px;" type="submit" value="Logout">
