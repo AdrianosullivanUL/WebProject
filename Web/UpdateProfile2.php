@@ -76,12 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     }
                                     echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
                                     echo ("");
-
-
-
-
-
-     
+                               
+                                    
                                     echo('</div>');
                                 }
                             }
@@ -93,8 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </br>
                     </br>
                     <div class="form-group">
+                   <label class="header">Profile Photo:</label>
+                <input id="image" type="file" name="profile_photo" placeholder="Photo" required="" capture>
+            </div>
 
-                    </div>
+             
                 </div>           
 
                 </br>
@@ -105,6 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         </div>
         <!--Lets try and do hobbies-->
+        
+        <div class="container border border-primary rounded bg-light text-dark col-sm-6">
 
         <div class="form-group">
             <p align="middle">
