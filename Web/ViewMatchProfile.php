@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <?php
+session_start();
+if ($_SESSION['user_logged_in'] == 0) {
+    header("Location: Logon.php");
+}
 require_once 'database_config.php';
 
-session_start();
+
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
+//echo "session user " . $user_id;
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    require_once 'database_config.php';
+
+    session_start();
+    $user_id = $_SESSION['user_id'];
+    $matching_user_id = $_SESSION['matching_user_id'];
+}
 ?>
 <html lang="en">
     <head>
@@ -102,7 +116,7 @@ $matching_user_id = $_SESSION['matching_user_id'];
                         }
                         ?>
                         <h4><?php echo $first_name . " " . $surname ?> </h4>
-                       <!-- Display Image -->
+                        <!-- Display Image -->
                         <?php
                         if (strlen($picture) > 0) {
                             echo '<img class="portrait"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
@@ -135,7 +149,7 @@ $matching_user_id = $_SESSION['matching_user_id'];
                        LEFT JOIN user_interests ON interest_id = interests.id
                        where user_id = " . $matching_user_id . ";";
                         $interest = "";
-                       if ($result = mysqli_query($db_connection, $sql)) {
+                        if ($result = mysqli_query($db_connection, $sql)) {
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_array($result)) {
                                     $description = $row['description'];
@@ -146,7 +160,7 @@ $matching_user_id = $_SESSION['matching_user_id'];
                         ?>
                     </div>
                     <div class="col-xs-6 col-sm-6"style="background-color:whitesmoke; opacity: 0.9;text-align:right">
-                        
+
                         <br>
                         <br>
                         <br>

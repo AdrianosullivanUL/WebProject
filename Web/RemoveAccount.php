@@ -1,4 +1,8 @@
 <?php
+session_start();
+if ($_SESSION['user_logged_in'] == 0) {
+    header("Location: Logon.php");
+}$Message = '';
 // Check and see if a post has been requested (this does not happen when screen initially opens
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // check the button selected (these are at the end of this form

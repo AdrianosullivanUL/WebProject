@@ -143,7 +143,7 @@ if (isset($_POST['submitted'])) {
                             <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad">
 
                                 <input type="password" onkeyup="passwordChecker()" name="password" id="password" class="form-control">
-                                                 
+
 
                             </div>
                             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
@@ -170,7 +170,7 @@ if (isset($_POST['submitted'])) {
                             <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad">
 
                                 <input type="password" name="verifypassword" id="verifypassword" class="form-control">
-                                                   
+
 
                             </div>
                             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>

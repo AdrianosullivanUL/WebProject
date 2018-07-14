@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <?php
+session_start();
+if ($_SESSION['user_logged_in'] == 0) {
+    header("Location: Logon.php");
+}
 require_once 'database_config.php';
 
-session_start();
+
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
 //echo "session user " . $user_id;
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -62,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     
 }
-
 ?>
 
 <html lang="en">
