@@ -99,8 +99,20 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" padding-top: 7px; text-align: left;">
+                                    Gender Preference <span style="color: red">*</span> :</div>
+
+                                <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style="font-weight:600;">
+
+                                    <input style="border-radius: 4px" type="text"  class="form-control" name="match" id="match" >                   
+
+                                </div>
+                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" padding-top: 7 px; text-align: left;">
-                                    Preferred Location <span style="color: red">*</span> :</div>
+                                    Relationship Type <span style="color: red">*</span> :</div>
 
                                 <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style="font-weight:600;">
 
