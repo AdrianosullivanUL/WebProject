@@ -3,8 +3,8 @@ require_once 'database_config.php';
 include 'group05_library.php';
 session_start();
 
-$_SESSION['user_id'] = 24;
-$_SESSION['matching_user_id'] = 24;
+$_SESSION['user_id'] = 0;
+$_SESSION['matching_user_id'] = 0;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // check the button selected (these are at the end of this form
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: ViewMatchProfile.php");
         exit();
     }
-        if ($_POST['btnAction'] == "UpdateProfile") { // Call Edit Profile
+    if ($_POST['btnAction'] == "UpdateProfile") { // Call Edit Profile
         header("Location: UpdateProfile.php");
         exit();
     }
@@ -45,13 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </head>
     <body >
         <br>
-        <div class="container border border-primary rounded bg-light text-dark col-sm-6">
+        <div class="container border border-primary rounded bg-light text-dark col-sm-4">
             <h1>Reach Out to your future partner</h1>
             <br><br>
             <a href="Logon.php?userid=24">Log on</a> 
             &nbsp
             <a href="Register.php">Register</a>
         </div>
+        <!--
         <br><br>
         <div class="container border border-primary rounded bg-light text-dark col-sm-6">
             <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
@@ -64,6 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
 
         </div>
-
+        -->
     </body>
 </html> 

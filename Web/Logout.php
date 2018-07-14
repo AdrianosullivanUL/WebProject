@@ -1,4 +1,20 @@
-<?PHP ?>
+<?php
+session_start();
+// redirect to the logon screen if the user is not logged in
+if ($_SESSION['user_logged_in'] == 0) {
+    header("Location: Logon.php");
+}
+require_once 'database_config.php';
+
+
+$user_id = $_SESSION['user_id'];
+$matching_user_id = $_SESSION['matching_user_id'];
+//echo "session user " . $user_id;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    echo "I am a post";
+}
+?>
 <head>
     <title>Logout</title>
     <meta charset="utf-8">

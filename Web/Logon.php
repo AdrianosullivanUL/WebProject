@@ -1,84 +1,89 @@
-<?PHP
-require_once("./include/membersite_config.php");
-
-if(isset($_POST['submitted']))
-{
-   if($fgmembersite->Login())
-   {
-        $fgmembersite->RedirectToURL("login-home.php");
-   }
+<?php
+require_once 'database_config.php';
+include 'group05_library.php';
+session_start();
+$_SESSION['user_logged_in'] = 0;
+$_SESSION['is_administrator'] = 0;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $logon = 0;
+    // check the button selected (these are at the end of this form
+    if ($_POST['btnAction'] == "Logon") { // Call Edit Profile
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $sql = "select * from user_profile where email = '" . $email . "' and password_hash = sha2('" . $password . "',256);";
+        if ($result = mysqli_query($db_connection, $sql)) {
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_array($result)) {
+                    $logon = 1;
+                    
+                    if ($row['is_administrator'] == 1) {
+                        $_SESSION['is_administrator'] = 1;
+                    }
+                }
+            }
+            if ($logon == 1) {
+                $_SESSION['user_logged_in'] = 1;
+                header("Location: MeetingSpace.php");
+                exit();
+            } else {
+                $message = 'Logon failed, please ensure you are entering the correct email address and password';
+            }
+        }
+        if ($_POST['btnAction'] == "ForgotPassword") { // Call Edit Profile
+            header("Location: PasswordReset.php");
+            exit();
+        }
+    }
+} else {
+    $message = 'Please input your email address and password and then press logon';
 }
-
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
-<head>
-	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>Login</title>
-	<link rel="STYLESHEET" type="text/css" href="style/fg_membersite.css" />
-	<script type='text/javascript' src='scripts/gen_validatorv31.js'></script>
-	<style>
-		body {
-			background-image:    url(images/backlit-bonding-casual-708392.jpg);
-			background-size:     cover;                      /* <------ */
-			background-repeat:   no-repeat;
-			background-position: center center;              /* optional, center the image */
-		}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Chance Dating</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
+        <style>
+            body {
+                background-image:    url(images/backlit-bonding-casual-708392.jpg);
+                background-size:     cover;                      /* <------ */
+                background-repeat:   no-repeat;
+                background-position: center center;              /* optional, center the image */
+            }
 
 
-	</style>
-	  
-</head>
-<body>
+        </style>
+    </head>
+    <body>
 
-<!-- Form Code Start -->
-<div id='fg_membersite'>
-<form id='login' action='<?php echo $fgmembersite->GetSelfScript(); ?>' method='post' accept-charset='UTF-8'>
-<fieldset >
-<legend>Login</legend>
+        <!-- Form Code Start -->
+        <div class="container border border-primary rounded bg-light text-dark col-sm-6">
 
-<input type='hidden' name='submitted' id='submitted' value='1'/>
+            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+                <div class="container-fluid">            
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" name="email" placeholder="">
+                        <label for="password">Username</label>
+                        <input type="password" class="form-control" name="password" placeholder="">
+                        <p><?php echo $message; ?></p>
+                    </div>    
 
-<div class='short_explanation'>* required fields</div>
+                    <button name="btnAction" class="btn btn-primary" type="submit" value="Logon">Logon</button>
+                    <button name="btnAction" class="btn btn-danger" type="submit" value="ForgotPassword">Forgot Password?</button>
+                </div>
 
-<div><span class='error'><?php echo $fgmembersite->GetErrorMessage(); ?></span></div>
-<div class='container'>
-    <label for='username' >UserName*:</label><br/>
-    <input type='text' name='username' id='username' value='<?php echo $fgmembersite->SafeDisplay('username') ?>' maxlength="50" /><br/>
-    <span id='login_username_errorloc' class='error'></span>
-</div>
-<div class='container'>
-    <label for='password' >Password*:</label><br/>
-    <input type='password' name='password' id='password' maxlength="50" /><br/>
-    <span id='login_password_errorloc' class='error'></span>
-</div>
 
-<div class='container'>
-    <input type='submit' name='Submit' value='Submit' />
-</div>
-<div class='short_explanation'><a href='reset-pwd-req.php'>Forgot Password?</a></div>
-</fieldset>
-</form>
-<!-- client-side Form Validations:
-Uses the excellent form validation script from JavaScript-coder.com-->
 
-<script type='text/javascript'>
-// <![CDATA[
 
-    var frmvalidator  = new Validator("login");
-    frmvalidator.EnableOnPageErrorDisplay();
-    frmvalidator.EnableMsgsTogether();
 
-    frmvalidator.addValidation("username","req","Please provide your username");
-    
-    frmvalidator.addValidation("password","req","Please provide the password");
+        </div>
 
-// ]]>
-</script>
-</div>
-<!--
-Form Code End (see html-form-guide.com for more info.)
--->
 
-</body>
+    </body>
 </html> 
