@@ -84,7 +84,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $preferred_gender_name = "";
                     $dob = "";
                     $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
-                    //echo ("sql" . $sql);
+
+                    //                   $sql = "SELECT image FROM user_profile where id =" . $user_id . ";";
+//echo ("sql" . $sql);
                     if ($result = mysqli_query($db_connection, $sql)) {
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_array($result)) {
