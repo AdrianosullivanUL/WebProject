@@ -16,6 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: ViewMatchProfile.php");
         exit();
     }
+        if ($_POST['btnAction'] == "UpdateProfile") { // Call Edit Profile
+        header("Location: UpdateProfile.php");
+        exit();
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -55,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <br><br>
                 <button name="btnAction" class="btn btn-success" type="submit" value="MeetingSpace">Meeting Space</button>
                 <button name="btnAction" class="btn btn-success" type="submit" value="ViewMatchingProfile">View Matching Profile</button>
+                <button name="btnAction" class="btn btn-success" type="submit" value="UpdateProfile">Update Profile</button>
 
             </form>
 
