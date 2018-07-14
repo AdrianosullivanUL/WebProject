@@ -67,7 +67,7 @@ $matching_user_id = $_SESSION['matching_user_id'];
                 <a href="MeetingSpace.php">Home</a>
                 <div class="topnav-right">
                     <a href="UpdateProfile.php">Update Profile</a>
-                    <a href="#logout">Log Out</a>
+                    <a href="logout.php">Log Out</a>
                 </div>
             </div>
             <div class="container-fluid">
