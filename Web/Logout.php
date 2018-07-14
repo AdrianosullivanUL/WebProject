@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <h4>Are you sure you want to Logout ?  </h4>
                         <br>
                         <br>
-                        <a href="logon.php" class="btn btn-info btn-lg">
+                        <a href="Logon.php" class="btn btn-info btn-lg">
                             <span class="glyphicon glyphicon-log-out"></span> Log out
                         </a>
                         </p> 
