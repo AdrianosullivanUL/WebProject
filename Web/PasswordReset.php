@@ -67,8 +67,8 @@ if (isset($_POST['submitted'])) {
         <a class="active">PASSWORD RESET</a>
         <a href="MeetingSpace.php">Home</a>
         <div class="topnav-right">
-            <a href="UpdateProfile.php">About</a>
-            <a href="#logout">Log In</a>
+            <a href="index.php">About</a>
+            <a href="logon.php">Log In</a>
         </div>
     </div>
     <<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
