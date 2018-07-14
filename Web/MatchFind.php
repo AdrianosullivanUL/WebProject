@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" padding-top: 7px; text-align: left;">
-                                    Gender Preference <span style="color: red">*</span> :</div>
+                                    Preferred Location <span style="color: red">*</span> :</div>
 
                                 <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style="font-weight:600;">
 
@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                             </div> 
-                            
+
                             <div class="form-group" style="margin-bottom: 5px;">
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-1"></div><div class="col-sm-8 col-md-8 col-lg-7 col-xs-10 mobilePad" id="message8" style=" font-size: 10pt;padding-left: 0px;"></div>                      
 
@@ -175,12 +175,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <input type="interest" name="interest" id="interest" class="form-control">
                                     <br>
                                     <br>
-                                     </div>
-                                 </div>
-                                    
+                                </div>
+                            </div>
 
 
-            
+
+
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
