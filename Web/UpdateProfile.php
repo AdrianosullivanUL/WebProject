@@ -1,3 +1,31 @@
+<?php
+require_once 'database_config.php';
+
+session_start();
+$user_id = $_SESSION['user_id'];
+$matching_user_id = $_SESSION['matching_user_id'];
+//echo "session user " . $user_id;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    echo "I am a post";
+    // check the button selected (these are at the end of this form
+    echo "EditPRofile call";
+    if ($_POST['btnAction'] == "Next") { // Call Edit Profile
+        echo "Next pressed";
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['matching_user_id'] = $matching_user_id;
+        header("Location: UpdateProfile2.php");
+        exit();
+    }
+    if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
+        echo "Cancel pressed";
+        header("Location: index.php");
+        exit();
+    } else {
+        echo "I am called from another form";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11,23 +39,23 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-           <script>                    
-  $( function() {
-    $( "#slider-range" ).slider({
-        echo "first part of slider"
-      range: true,
-      min: 18,
-      max: 120,
-      values: [ 18, 65 ],
-      slide: function( event, ui ) {
-        $( "#age" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-      }
-    });
-    $( "#age" ).val( $( "#slider-range" ).slider( "values", 0 ) +
-      " - " + $( "#slider-range" ).slider( "values", 1 ) );
-  } );
- </script>
-  
+        <script>
+            $(function () {
+                $("#slider-range").slider({
+                    echo "first part of slider"
+                            range: true,
+                    min: 18,
+                    max: 120,
+                    values: [18, 65],
+                    slide: function (event, ui) {
+                        $("#age").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+                    }
+                });
+                $("#age").val($("#slider-range").slider("values", 0) +
+                        " - " + $("#slider-range").slider("values", 1));
+            });
+        </script>
+
         <style>
             body {
                 background-image:    url(images/backlit-bonding-casual-708392.jpg);
@@ -43,173 +71,97 @@
     <body>
         <div class="container">
 
-            <form action="UpdateProfile2.php" method = "post">
-                <?php
-                $user_id = $_GET["userid"];
-
-                require_once 'database_config.php';
-                ?>
+            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
                 <div class="container border border-primary rounded bg-light text-dark col-sm-6">
                     <h1>Personal Details</h1>
                 </div>
+                </br>
                 <div class="container border border-primary rounded bg-light text-dark col-sm-6">
                     <?php
-                     $firstname = "";
-                   $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
-               //    echo ("sql" . $sql);
-                   if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                if ($row['id'] == $user_id) {
-                               //     echo ($row['first_name']);
-                                                        echo('<div class="form-group">');
-                      echo('<label for="firstnameInput">Name</label>');
-                       echo('<input type="text" class="form-control" id="firstnameInput" placeholder="'.$row['first_name'].'">');
-                       $surname = $row['first_name'];
-                    //     echo ($row['first_name']);
-                     //    echo('</input>');
-                   echo('</div>');
-                                }
-                            }
-                        }
-                   }
+                    $firstname = "";
                     $surname = "";
-                   $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
-               //    echo ("sql" . $sql);
-                   if ($result = mysqli_query($db_connection, $sql)) {
+                    $gender_name = "";
+                    $preferred_gender_name = "";
+                    $dob = "";
+                    $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
+                    //echo ("sql" . $sql);
+                    if ($result = mysqli_query($db_connection, $sql)) {
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_array($result)) {
                                 if ($row['id'] == $user_id) {
-                               //     echo ($row['first_name']);
-                                                        echo('<div class="form-group">');
-                      echo('<label for="surnameInput">Surname</label>');
-                       echo('<input type="text" class="form-control" id="surnameInput" placeholder="'.$row['surname'].'">');
-                       $surname = $row['surname'];
-                    //     echo ($row['first_name']);
-                     //    echo('</input>');
-                   echo('</div>');
+                                    //     echo ($row['first_name']);
+                                    echo('<div class="form-group">');
+                                    echo('<label for="firstnameInput">Name</label>');
+                                    echo('<input type="text" class="form-control" id="firstnameInput" placeholder="' . $row['first_name'] . '">');
+                                    $surname = $row['surname'];
+                                    $firstname = $row['first_name'];
+                                    $gender_name = $row['gender_name'];
+                                    $dob = $row['date_of_birth'];
+                                    $preferred_gender_name = $row['preferred_gender_name'];
+                                    //     echo ($row['first_name']);
+                                    //    echo('</input>');
+                                    echo('</div>');
                                 }
                             }
                         }
-                   }
-                     
-                                    ?>
-                  
+                    }
+                    ?>
+                    <div class="form-group">
+                        <label for="surnameInput">Surname</label>
+                        <input type="text" class="form-control" id="surnameInput" placeholder=" <?php echo $surname; ?> ">
+
+                    </div>
+
+
 
                     <div class="form-group">
                         <label for="dateOfBirthInput">Date of Birth</label>
-                        <input type="date" class="form-control" id="dateOfBirthInput">
+                        <input type="text" class="form-control" id="dateOfBirthInput" placeholder=" <?php echo $dob; ?> ">
                     </div>
                     <div class="form-group">
-                 
-                     <?php
-                        $gender = "";
-                 
-                      
-                      $sql = "SELECT * FROM user_profile  up1 join gender g1 on g1.id = up1.gender_id where up1.id = " . $user_id . ";";
-                      
-                
-                 echo ("sql" . $sql);
-                   if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                               // if ($row['id'] == $user_id) {
-                               if ($row['id'] == $user_id) {
-                               //     echo ($row['first_name']);
-                                                        echo('<div class="form-group">');
-                      echo('<label for="genderInput">Gender</label>');
-                      echo('<input type="text" class="form-control" id="genderInput" placeholder="'.$row['gender_name'].'">');
-                       $gender = $row['gender_name'];
-                    //     echo ($row['first_name']);
-                     //    echo('</input>');
-                   echo('</div>');
-                                }
-                            }
-                        }
-                   }
-                      $genderSelection = "";
-                   $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
-               //    echo ("sql" . $sql);
-                   if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                if ($row['id'] == $user_id) {
-                               //     echo ($row['first_name']);
-                                                        echo('<div class="form-group">');
-                      echo('<label for="genderSelectionInput">Preferred Partner Gender</label>');
-                      echo('<input type="text" class="form-control" id="genderSelectionInput" placeholder="'.$row['gender_id'].'">');
-                       $genderSelection = $row['gender_id'];
-                    //     echo ($row['first_name']);
-                     //    echo('</input>');
-                   echo('</div>');
-                                }
-                            }
-                        }
-                   }
-                
-                     ?>
-                         <?php
-                    $location = "";
-                   $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
-               //    echo ("sql" . $sql);
-                   if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                if ($row['id'] == $user_id) {
-                               //     echo ($row['first_name']);
-                                                        echo('<div class="form-group">');
-                      echo('<label for="locationInput">Preferred Location</label>');
-                       echo('<input type="text" class="form-control" id="locationInput" placeholder="'.$row['city_id'].'">');
-                       $location = $row['city_id'];
-                    //     echo ($row['first_name']);
-                     //    echo('</input>');
-                   echo('</div>');
-                                }
-                            }
-                        }
-                   }
-                                    ?>
-                    
-                    
-                    <div class="form-group">
-                        <label for="seekingAgeSelection">Seeking Age Profile</label>
-                        <input type="range" min="1" max="100" value="50" class="slider" id="seekingAgeSelection">
+                        <label for="genderInput">Gender</label>
+                        <input type="text" class="form-control" id="gender" placeholder=" <?php echo $gender_name; ?> ">
                     </div>
- 
                     <div class="form-group">
-                        <label for="travelDistanceSelection">Distance I will travel</label>
-                        <input type="range" min="1" max="100" value="50" class="slider" id="travelDistanceSelection">
+                        <label for="genderInput">Preferred Gender</label>
+                        <input type="text" class="form-control" id="preferredGender" placeholder=" <?php echo $preferred_gender_name; ?> ">
                     </div>
+                    <div class="form-group">
 
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-heart "></i> Love
-                    </button>   
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fab fa-cuttlefish "></i> Casual
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Friendship
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-user-friends"></i> Relationship
-                    </button>
-                    <b/>
+
+                        <div class="form-group">
+                            <label for="seekingAgeSelection">Seeking Age Profile</label>
+                            <input type="range" min="1" max="100" value="50" class="slider" id="seekingAgeSelection">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="travelDistanceSelection">Distance I will travel</label>
+                            <input type="range" min="1" max="100" value="50" class="slider" id="travelDistanceSelection">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-heart "></i> Love
+                        </button>   
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fab fa-cuttlefish "></i> Casual
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Friendship
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-friends"></i> Relationship
+                        </button>
+                        <b/>
+                    </div>
+                    <p align="middle">
+                        <button class="btn btn-primary" name="btnAction" type="submit" value="Next">Next</button>
+                        <button class="btn btn-warning" name="btnAction" type="submit" value="Cancel">Cancel</button>
+                    </p>
                 </div>
-        </div>
-        <p align="middle">
 
-
-
-            <button type="next" class="btn btn-success">Next</button>
-            <button type="Delete" class="btn btn-success">Delete</button>
-
-
+            </form>
 
         </div>
-
-    </form>
-
-</div>
-</body>
+    </body>
 
 </html>
