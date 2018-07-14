@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
         <style>
             body {
-                background-image:    url(images/backlit-bonding-casual-708392.jpg);
+                background-image:    url(backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
                 background-repeat:   no-repeat;
                 background-position: center center;              /* optional, center the image */

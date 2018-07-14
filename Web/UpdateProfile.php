@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <style>
             body {
-                background-image:    url(images/backlit-bonding-casual-708392.jpg);
+                background-image:    url(backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
                 background-repeat:   no-repeat;
                 background-position: center center;              /* optional, center the image */
@@ -92,24 +92,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
 
                     //                   $sql = "SELECT image FROM user_profile where id =" . $user_id . ";";
-echo ("sql" . $sql);
+// echo ("sql" . $sql);
                     if ($result = mysqli_query($db_connection, $sql)) {
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_array($result)) {
-                                    //     echo ($row['first_name']);
-                                    $surname = $row['surname'];
-                                    $email = $row['email'];
-                                    $firstname = $row['first_name'];
-                                    $gender_name = $row['gender_name'];
-                                    $dob = $row['date_of_birth'];
-                                    $preferred_gender_name = $row['preferred_gender_name'];
-                                    //     echo ($row['first_name']);
-                                    //    echo('</input>');
+                                //     echo ($row['first_name']);
+                                $surname = $row['surname'];
+                                $email = $row['email'];
+                                $firstname = $row['first_name'];
+                                $gender_name = $row['gender_name'];
+                                $dob = $row['date_of_birth'];
+                                $preferred_gender_name = $row['preferred_gender_name'];
+                                //     echo ($row['first_name']);
+                                //    echo('</input>');
                             }
                         }
                     }
                     ?>
-                                        <div class="form-group">
+                    <div class="form-group">
                         <label for="emailInput">Email</label>
                         <input type="text" class="form-control" id="surnameInput" placeholder=" <?php echo $email; ?> ">
 

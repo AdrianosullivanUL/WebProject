@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <?php
-session_start();
-if ($_SESSION['user_logged_in'] == 0) {
-    header("Location: Logon.php");
-}
 require_once 'database_config.php';
 
-
+session_start();
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
 //echo "session user " . $user_id;
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -27,29 +22,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['user_id'] = $user_id;
         $_SESSION['matching_user_id'] = $matching_user_id;
         header("Location: MatchFind.php");
+        PostPage('MatchFind.php', $user_id, $matching_user_id);
         exit();
     }
     if ($_POST['btnAction'] == "Logoff") { // Logoff
-        $_SESSION['user_logged_in'] = 0;
         header("Location: index.php");
+        PostPage('index.php', 0, 0);
         exit();
     }
     if ($_POST['btnAction'] == "RemoveAccount") { // Call RemoveAccount
         $_SESSION['user_id'] = $user_id;
         $_SESSION['matching_user_id'] = $matching_user_id;
         header("Location: RemoveAccount.php");
+        PostPage('RemoveAccount.php', $user_id, $matching_user_id);
         exit();
     }
     if ($_POST['btnAction'] == "Chat") { // Call RemoveAccount
         $_SESSION['user_id'] = $user_id;
         $_SESSION['matching_user_id'] = $matching_user_id;
         header("Location: ChatLine.php");
+        PostPage('ChatLine.php', $user_id, $matching_user_id);
         exit();
     }
     if ($_POST['btnAction'] == "View") { // Call RemoveAccount
         $_SESSION['user_id'] = $user_id;
         $_SESSION['matching_user_id'] = $matching_user_id;
         header("Location: ViewMatchProfile.php");
+        PostPage('ViewMatchProfile.php', $user_id, $matching_user_id);
         exit();
     }
     if ($_POST['btnAction'] == "Goodbye") { // Update Status
@@ -63,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     
 }
+
 ?>
 
 <html lang="en">
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <style>
             body{color:#444;font:100%/1.4 sans-serif;}
             body {
-                background-image:    url(backlit-bonding-casual-708392.jpg);
+                background-image:    url(images/backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
                 background-repeat:   no-repeat;
                 background-position: center center;              /* optional, center the image */
@@ -185,17 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="col-sm-2 container border border-primary rounded bg-light text-dark">
                         <br>
-                        <?php
-                        $sql = "SELECT first_name, surname FROM user_profile where id = " . $user_id . ";";
-                        //echo $sql;
-                        if ($result = mysqli_query($db_connection, $sql)) {
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_array($result)) {
-                                        echo '<h3>' . $row['first_name'] . '&nbsp' . $row['surname'] . '</h3>';
-                                }
-                            }
-                        }
-                        ?>
+
                         <button class="btn btn-primary" name="btnAction" type="submit" value="EditProfile">Edit Profile</button>
                         <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button>                        
                         <button name="btnAction" class="btn btn-warning" type="submit" value="Logoff">Logoff</button>
@@ -209,6 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-sm-12 container border border-primary rounded bg-light text-dark">
                         <h3>Chatting with</h3>
                         <?php
+                        echo "session check " . $user_id;
                         $sql = "SELECT * FROM matches_view where (match_user_id_1 =" . $user_id
                                 . " or  match_user_id_2 =" . $user_id . ")"
                                 . " and (user_profile_1_match_status = 'Chatting'"
