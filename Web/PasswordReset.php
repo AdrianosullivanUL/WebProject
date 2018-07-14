@@ -76,11 +76,12 @@ if (isset($_POST['submitted'])) {
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <!------ Include the above in your HEAD tag ---------->
 
-    <div class="row">
-            <div class="col-md-6 col-md-offset-3" style="background-color:lavender; opacity: .8;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3" >
 
                 <form method="post" name="challenge"  class="form-horizontal" role="form" action="#" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
-                    <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;">
+                    <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
                         <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Password Reset</legend>
 
                         <div class="form-group">
@@ -169,7 +170,8 @@ if (isset($_POST['submitted'])) {
                             <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad">
 
                                 <input type="password" name="verifypassword" id="verifypassword" class="form-control">
-                                
+                                                   
+
                             </div>
                             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                         </div>	
@@ -195,7 +197,7 @@ if (isset($_POST['submitted'])) {
             </div>
         </div>
 
-
+    </div>
 
 </body>
 </html>
