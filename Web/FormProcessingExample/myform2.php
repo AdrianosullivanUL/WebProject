@@ -1,35 +1,37 @@
 <?php
-if ($_POST['formSubmit'] == "Submit") {
-    $errorMessage = "";
 
-    if (empty($_POST['formMovie'])) {
-        $errorMessage .= "<li>You forgot to enter a movie!</li>";
-    }
-    if (empty($_POST['formName'])) {
-        $errorMessage .= "<li>You forgot to enter a name!</li>";
-    }
-    if (empty($_POST['formGender'])) {
-        $errorMessage .= "<li>You forgot to select your Gender!</li>";
-    }
+    if ($_POST['formSubmit'] == "Submit") {
+        $errorMessage = "";
 
-    $varMovie = $_POST['formMovie'];
-    $varName = $_POST['formName'];
-    $varGender = $_POST['formGender'];
+        if (empty($_POST['formMovie'])) {
+            $errorMessage .= "<li>You forgot to enter a movie!</li>";
+        }
+        if (empty($_POST['formName'])) {
+            $errorMessage .= "<li>You forgot to enter a name!</li>";
+        }
+        if (empty($_POST['formGender'])) {
+            $errorMessage .= "<li>You forgot to select your Gender!</li>";
+        }
 
-    if (empty($errorMessage)) {
-        $db = mysql_connect("servername", "username", "password");
-        if (!$db)
-            die("Error connecting to MySQL database.");
-        mysql_select_db("databasename", $db);
+        $varMovie = $_POST['formMovie'];
+        $varName = $_POST['formName'];
+        $varGender = $_POST['formGender'];
 
-        $sql = "INSERT INTO movieformdata (moviename, yourname, Gender) VALUES (" .
-                PrepSQL($varMovie) . ", " .
-                PrepSQL($varName) . ", " .
-                PrepSQL($varGender) . ")";
-        mysql_query($sql);
+        if (empty($errorMessage)) {
+            $db = mysql_connect("servername", "username", "password");
+            if (!$db)
+                die("Error connecting to MySQL database.");
+            mysql_select_db("databasename", $db);
 
-        header("Location: thankyou.html");
-        exit();
+            $sql = "INSERT INTO movieformdata (moviename, yourname, Gender) VALUES (" .
+                    PrepSQL($varMovie) . ", " .
+                    PrepSQL($varName) . ", " .
+                    PrepSQL($varGender) . ")";
+            mysql_query($sql);
+
+            header("Location: thankyou.html");
+            exit();
+        }
     }
 }
 
@@ -37,9 +39,9 @@ if ($_POST['formSubmit'] == "Submit") {
 // use stripslashes and mysql_real_escape_string PHP functions
 // to sanitize a string for use in an SQL query
 //
-    // also puts single quotes around the string
+// also puts single quotes around the string
 //
-    function PrepSQL($value) {
+function PrepSQL($value) {
     // Stripslashes
     if (get_magic_quotes_gpc()) {
         $value = stripslashes($value);
@@ -68,12 +70,12 @@ if ($_POST['formSubmit'] == "Submit") {
 
     <body>
 
-<?php
-if (!empty($errorMessage)) {
-    echo("<p>There was an error with your form:</p>\n");
-    echo("<ul>" . $errorMessage . "</ul>\n");
-}
-?>
+        <?php
+        if (!empty($errorMessage)) {
+            echo("<p>There was an error with your form:</p>\n");
+            echo("<ul>" . $errorMessage . "</ul>\n");
+        }
+        ?>
 
         <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
             <p>

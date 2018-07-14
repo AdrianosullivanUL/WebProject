@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </script>
         <style>
             body {
-                background-image:    url(images/backlit-bonding-casual-708392.jpg);
+                background-image:    url(backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
                 background-repeat:   no-repeat;
                 background-position: center center;              /* optional, center the image */
