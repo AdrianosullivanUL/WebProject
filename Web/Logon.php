@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="text" class="form-control" name="email" placeholder="">
-                        <label for="password">Username</label>
+                        <label for="password">Password</label>
                         <input type="password" class="form-control" name="password" placeholder="">
                         <p><?php echo $message; ?></p>
                     </div>    
