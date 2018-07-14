@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Create user
         if ($valid == 1) {
             // insert into database
-            $sql = "insert into user_profile (email, password_hash, first_name, surname, black_listed_reason, user_status_id, is_administrator) values ('" . $email . "', sha2('" . $password . "',256), '','','',1,0);";
+            $sql = "insert into user_profile (email, password_hash, first_name, surname, black_listed_reason, user_status_id, is_administrator) values ('" . $email . "', sha2('" . $password . "',256), '','','',1,0); ";
             //  echo $sql;
             if ($result = mysqli_query($db_connection, $sql)) {
                 // get the new user id
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $user_id = $row['id'];
                             $_SESSION['user_id'] = $user_id;
                             $_SESSION['matching_user_id'] = 0;
-
+                            $_SESSION['user_logged_in'] = 1;        
                             //        echo $_SESSION['user_id'];
                             header("Location: UpdateProfile.php");
                             exit();

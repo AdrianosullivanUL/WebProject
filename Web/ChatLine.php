@@ -21,11 +21,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <title>chatline</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
+
 
         <style>
+            
+                        body{color:#444;font:100%/1.4 sans-serif;}
+            body {
+                background-image:    url(images/backlit-bonding-casual-708392.jpg);
+                background-size:     cover;                      /* <------ */
+                background-repeat:   no-repeat;
+                background-position: center center;              /* optional, center the image */
+            }
             #main{
                 height: 455px;
                 background-color: white;
@@ -61,14 +71,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <body>
 
 
-        <div class="container">
-            <h1>chatline Screen</h1>
+        <div  class="col-sm-6 container border border-primary rounded bg-light text-dark" >
+            <h1>Chat Line</h1>
         </div>
 
-        <div id="main">
+        <div col-sm-6 container border border-primary rounded bg-light text-dark>
+            <?php
+            $name = '';
+            $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
+            if ($result = mysqli_query($db_connection, $sql)) {
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_array($result)) {
+                        $name = $row['first_name'] . ' ' . $row['surname'];
+                    }
+                }
+            } else {
+                echo ("No matches found");
+            }
+            ?>
 
-            <h1 style="background-color: #6495ed;color: white;"><?php echo $_SESSION['$user_id'] ?>-online</h1>
-            <div class="output">
+
+
+
+            <h1 style=" background-color: #6495ed;color: white;"><?php echo $name ?>-online</h1>
+            <div class="output col-sm-6 container border border-primary rounded bg-light text-dark">
 
                 <?php
                 // session_start();
@@ -90,7 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
             </div>
-
+<div class="output col-sm-6 container border border-primary rounded bg-light text-dark">
+    <br>
             <form method="post" action="Send.php">
                 <textarea name="msg" placeholder="Type to send message...."
                           class="form-control"></textarea><br>
@@ -102,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input stype="width: 100%;background-color: #6495ed;color:
                        white;font-size: 20px;" type="submit" value="Logout">
             </form>
-
+</div>
         </div>
 
     </body>

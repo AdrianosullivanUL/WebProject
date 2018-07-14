@@ -2,7 +2,9 @@
 session_start();
 if ($_SESSION['user_logged_in'] == 0) {
     header("Location: Logon.php");
-}$Message = '';
+}
+$Message = '';
+$user_id = $_SESSION['user_id'];
 // Check and see if a post has been requested (this does not happen when screen initially opens
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // check the button selected (these are at the end of this form
@@ -47,11 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $account_removed = false;
 
-    if (empty($_POST['userid'])) {
-        $user_id = 0;
+    if ($user_id == 0) {
         $message = "User ID not populated, cannot delete this account";
     } else {
-        $user_id = $_POST["userid"];
         $Message = "<p>Please note, if you remove your account then all information related to you and your account will be removed and cannot be recovered."
                 . "This includes your profile, images, communications history and matches."
                 . "<br><br>If you are happy with this, press the Remove button below."
@@ -94,6 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="col-sm-12">
                             <?php
                             $sql = "SELECT * FROM user_profile where id =" . $user_id . ";";
+                            //   echo $sql;
                             if ($result = mysqli_query($db_connection, $sql)) {
                                 if (mysqli_num_rows($result) > 0) {
                                     while ($row = mysqli_fetch_array($result)) {

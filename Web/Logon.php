@@ -4,9 +4,15 @@ include 'group05_library.php';
 session_start();
 $_SESSION['user_logged_in'] = 0;
 $_SESSION['is_administrator'] = 0;
+$message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $logon = 0;
     // check the button selected (these are at the end of this form
+    if ($_POST['btnAction'] == "ForgotPassword") { // Call Edit Profile
+        header("Location: PasswordReset.php");
+        exit();
+    }
+
     if ($_POST['btnAction'] == "Logon") { // Call Edit Profile
         $email = $_POST['email'];
         $password = $_POST['password'];
@@ -15,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_array($result)) {
                     $logon = 1;
-                    
+                    $_SESSION['user_id'] = $row['id'];
                     if ($row['is_administrator'] == 1) {
                         $_SESSION['is_administrator'] = 1;
                     }
@@ -28,10 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 $message = 'Logon failed, please ensure you are entering the correct email address and password';
             }
-        }
-        if ($_POST['btnAction'] == "ForgotPassword") { // Call Edit Profile
-            header("Location: PasswordReset.php");
-            exit();
         }
     }
 } else {
@@ -60,7 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </style>
     </head>
     <body>
-
+                    <div  class="col-sm-6 container border border-primary rounded bg-light text-dark" >
+                        <h1>Log on</h1>
+                    </div><br>
         <!-- Form Code Start -->
         <div class="container border border-primary rounded bg-light text-dark col-sm-6">
 
