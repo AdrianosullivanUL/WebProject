@@ -11,13 +11,7 @@ insert into gender (gender_name) values  ('Trans Gender (M/F');
 insert into gender (gender_name) values  ('Trans Gender (F/M');
 
 
--- user interests
--- ---------------
-insert into user_interests (interest_id, user_id) values (1,24);
-insert into user_interests (interest_id, user_id) values (2,24);
-insert into user_interests (interest_id, user_id) values (3,24);
-insert into user_interests (interest_id, user_id) values (4,24);
-insert into user_interests (interest_id, user_id) values (5,24); 
+
  
 
 
@@ -898,6 +892,13 @@ update user_profile set password_hash = sha2(password_hash,256);
 
 -- user_interests
 -- ------------------------------------------------
+-- user interests
+-- ---------------
+insert into user_interests (interest_id, user_id) values (1,24);
+insert into user_interests (interest_id, user_id) values (2,24);
+insert into user_interests (interest_id, user_id) values (3,24);
+insert into user_interests (interest_id, user_id) values (4,24);
+insert into user_interests (interest_id, user_id) values (5,24); 
 
 commit;
 
@@ -920,10 +921,3 @@ insert into match_table (match_user_id_1, match_user_id_2, match_date, response_
 values('24', '15', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-10 13:22:19', '8', '2018-07-10 13:22:19', '0');
 commit;
 
--- user interests
--- ---------------
-insert into user_interests (interest_id, user_id) values (1,24);
-insert into user_interests (interest_id, user_id) values (2,24);
-insert into user_interests (interest_id, user_id) values (3,24);
-insert into user_interests (interest_id, user_id) values (4,24);
-insert into user_interests (interest_id, user_id) values (5,24);

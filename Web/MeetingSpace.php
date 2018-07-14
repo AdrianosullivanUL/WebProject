@@ -269,6 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $sql = "SELECT * FROM matches_view where system_generated_match = true and (match_user_id_1 =" . $user_id
                                 . " or  match_user_id_2 =" . $user_id . ")"
                                 . " and user_profile_1_match_status not in ('Chatting','Goodbye');";
+                       // echo $sql;
                         if ($result = mysqli_query($db_connection, $sql)) {
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_array($result)) {

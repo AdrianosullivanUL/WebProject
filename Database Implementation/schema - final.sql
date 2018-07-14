@@ -210,7 +210,6 @@ select
   up1.my_bio user_profile_1_my_bio,
   up1.user_status_id user_profile_1_user_status_id,
   us1.status_description user_profile_1_status,
-  
   up2.first_name user_profile_2_first_name,
   up2.surname user_profile_2_surname,
   up2.date_of_birth user_profile_2_date_of_birth,
@@ -230,20 +229,20 @@ select
   up2.user_status_id user_profile_2_user_status_id,
   us2.status_description user_profile_2_status
 from match_table mt
- join status_master ms1 on ms1.id = mt.user_1_match_status_id
- join status_master ms2 on ms2.id = mt.user_2_match_status_id
- join user_profile up1 on up1.id = mt.match_user_id_1
- join city c1 on c1.id = up1.city_id
- join status_master us1 on us1.id = up1.user_status_id
- join relationship_type rt1 on rt1.id = up1.relationship_type_id
- join gender g1 on g1.id = up1.gender_id
- join gender gp1 on gp1.id = up1.gender_preference_id
- join user_profile up2 on up2.id = mt.match_user_id_2
- join city c2 on c2.id = up2.city_id
- join status_master us2 on us2.id = up2.user_status_id
- join relationship_type rt2 on rt2.id = up2.relationship_type_id
-  join gender g2 on g2.id = up2.gender_id
- join gender gp2 on gp2.id = up2.gender_preference_id
+ left join status_master ms1 on ms1.id = mt.user_1_match_status_id
+ left join status_master ms2 on ms2.id = mt.user_2_match_status_id
+ left join user_profile up1 on up1.id = mt.match_user_id_1
+ left join city c1 on c1.id = up1.city_id
+ left join status_master us1 on us1.id = up1.user_status_id
+ left join relationship_type rt1 on rt1.id = up1.relationship_type_id
+ left join gender g1 on g1.id = up1.gender_id
+ left join gender gp1 on gp1.id = up1.gender_preference_id
+ left join user_profile up2 on up2.id = mt.match_user_id_2
+ left join city c2 on c2.id = up2.city_id
+ left join status_master us2 on us2.id = up2.user_status_id
+ left join relationship_type rt2 on rt2.id = up2.relationship_type_id
+ left join gender g2 on g2.id = up2.gender_id
+ left join gender gp2 on gp2.id = up2.gender_preference_id
 where  up1.is_administrator = false and up1.is_administrator = false
 and up1.user_status_id in (select id from status_master where status_description in ('Registered','Active')) and up2.is_administrator = false and up2.is_administrator = false
 and up2.user_status_id in (select id from status_master where status_description in ('Registered','Active')) ;
