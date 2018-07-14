@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         if (strlen($picture) > 0) {
                             echo '<img class="portrait"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
                         } else {
-                            echo ("<img class='portrait' src='images/camera-photo-7.png'/><i></i>'");
+                            echo ("<img class='portrait' src='camera-photo-7.png'/><i></i>'");
                         }
                         ?>
                     </div>

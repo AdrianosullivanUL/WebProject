@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     if (strlen($row['picture']) > 0) {
                                         echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
                                     } else {
-                                        echo ("<img class='portrait rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
+                                        echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
                                     }
                                     echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
                                     echo ("");
