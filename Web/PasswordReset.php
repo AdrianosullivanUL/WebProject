@@ -85,7 +85,7 @@ if (isset($_POST['submitted'])) {
                         <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Password Reset</legend>
 
                         <div class="form-group">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12" style="text-align: right!important;">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12" style="text-align: right;">
                                 <span style="color: red">*</span> <span style="font-size: 8pt;">mandatory fields</span>
                             </div>
                         </div>	

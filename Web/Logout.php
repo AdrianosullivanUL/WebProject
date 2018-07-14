@@ -1,5 +1,4 @@
-<?PHP
-?>
+<?PHP ?>
 <head>
     <title>Logout</title>
     <meta charset="utf-8">
@@ -55,7 +54,7 @@
 </head>
 <body>
     <div class="topnav">
-        <a class="active">PASSWORD RESET</a>
+        <a class="active">LOG OUT</a>
         <a href="MeetingSpace.php">Home</a>
         <div class="topnav-right">
             <a href="index.php">About</a>
@@ -75,12 +74,14 @@
                     <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
                         <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Log Out</legend>
 
-                        <div class="form-group">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12" style="text-align: right!important;">
-                                <span style="color: red">*</span> <span style="font-size: 8pt;">mandatory fields</span>
-                            </div>
-                        </div>	
-                        
+                        <h4>Are you sure you want to Logout ?  </h4>
+                        <br>
+                        <br>
+                        <a href="logon.php" class="btn btn-info btn-lg">
+                            <span class="glyphicon glyphicon-log-out"></span> Log out
+                        </a>
+                        </p> 
+
                     </fieldset>
 
                 </form>
