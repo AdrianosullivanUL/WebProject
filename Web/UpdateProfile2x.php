@@ -100,7 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
                 <div class="container border border-primary rounded bg-light text-dark col-sm-6">
                     <h1>Personal Details Page 2</h1>
-                      <div class="topnav">
                 </div>
                 </br>
                 <div class="container border border-primary rounded bg-light text-dark col-sm-6">
