@@ -1,18 +1,37 @@
- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Personal Details</title>
+<?php
+require_once 'database_config.php';
 
-   // <meta name="viewport" content="width=device-width, initial-scale=1">
-   // <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-   // <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-   // <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-   // <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-   // <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-//	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  //  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-     <meta name="viewport" content="width=device-width, initial-scale=1">
+session_start();
+$user_id = $_SESSION['user_id'];
+$matching_user_id = $_SESSION['matching_user_id'];
+//echo "session user " . $user_id;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    echo "I am a post";
+    // check the button selected (these are at the end of this form
+    echo "EditPRofile call";
+    if ($_POST['btnAction'] == "Save") { //save the detils
+        echo "Saved";
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['matching_user_id'] = $matching_user_id;
+        header("Location: UpdateProfile2.php");
+        exit();
+    }
+    if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
+        echo "Cancel pressed";
+        header("Location: index.php");
+        exit();
+    } else {
+        echo "I am called from another form";
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Personal Details2</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -20,7 +39,7 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
         </script>
-         <style>
+        <style>
             body {
                 background-image:    url(images/backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
@@ -30,56 +49,94 @@
 
 
         </style>
-</head>
-<body>
-<div class="container">
-    <h1>Personal Details2</h1>
-	
-	<form action="#" method="post">
+    </head>
+    <body>
+        <div class="container">
 
-            <div class="form-control"> 
-                <label class="header">Profile Photo:</label>
+            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+                <div class="container border border-primary rounded bg-light text-dark col-sm-6">
+                    <h1>Personal Details Page 2</h1>
+                </div>
+                </br>
+                <div class="container border border-primary rounded bg-light text-dark col-sm-6">
+                    <?php
+                    $picture = "";
+                    $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
 
-                <input id="image" type="file" name="profile_photo" placeholder="Photo" required="" capture>
-            </div>
-			<br/><br/><br/>
-			</br>
-			
-			
-			
-			</div>
-<!--Lets try and do hobbies-->
-     	<div class="form-group">
-		<p align="middle">
-		    <label for="hobbies">Hobbies</label>
-            
+                    //echo ("sql" . $sql);
+                    if ($result = mysqli_query($db_connection, $sql)) {
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_array($result)) {
+                                if ($row['id'] == $user_id) {
+                                    echo('<div class="form-group">');
+                                    if (strlen($row['picture']) > 0) {
+                                        echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
+                                    } else {
+                                        echo ("<img class='portrait rounded-circle' src='images/camera-photo-7.png'/><i></i>'");
+                                    }
+                                    echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
+                                    echo ("");
+
+
+
+
+
+     
+                                    echo('</div>');
+                                }
+                            }
+                        }
+                    }
+                    ?>
+
+                    </br>
+                    </br>
+                    </br>
+                    <div class="form-group">
+
+                    </div>
+                </div>           
+
+                </br>
+                </br>
+                </br>
+
+
+
         </div>
-			
-		<div class="checkbox">
-		<p align="middle">
-             <label><input type="checkbox" value="">Sport</label>
+        <!--Lets try and do hobbies-->
+
+        <div class="form-group">
+            <p align="middle">
+                <label for="hobbies">Hobbies</label>
+
+        </div>
+
+        <div class="checkbox">
+            <p align="middle">
+                <label><input type="checkbox" value="">Sport</label>
         </div>
         <div class="checkbox">
-		<p align="middle">
-             <label><input type="checkbox" value="">Music</label>
+            <p align="middle">
+                <label><input type="checkbox" value="">Music</label>
         </div>
-		<div class="checkbox">
-		<p align="middle">
-             <label><input type="checkbox" value="">Outdoors</label>
+        <div class="checkbox">
+            <p align="middle">
+                <label><input type="checkbox" value="">Outdoors</label>
         </div>
-		<div class="checkbox">
-		<p align="middle">
-             <label><input type="checkbox" value="">Reading</label>
+        <div class="checkbox">
+            <p align="middle">
+                <label><input type="checkbox" value="">Reading</label>
         </div>
-        
-<!------ Include the above in your HEAD tag ---------->
 
-<
+        <!------ Include the above in your HEAD tag ---------->
+
+        <
         <p align="right">
-        
-        <input class="btn btn-default" type="submit" value="Save">
 
-        
+            <input class="btn btn-default" type="submit" value="Save">
+
+
         </div>
 
     </form>
