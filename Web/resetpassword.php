@@ -98,7 +98,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" padding-top: 7px; text-align: right;">
+                            <div class="col-sm-3 col-md-3 col-lg-4 col-xs-10 mobileLabel" style=" padding-top: 7px; text-align: right;">
                                 Your Email <span style="color: red">*</span> :</div>
 
                             <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style="font-weight:600;">
@@ -110,13 +110,14 @@
                         </div> 
 
                         <div class="form-group">
-                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-1"></div>
-                            <div class="col-sm-8 col-md-8 col-lg-7 col-xs-10 mobilePad"  data-toggle="collapse"style="font-weight: bold;font-size: 10pt;padding-left: 0px;color: black;cursor: pointer;text-decoration: underline;">Check Password Policy<span class="caret"></span>
+                            <div class="col-sm-5 col-md-5 col-lg-6 col-xs-1"></div>
+                            <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 mobilePad"  data-toggle="collapse" data-target="#passPolicy" style="font-weight: bold;font-size: 10pt;padding-left: 0px;color: black;cursor: pointer;text-decoration: underline;">Check Password Policy
+                                <span class="caret"></span>
                             </div>  
                         </div>
                         <div class="form-group" style="margin-bottom: 0px;">
-                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-1"></div>
-                            <div id="passPolicy" class="col-sm-8 col-md-8 col-lg-7 col-xs-10 collapse mobilePad" style="padding-right: 17px;">
+                            <div class="col-sm-4 col-md-4 col-lg-6 col-xs-1"></div>
+                            <div id="passPolicy" class="col-sm-8 col-md-8 col-lg-6 col-xs-10 collapse mobilePad" style="padding-right: 17px;">
                                 <ul type="disc" style="padding-left: 0px;">
                                     <li>Your Password must have minimum 6 characters.</li>
                                     <li>Your Password must contain at least one number, one uppercase, lowercase & special character.</li>
@@ -128,7 +129,7 @@
                         </div>   
                         <div class="form-group " style="margin-bottom: 5px;">
                             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" padding-top: 7px;text-align: right;">
+                            <div class="col-sm-3 col-md-3 col-lg-4 col-xs-10 mobileLabel" style=" padding-top: 7px;text-align: right;">
                                 New Password <span style="color: red">*</span> :</div>
 
                             <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad">
@@ -155,7 +156,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel" style=" padding-top: 7px;text-align: right;">
+                            <div class="col-sm-3 col-md-3 col-lg-4 col-xs-10 mobileLabel" style=" padding-top: 7px;text-align: right;">
                                 Confirm Your Password <span style="color: red">*</span> :</div>
 
                             <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad">
