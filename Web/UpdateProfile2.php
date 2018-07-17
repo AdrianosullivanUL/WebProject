@@ -100,94 +100,98 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
                 <div class="container border border-primary rounded bg-light text-dark col-sm-6">
                     <h1>Personal Details Page 2</h1>
-                      <div class="topnav">
-                </div>
-                </br>
-                <div class="container border border-primary rounded bg-light text-dark col-sm-6">
-                    <?php
-                    $picture = "";
-                    $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
+                    <div class="topnav">
+                    </div>
+                    </br>
+                    <div class="container border border-primary rounded bg-light text-dark col-sm-6">
+                        <?php
+                        $picture = "";
+                     //   $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
+                     // $sql = "SELECT up1.*, i1.interest_id FROM user_profile up1 join user_interests i1 where up1.id =" . $user_id . ";";
+                       $sql = " SELECT up1.*, ui1.interest_id, ud1.description FROM user_profile up1 join user_interests ui1 join interests ud1 where up1.id;=" . $user_id . " AND ui1.interest_id = ud1;";
+                        echo ("sql" . $sql);
 
-                    //echo ("sql" . $sql);
-                    if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                if ($row['id'] == $user_id) {
-                                    echo('<div class="form-group">');
-                                    if (strlen($row['picture']) > 0) {
-                                        echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
-                                    } else {
-                                        echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
+
+                        if ($result = mysqli_query($db_connection, $sql)) {
+                            echo "Result", mysqli_num_rows($result);
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_array($result)) {
+                                    if ($row['id'] == $user_id) {
+                                        echo('<div class="form-group">');
+                                        if (strlen($row['picture']) > 0) {
+                                            echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
+                                        } else {
+                                            echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
+                                        }
+                                        echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
+                                        echo ("");
+
+
+                                        echo('</div>');
                                     }
-                                    echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
-                                    echo ("");
-                               
-                                    
-                                    echo('</div>');
                                 }
                             }
                         }
-                    }
-                    ?>
+                        ?>
+
+                        </br>
+                        </br>
+                        </br>
+                        <div class="form-group">
+                            <label class="header">Profile Photo:</label>
+                            <input id="image" type="file" name="profile_photo" placeholder="Photo" required="" capture>
+                        </div>
+
+
+                    </div>           
 
                     </br>
                     </br>
                     </br>
+
+
+
+                </div>
+                <!--Lets try and do hobbies-->
+
+                <div class="container border border-primary rounded bg-light text-dark col-sm-6">
+
                     <div class="form-group">
-                   <label class="header">Profile Photo:</label>
-                <input id="image" type="file" name="profile_photo" placeholder="Photo" required="" capture>
-            </div>
+                        <p align="middle">
+                            <label for="hobbies">Hobbies</label>
 
-             
-                </div>           
+                    </div>
 
-                </br>
-                </br>
-                </br>
+                    <div class="checkbox">
+                        <p align="middle">
+                            <label><input type="checkbox" value="">Sport</label>
+                    </div>
+                    <div class="checkbox">
+                        <p align="middle">
+                            <label><input type="checkbox" value="">Music</label>
+                    </div>
+                    <div class="checkbox">
+                        <p align="middle">
+                            <label><input type="checkbox" value="">Outdoors</label>
+                    </div>
+                    <div class="checkbox">
+                        <p align="middle">
+                            <label><input type="checkbox" value="">Reading</label>
+                    </div>
+
+                    <!------ Include the above in your HEAD tag ---------->
+
+                    <
+                    <p align="right">
+
+                        <input class="btn btn-default" type="submit" value="Save">
 
 
+                </div>
 
-        </div>
-        <!--Lets try and do hobbies-->
-        
-        <div class="container border border-primary rounded bg-light text-dark col-sm-6">
-
-        <div class="form-group">
-            <p align="middle">
-                <label for="hobbies">Hobbies</label>
-
-        </div>
-
-        <div class="checkbox">
-            <p align="middle">
-                <label><input type="checkbox" value="">Sport</label>
-        </div>
-        <div class="checkbox">
-            <p align="middle">
-                <label><input type="checkbox" value="">Music</label>
-        </div>
-        <div class="checkbox">
-            <p align="middle">
-                <label><input type="checkbox" value="">Outdoors</label>
-        </div>
-        <div class="checkbox">
-            <p align="middle">
-                <label><input type="checkbox" value="">Reading</label>
-        </div>
-
-        <!------ Include the above in your HEAD tag ---------->
-
-        <
-        <p align="right">
-
-            <input class="btn btn-default" type="submit" value="Save">
-
+            </form>
 
         </div>
-
-    </form>
-
-</div>
-</body>
+    </body>
 
 </html>
