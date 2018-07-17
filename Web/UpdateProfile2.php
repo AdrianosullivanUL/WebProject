@@ -1,6 +1,6 @@
 <?php
 require_once 'database_config.php';
-
+include 'group05_library.php';
 session_start();
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
@@ -8,7 +8,7 @@ $matching_user_id = $_SESSION['matching_user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo "I am a post";
-    // check the button selected (these are at the end of this form
+// check the button selected (these are at the end of this form
     echo "EditPRofile call";
     if ($_POST['btnAction'] == "Save") { //save the detils
         echo "Saved";
@@ -106,30 +106,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="container border border-primary rounded bg-light text-dark col-sm-6">
                         <?php
                         $picture = "";
-                     //   $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
-                     // $sql = "SELECT up1.*, i1.interest_id FROM user_profile up1 join user_interests i1 where up1.id =" . $user_id . ";";
-                       $sql = " SELECT up1.*, ui1.interest_id, ud1.description FROM user_profile up1 join user_interests ui1 join interests ud1 where up1.id;=" . $user_id . " AND ui1.interest_id = ud1;";
-                        echo ("sql" . $sql);
+                        // Get User Profile
+                        $sql = " SELECT up1.* "
+                                . " FROM user_profile up1"
+                                . " where up1.id=" . $user_id . "; ";
 
-
-                        if ($result = mysqli_query($db_connection, $sql)) {
-                            echo "Result", mysqli_num_rows($result);
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_array($result)) {
-                                    if ($row['id'] == $user_id) {
-                                        echo('<div class="form-group">');
-                                        if (strlen($row['picture']) > 0) {
-                                            echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
-                                        } else {
-                                            echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
-                                        }
-                                        echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
-                                        echo ("");
-
-
-                                        echo('</div>');
-                                    }
+                       // echo ("sql" . $sql);
+                        $result = execute_sql_query($db_connection, $sql);
+                        if ($result == null) {
+                            $message = "ERROR: Cannot match entry " . $matchId;
+                        } else {
+                            while ($row = mysqli_fetch_array($result)) {
+                                echo('<div class="form-group">');
+                                if (strlen($row['picture']) > 0) {
+                                    echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
+                                } else {
+                                    echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
                                 }
+                                echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
+                                echo ("");
+
+
+                                echo('</div>');
                             }
                         }
                         ?>
@@ -157,35 +155,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="container border border-primary rounded bg-light text-dark col-sm-6">
 
                     <div class="form-group">
-                        <p align="middle">
-                            <label for="hobbies">Hobbies</label>
+                        <h3>Hobbies</h3>
 
                     </div>
+                    <?php
+                    // Get user Interests
+                    $sql = "  SELECT  ud1.id, ud1.description , ui1.user_id "
+                            . " FROM interests ud1 "
+                            . " left join user_interests ui1 on ui1.interest_id = ud1.id "
+                            . " where ui1.user_id is null or ui1.user_id=" . $user_id . "; ";
 
-                    <div class="checkbox">
-                        <p align="middle">
-                            <label><input type="checkbox" value="">Sport</label>
-                    </div>
-                    <div class="checkbox">
-                        <p align="middle">
-                            <label><input type="checkbox" value="">Music</label>
-                    </div>
-                    <div class="checkbox">
-                        <p align="middle">
-                            <label><input type="checkbox" value="">Outdoors</label>
-                    </div>
-                    <div class="checkbox">
-                        <p align="middle">
-                            <label><input type="checkbox" value="">Reading</label>
-                    </div>
+                    //echo ("sql" . $sql);
+                    $result = execute_sql_query($db_connection, $sql);
+                    if ($result == null) {
+                        $message = "ERROR: No interests found " . $user_id;
+                    } else {
+                        while ($row = mysqli_fetch_array($result)) {
+                            if ($row['user_id'] != null)
+                                $checked = "checked";
+                            else
+                                $checked = "";
+                            echo "<div class='checkbox'>";
+                            echo "    <p align='middle>'";
+                            echo "        <label><input type='checkbox' " . $checked . "  value=''>" . $row['description'] . "</label>";
+                            echo "</div>";
+                        }
+                    }
+                    ?>
 
-                    <!------ Include the above in your HEAD tag ---------->
+                    <!------Include the above in your HEAD tag ---------->
 
-                    <
-                    <p align="right">
+              
+                    <p align = "right">
 
-                        <input class="btn btn-default" type="submit" value="Save">
-
+                        <input class = "btn btn-default" type = "submit" value = "Save">
+                    </p>
 
                 </div>
 
