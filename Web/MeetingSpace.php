@@ -40,11 +40,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: RemoveAccount.php");
         exit();
     }
+
+    // CHAT
     if ($_POST['btnAction'] == "Chat") { // Call RemoveAccount
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['matching_user_id'] = $matching_user_id;
-        header("Location: ChatLine.php");
-        exit();
+        if (isset($_POST['selected_user'])) {
+            $matchId = $_POST['selected_user'];
+            $sql = "SELECT * FROM matches_view where match_id = " . $matchId . ";";
+            echo $sql;
+            $result = execute_sql_query($db_connection, $sql);
+            if ($result == null) {
+                $message = "ERROR: Cannot match entry " . $matchId;
+            } else {
+                while ($row = mysqli_fetch_array($result)) {
+                    $matching_user_id = 0;
+                    if ($row[match_user_id_1] == $user_id && $row[user_profile_2_match_status] == 'Chatting')
+                        $matching_user_id = $row[match_user_id_2]; // chatting with profile 2
+                    if ($row[match_user_id_2] == $user_id && $row[user_profile_1_match_status] == 'Chatting')
+                        $matching_user_id = $row[match_user_id_1]; // chatting with profile 2                                
+                    if ($matching_user_id != 0) {
+                        $_SESSION['user_id'] = $user_id;
+                        $_SESSION['matching_user_id'] = $matching_user_id;
+                        header("Location: ChatLine.php");
+                        exit();
+                    } else {
+                        $message = "This user has not responded to your Like request yet";
+                    }
+                }
+            }
+        } else {
+            $message = "You must select a profile before clicking on Chat";
+        }
     }
 // Process User Profile specific buttons
     if ($_POST['btnAction'] == "Like" || $_POST['btnAction'] == "Maybe" || $_POST['btnAction'] == "Report" || $_POST['btnAction'] == "View") { // Get Match view row for subsequent buttons
@@ -83,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //   if ($_POST['btnAction'] == "Goodbye") { // Update Status
 //       $matchId =    }
     } else {
-
+        
     }
 }
 ?>
@@ -188,7 +213,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
 
                 </div>
-                <br>    
+                <br>  
+                <?php if (strlen($message) > 0) echo "<p><font color='red'>" . $message . "</font></p>" ?>
                 <div class="row">
                     <div class="col-sm-11 container border border-primary rounded bg-light text-dark">
                         <h3>Chatting with</h3>
@@ -207,8 +233,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $pictureIndex++;
                                 echo ("<li>");
                                 if ($row['match_user_id_1'] == $user_id) {
-                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
-                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio" . $pictureIndex . "'>";
                                     echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                     echo "<br>";
                                     if (strlen($row['user_profile_2_picture']) > 0)
@@ -217,8 +243,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo ("<img height='100' width='100' src='camera-photo-7.png'/><i></i>'");
                                     echo "</label>";
                                 } else {
-                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
-                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio" . $pictureIndex . "'>";
                                     echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                     echo "<br>";
                                     if (strlen($row['user_profile_1_picture']) > 0)
@@ -253,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 . " or  match_user_id_2 =" . $user_id . ")"
                                 . " and user_profile_1_match_status not in ('Chatting','Goodbye');";
                         $result = execute_sql_query($db_connection, $sql);
-                        
+
                         if ($result == null) {
                             echo "No matches found";
                         } else {
@@ -261,8 +287,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $pictureIndex++;
                                 echo ("<li>");
                                 if ($row['match_user_id_1'] == $user_id) {
-                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
-                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio" . $pictureIndex . "'>";
                                     echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                     echo "<br>";
                                     if (strlen($row['user_profile_2_picture']) > 0)
@@ -271,8 +297,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo ("<img height='100' width='100' src='camera-photo-7.png'/><i></i>'");
                                     echo "</label>";
                                 } else {
-                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
-                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio" . $pictureIndex . "'>";
                                     echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                     echo "<br>";
                                     if (strlen($row['user_profile_1_picture']) > 0)
@@ -288,7 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ?>
                         <div class="col-sm-12">
                             <p>Click on Photograph and do one of the following:</p>
-                            
+
                             <button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="32" width="32"  title="Like" src='/images/Like.png'/></button>
                             <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="32" width="32"  title="View" src='/images/View.png'/></button>
                             <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="32" width="32"  title="Maybe" src='/images/Maybe.png'/></button>
@@ -310,8 +336,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $pictureIndex++;
                                 echo ("<li>");
                                 if ($row['match_user_id_1'] == $user_id) {
-                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
-                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio" . $pictureIndex . "'>";
                                     echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                     echo "<br>";
                                     if (strlen($row['user_profile_2_picture']) > 0)
@@ -320,8 +346,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo ("<img class='rounded-circle' height='100' width='100' src='camera-photo-7.png'/><i></i>'");
                                     echo "</label>";
                                 } else {
-                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
-                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio" . $pictureIndex . "'>";
                                     echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                     echo "<br>";
                                     if (strlen($row['user_profile_1_picture']) > 0)
@@ -343,7 +369,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="32" width="32"  title="Maybe" src='/images/Maybe.png'/></button>
                             <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="32" width="32"  title="Goodbye" src='/images/Goodbye.png'/></button>
                             <button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="32" width="32"  title="Report" src='/images/Report.png'/></button>
-                            
+
                         </div>
                     </div>
                 </div>

@@ -29,7 +29,7 @@ function execute_sql_query($db_connection, $sql) {
             return null;
         }
     } else {
-        error_log("ERROR: Could not able to execute $sql. " . mysqli_error($link));
+        error_log("ERROR: Could not able to execute $sql. " . mysqli_error($db_connection));
     }
 }
 
