@@ -95,10 +95,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </style>
     </head>
     <body>
-        <div class="container">
+        <!--taken out 18.32 <div class="container">  es-->
 
-            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
-                <div class="container border border-primary rounded bg-light text-dark col-sm-6">
+
+        <div class="container-fluid">
+
+           
+
+
+
+        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+            <div class="row">
+                <div class="col-sm-5 container border border-primary rounded bg-light text-dark ">
                     <h1>Personal Details Page 2</h1>
                     <div class="topnav">
                     </div>
@@ -111,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 . " FROM user_profile up1"
                                 . " where up1.id=" . $user_id . "; ";
 
-                       // echo ("sql" . $sql);
+                        // echo ("sql" . $sql);
                         $result = execute_sql_query($db_connection, $sql);
                         if ($result == null) {
                             $message = "ERROR: Cannot match entry " . $matchId;
@@ -152,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <!--Lets try and do hobbies-->
 
-                <div class="container border border-primary rounded bg-light text-dark col-sm-6">
+                <div class="col-sm-3 container border border-primary rounded bg-light text-dark ">
 
                     <div class="form-group">
                         <h3>Hobbies</h3>
@@ -185,17 +193,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <!------Include the above in your HEAD tag ---------->
 
-              
+
                     <p align = "right">
 
                         <input class = "btn btn-default" type = "submit" value = "Save">
                     </p>
 
                 </div>
+            </div>
 
-            </form>
+        </form>
 
-        </div>
-    </body>
+    </div>
+</body>
 
 </html>
