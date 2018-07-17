@@ -5,22 +5,22 @@ if ($_SESSION['user_logged_in'] == 0) {
     header("Location: Logon.php");
 }
 require_once 'database_config.php';
-
+include 'group05_library.php';
 
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
 //echo "session user " . $user_id;
 
+$pictureIndex = 0;
+$message = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    // check the button selected (these are at the end of this form
-    echo "EditPRofile call";
+// check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "EditProfile") { // Call Edit Profile
         $_SESSION['user_id'] = $user_id;
         $_SESSION['matching_user_id'] = $matching_user_id;
         header("Location: UpdateProfile.php");
-        PostPage('UpdateProfile.php', $user_id, $matching_user_id);
         exit();
     }
     if ($_POST['btnAction'] == "MatchFinder") { // Call MatchFinder
@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
     if ($_POST['btnAction'] == "Logoff") { // Logoff
-        $_SESSION['user_logged_in'] = 0;
-        header("Location: index.php");
+        //$_SESSION['user_logged_in'] = 0;
+        header("Location: Logout.php");
         exit();
     }
     if ($_POST['btnAction'] == "RemoveAccount") { // Call RemoveAccount
@@ -46,22 +46,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: ChatLine.php");
         exit();
     }
-    if ($_POST['btnAction'] == "View") { // Call RemoveAccount
+// Process User Profile specific buttons
+    if ($_POST['btnAction'] == "Like" || $_POST['btnAction'] == "Maybe" || $_POST['btnAction'] == "Report" || $_POST['btnAction'] == "View") { // Get Match view row for subsequent buttons
         $_SESSION['user_id'] = $user_id;
-        $_SESSION['matching_user_id'] = $matching_user_id;
-        header("Location: ViewMatchProfile.php");
-        exit();
+        $matchId = $_POST['selected_user'];
+        $sql = 'select match_user_id_1, match_user_id_2 from match_table where id = ' . $matchId . ";";
+        $result = execute_sql_query($db_connection, $sql);
+        if ($result == null) {
+            echo "ERROR: Cannot find match entry to update status with, id =" . $matchId;
+        } else {
+            while ($row = mysqli_fetch_array($result)) {
+                if ($row['match_user_id_1'] == $user_id)
+                    $_SESSION['matching_user_id'] = $row['match_user_id_2'];
+                else
+                    $_SESSION['matching_user_id'] = $row['match_user_id_1'];
+                $matchId = $row['id'];
+                if ($_POST['btnAction'] == "View") { // View Profile
+                    header("Location: ViewMatchProfile.php");
+                    exit();
+                }
+                if ($_POST['btnAction'] == "Like") { // Update Status
+                    if ($row['match_user_id_1'] == $user_id)
+                        $updateUserStatus = 1;
+                    else
+                        $updateUserStatus = 2;
+                    update_match_status($matchId, 'Like', $updateUserStatus);
+                }
+                if ($_POST['btnAction'] == "Maybe") { // Update Status
+                    update_match_status($_SESSION['matching_user_id'], 'Maybe');
+                }
+                if ($_POST['btnAction'] == "Report") { // Update Status
+                    update_match_status($_SESSION['matching_user_id'], 'Report');
+                }
+            }
+        }
+//   if ($_POST['btnAction'] == "Goodbye") { // Update Status
+//       $matchId =    }
+    } else {
+
     }
-    if ($_POST['btnAction'] == "Goodbye") { // Update Status
-    }
-    if ($_POST['btnAction'] == "Like") { // Update Status
-    }
-    if ($_POST['btnAction'] == "Maybe") { // Update Status
-    }
-    if ($_POST['btnAction'] == "Report") { // Update Status
-    }
-} else {
-    
 }
 ?>
 
@@ -113,71 +136,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 border: 1px solid gray;
                 background: gray;
             }
-            /* CHECKBOX OVERWRITE STYLES */
-            .ckb > i {
-                width: 25px;
-                border-radius: 3px;
+            <!-- invisible radio button with image select -->
+            ul {
+                list-style: none;
             }
-            .rad:hover > i{ /* HOVER <i> STYLE */
-                box-shadow: inset 0 0 0 3px #fff;
-                background: gray;
+            li {
+                display: inline-block;
+                margin-right: 15px;
             }
-            .rad > input:checked + i{ /* (RADIO CHECKED) <i> STYLE */
-                box-shadow: inset 0 0 0 3px #fff;
-                background: orange;
+            input {
+                visibility:hidden;
             }
-            /* CHECKBOX */
-            .ckb > input + i:after{
-                content: "";
-                display: block;
-                height: 12px;
-                width:  12px;
-                margin: 2px;
-                border-radius: inherit;
-                transition: inherit;
-                background: gray;
-            }
-            .ckb > input:checked + i:after{ /* (RADIO CHECKED) <i> STYLE */
-                margin-left: 11px;
-                background:  orange;
-            }
-
-            label > input{ /* HIDE RADIO */
-                visibility: hidden; /* Makes input not-clickable */
-                position: absolute; /* Remove input from document flow */
-            }
-            label > input + img{ /* IMAGE STYLES */
-                cursor:pointer;
-                border:2px solid transparent;
-            }
-            label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
-                border:2px solid #f00;
-            }
-
             img {
-                max-width: 100%;
-                max-height: 100%;
+                cursor: pointer;
             }
-
-            .portrait {
-                height: 200px;
-                width: 150px;
-            }
-
-            .landscape {
-                height: 30px;
-                width: 80px;
-            }
-
-            .square {
-                height: 75px;
-                width: 75px;
-            }
+            input:checked + label {
+                border:2px solid #f00;
+            }           
         </style>
     </head>
     <body>
-        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+
             <div class="container-fluid">
+
                 <div class="row">
 
                     <div  class="col-sm-6 container border border-primary rounded bg-light text-dark" >
@@ -187,71 +170,74 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <br>
                         <?php
                         $sql = "SELECT first_name, surname FROM user_profile where id = " . $user_id . ";";
-                        //echo $sql;
-                        if ($result = mysqli_query($db_connection, $sql)) {
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_array($result)) {
-                                        echo '<h3>' . $row['first_name'] . '&nbsp' . $row['surname'] . '</h3>';
-                                }
+//echo $sql;
+                        $result = execute_sql_query($db_connection, $sql);
+                        if ($result == null) {
+                            echo "ERROR: Cannot find profile for user id " . $user_id;
+                        } else {
+                            while ($row = mysqli_fetch_array($result)) {
+                                echo '<h3>' . $row['first_name'] . '&nbsp' . $row['surname'] . '</h3>';
                             }
                         }
                         ?>
-                        <button class="btn btn-primary" name="btnAction" type="submit" value="EditProfile">Edit Profile</button>
-                        <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder">Match Finder</button>                        
-                        <button name="btnAction" class="btn btn-warning" type="submit" value="Logoff">Logoff</button>
-                        <button name="btnAction" class="btn btn-danger" type="submit" value="RemoveAccount">Remove Account</button>
+                        <button class="btn btn-primary" name="btnAction" type="submit" value="EditProfile"><img height="32" width="32"  title="Edit Profile" src='/images/Edit.png'/></button>
+                        <button name="btnAction" class="btn btn-secondary" type="submit" value="MatchFinder"><img height="32" width="32"  title="Match Finder" src='/images/Find.png'/></button></button>                        
+                        <button name="btnAction" class="btn btn-warning" type="submit" value="Logoff"><img height="32" width="32"  title="Logoff" src='/images/Logoff.png'/></button></button>
+                        <button name="btnAction" class="btn btn-danger" type="submit" value="RemoveAccount"><img height="32" width="32"  title="Remove Account" src='/images/Delete.png'/></button></button>
                         <br>
                     </div>
 
                 </div>
                 <br>    
                 <div class="row">
-                    <div class="col-sm-12 container border border-primary rounded bg-light text-dark">
+                    <div class="col-sm-11 container border border-primary rounded bg-light text-dark">
                         <h3>Chatting with</h3>
+
                         <?php
+                        echo "<ul>";
                         $sql = "SELECT * FROM matches_view where (match_user_id_1 =" . $user_id
                                 . " or  match_user_id_2 =" . $user_id . ")"
                                 . " and (user_profile_1_match_status = 'Chatting'"
                                 . " or user_profile_2_match_status = 'Chatting');";
-                        if ($result = mysqli_query($db_connection, $sql)) {
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_array($result)) {
-                                    if ($row['match_user_id_1'] == $user_id) {
-                                        echo ("<label class='rad'>");
-                                        echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_2'] . "'>");
-                                        echo("");
-                                        if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['user_profile_2_picture']) . '"/><i></i>';
-                                        } else {
-                                            echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
-                                        }
-                                        echo ("<figcaption>" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</figcaption>");
-                                        echo ("");
-                                        echo ("</label>");
-                                    } else {
-                                        echo ("<figcaption>" . $row['user_profile_1_first_name'] . "</figcaption>");
-                                        echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_1'] . "'>");
-                                        if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo ("<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_1_picture']) . "/><i></i>");
-                                        } else {
-                                            echo ("<img class='portrait  rounded-circle' src='camera-photo-7.png'/><i></i>'");
-                                        }
-                                        echo ("<figcaption>" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</figcaption>");
-                                        echo ("</label>");
-                                    }
-                                }
-                            } else {
-                                echo ("No matches found");
-                            }
+                        $result = execute_sql_query($db_connection, $sql);
+                        if ($result == null) {
+                            echo "No matches found";
                         } else {
-                            echo ("bad result");
+                            while ($row = mysqli_fetch_array($result)) {
+                                $pictureIndex++;
+                                echo ("<li>");
+                                if ($row['match_user_id_1'] == $user_id) {
+                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
+                                    echo "<br>";
+                                    if (strlen($row['user_profile_2_picture']) > 0)
+                                        echo "<img class='rounded-circle'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
+                                    else
+                                        echo ("<img height='100' width='100' src='camera-photo-7.png'/><i></i>'");
+                                    echo "</label>";
+                                } else {
+                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
+                                    echo "<br>";
+                                    if (strlen($row['user_profile_1_picture']) > 0)
+                                        echo "<img  class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
+                                    else
+                                        echo ("<img height='100' width='100' src='camera-photo-7.png'/><i></i>'");
+                                    echo "</label>";
+                                }
+                                echo "    </li>";
+                                echo "</ul>";
+                            }
                         }
                         ?>
                         <div class="col-sm-12">
                             <p>Click on Photograph and do one of the following:</p>
-                            <button name="btnAction" class="btn btn-success" type="submit" value="Chat">Chat</button>
-                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
-                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                            <button name="btnAction" class="btn btn-success" type="submit" value="Chat"><img height="32" width="32"  title="Chat" src='/images/Chat.png'/></button>
+                            <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="32" width="32"  title="View" src='/images/View.png'/></button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="32" width="42"  title="Goodbye"  src='/images/Goodbye.png'/></button>
+                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="32" width="32"  title="Report"  src='/images/Report.png'/></button>
 
                         </div>
 
@@ -259,108 +245,105 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-sm-9 container border border-primary rounded bg-light text-dark">
+                    <div class="col-sm-7 container border border-primary rounded bg-light text-dark">
                         <h3>System Matches</h3>
-
                         <?php
-                        require_once 'database_config.php';
-                        ?>
-                        <?php
+                        echo "<ul>";
                         $sql = "SELECT * FROM matches_view where system_generated_match = true and (match_user_id_1 =" . $user_id
                                 . " or  match_user_id_2 =" . $user_id . ")"
                                 . " and user_profile_1_match_status not in ('Chatting','Goodbye');";
-                       // echo $sql;
-                        if ($result = mysqli_query($db_connection, $sql)) {
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_array($result)) {
-                                    if ($row['match_user_id_1'] == $user_id) {
-                                        echo ("<label class='rad'>");
-                                        echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_2'] . "'>");
-                                        echo("");
-                                        if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['user_profile_2_picture']) . '"/><i></i>';
-                                        } else {
-                                            echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
-                                        }
-                                        echo ("<figcaption>" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</figcaption>");
-                                        echo ("");
-                                        echo ("</label>");
-                                    } else {
-                                        echo ("<figcaption>" . $row['user_profile_1_first_name'] . "</figcaption>");
-                                        echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_1'] . "'>");
-                                        if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo ("<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_1_picture']) . "/><i></i>");
-                                        } else {
-                                            echo ("<img class='portrait  rounded-circle' src='camera-photo-7.png'/><i></i>'");
-                                        }
-                                        echo ("<figcaption>" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</figcaption>");
-                                        echo ("</label>");
-                                    }
-                                }
-                            } else {
-                                echo ("No matches found");
-                            }
+                        $result = execute_sql_query($db_connection, $sql);
+                        
+                        if ($result == null) {
+                            echo "No matches found";
                         } else {
-                            echo ("bad result");
+                            while ($row = mysqli_fetch_array($result)) {
+                                $pictureIndex++;
+                                echo ("<li>");
+                                if ($row['match_user_id_1'] == $user_id) {
+                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
+                                    echo "<br>";
+                                    if (strlen($row['user_profile_2_picture']) > 0)
+                                        echo "<img class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
+                                    else
+                                        echo ("<img height='100' width='100' src='camera-photo-7.png'/><i></i>'");
+                                    echo "</label>";
+                                } else {
+                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
+                                    echo "<br>";
+                                    if (strlen($row['user_profile_1_picture']) > 0)
+                                        echo "<img class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
+                                    else
+                                        echo ("<img height='100' width='100' src='camera-photo-7.png'/><i></i>'");
+                                    echo "</label>";
+                                }
+                                echo "    </li>";
+                                echo "</ul>";
+                            }
                         }
                         ?>
                         <div class="col-sm-12">
                             <p>Click on Photograph and do one of the following:</p>
-                            <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
-                            <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
-                            <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
-                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
-                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                            
+                            <button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="32" width="32"  title="Like" src='/images/Like.png'/></button>
+                            <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="32" width="32"  title="View" src='/images/View.png'/></button>
+                            <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="32" width="32"  title="Maybe" src='/images/Maybe.png'/></button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="32" width="32"  title="Goodbye" src='/images/Goodbye.png'/></button>
+                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="32" width="32"  title="Report" src='/images/Report.png'/></button>
                         </div>    
                     </div>
 
-                    <div class="col-sm-2 container border border-primary rounded bg-light text-dark" ><h3>Interested in Me</h3>
+                    <div class="col-sm-3 container border border-primary rounded bg-light text-dark" ><h3>Interested in Me</h3>
                         <?php
                         $sql = "SELECT * FROM matches_view where system_generated_match = false and (match_user_id_1 =" . $user_id
                                 . " or  match_user_id_2 =" . $user_id . ")"
                                 . " and user_profile_1_match_status not in ('Chatting','Goodbye');";
-                        if ($result = mysqli_query($db_connection, $sql)) {
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_array($result)) {
-                                    echo("<div class='row'>");
-                                    if ($row['match_user_id_1'] == $user_id) {
-                                        echo ("<label class='rad'>");
-                                        echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_2'] . "'>");
-                                        if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo "<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_2_picture']) . "'/><i></i>";
-                                        } else {
-                                            echo ("<img class='portrait' src='camera-photo-7.png'/><i></i>'");
-                                        }
-                                        echo ("<figcaption>" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</figcaption>");
-                                        echo ("");
-                                        echo ("</label>");
-                                    } else {
-                                        echo ("<figcaption>" . $row['user_profile_1_first_name'] . "</figcaption>");
-                                        echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_1'] . "'>");
-                                        if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo ("<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_1_picture']) . "'/><i></i>");
-                                        } else {
-                                            echo ("<img class='portrait' src='camera-photo-7.png'/><i></i>'");
-                                        }
-                                        echo ("<figcaption>" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</figcaption>");
-                                        echo ("</label>");
-                                    }
-                                    echo("</div>");
-                                }
-                            } else {
-                                echo ("No matches found");
-                            }
+                        $result = execute_sql_query($db_connection, $sql);
+                        if ($result == null) {
+                            echo "No matches found";
                         } else {
-                            echo ("bad result");
+                            while ($row = mysqli_fetch_array($result)) {
+                                $pictureIndex++;
+                                echo ("<li>");
+                                if ($row['match_user_id_1'] == $user_id) {
+                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
+                                    echo "<br>";
+                                    if (strlen($row['user_profile_2_picture']) > 0)
+                                        echo "<img class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
+                                    else
+                                        echo ("<img class='rounded-circle' height='100' width='100' src='camera-photo-7.png'/><i></i>'");
+                                    echo "</label>";
+                                } else {
+                                    echo "        <input type='radio' name='selected_user' id='radio".$pictureIndex."' value='" . $row['match_id'] . "'/>";
+                                    echo "        <label for='radio".$pictureIndex."'>";
+                                    echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
+                                    echo "<br>";
+                                    if (strlen($row['user_profile_1_picture']) > 0)
+                                        echo "<img  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
+                                    else
+                                        echo ("<img height='100' width='100' src='camera-photo-7.png'/><i></i>'");
+                                    echo "</label>";
+                                }
+                                echo "    </li>";
+                                echo "</ul>";
+                            }
                         }
                         ?>
+
                         <div class="col-sm-12 ">
                             <p>Click on Photograph and do one of the following:</p>
-                            <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
-                            <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
-                            <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
-                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
-                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                            <button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="32" width="32"  title="Like" src='/images/Like.png'/></button>
+                            <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="32" width="32"  title="View" src='/images/View.png'/></button>
+                            <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="32" width="32"  title="Maybe" src='/images/Maybe.png'/></button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="32" width="32"  title="Goodbye" src='/images/Goodbye.png'/></button>
+                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="32" width="32"  title="Report" src='/images/Report.png'/></button>
+                            
                         </div>
                     </div>
                 </div>

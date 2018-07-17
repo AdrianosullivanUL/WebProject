@@ -9,7 +9,7 @@ require_once 'database_config.php';
 
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
-//echo "session user " . $user_id;
+// echo " matching_user_id " . $matching_user_id;
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

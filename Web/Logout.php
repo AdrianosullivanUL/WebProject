@@ -12,7 +12,9 @@ $matching_user_id = $_SESSION['matching_user_id'];
 //echo "session user " . $user_id;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    echo "I am a post";
+    $_SESSION['user_id'] = 0;
+        header("Location: Logon.php");
+        exit;
 }
 ?>
 <head>
@@ -86,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="row">
             <div class="col-md-6 col-md-offset-3" >
 
-                <form method="post" name="challenge"  class="form-horizontal" role="form" action="#" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
+                <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" AUTOCOMPLETE = "off" >
                     <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
                         <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Log Out</legend>
 

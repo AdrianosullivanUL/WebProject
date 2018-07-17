@@ -4,15 +4,100 @@ session_start();
 if ($_SESSION['user_logged_in'] == 0) {
     header("Location: Logon.php");
 }
+// Get a database connection
 require_once 'database_config.php';
 
-
+// Get the standard session parameters
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
 //echo "session user " . $user_id;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    echo "I am a post";
+
+    // check the button selected (these are at the end of this form
+    if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
+        // Validate user inputs
+        // --------------------
+        $valid = true;
+        $message = "";
+
+        // Get the form inputs
+        $fromAge = $_POST['dateOfBirthInput'];
+        $toAge = $_POST['dateOfBirthInput'];
+        $preferredGender = $_POST['preferredGenderInput'];
+        $ageSelection = $_POST['seekingAgeSelectionName'];
+        $travelDistance = $_POST['travelDistanceSelection'];
+        $relationshipType = $_POST['relationshipType'];
+
+        if (strlen($firstname) == 0) { // validate first name
+            $valid = false;
+            $message = "First Name must be populated";
+        }
+
+        // are all inputs valid?
+        if ($valid == true) {
+
+            // Update database
+            // ---------------
+            $sql = "update user_profile set first_name = '" . $firstname . " "
+                    // need to add other columns here
+                    . "where id = " . $user_id . ";";
+
+            // open User profile 2 page
+            // ------------------------
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['matching_user_id'] = $matching_user_id;
+            header("Location: UpdateProfile2.php");
+            exit();
+        }
+    }
+    if ($_POST['btnAction'] == "Cancel") { // cancel the update
+        echo "Cancel pressed";
+        header("Location: meetingspace.php");
+        exit();
+    }
+} else {
+    // prepare the page variables for presentation
+    $message = "";
+    $email = "";
+    $firstname = "";
+    $surname = "";
+    $gender_name = "";
+    $preferred_gender_name = "";
+    $dob = "";
+    $relationshipTypeLove = true;
+    $relationshipTypeCasual = false;
+    $relationshipTypeFriendship = false;
+    $relationshipTypeRelationship = false;
+    $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
+    if ($result = mysqli_query($db_connection, $sql)) {
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_array($result)) {
+                $surname = $row['surname'];
+                $email = $row['email'];
+                $firstname = $row['first_name'];
+                $gender_name = $row['gender_name'];
+                $dob = $row['date_of_birth'];
+                $preferred_gender_name = $row['preferred_gender_name'];
+                $relationshipTypeId = $row['relationship_type_id'];
+                
+                  if ($relationshipTypeId == 1) {
+                    $relationshipTypeLove = true;
+                }
+                if ($relationshipTypeId == 2) {
+                    $relationshipTypeCasual = true;
+                }
+                if ($relationshipTypeId == 3) {
+                    $relationshipTypeFriendship = true;
+                }
+                if ($relationshipTypeId == 4) {
+                    $relationshipTypeRelationship = true;
+                }
+            }
+        } else {
+            $message = "Cannot find user profile";
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -87,8 +172,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-md-offset-3" >
-
-                    <form method="post" name="challenge"  class="form-horizontal" role="form" action="#" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
+                    <form class="form-horizontal" role="form"  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                  <!--  <form method="post" name="challenge"  class="form-horizontal" role="form" action="#" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >-->
                         <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
                             <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Perfect Match Filter</legend>
 

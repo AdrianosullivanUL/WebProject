@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php
         require_once 'database_config.php';
         ?>
-        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
 
             <div class="container">
                 <br>
