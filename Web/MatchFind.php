@@ -244,7 +244,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </label>
                                     </div>
                                 </div>
-
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+                                <<div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
                                 <div class="form-group">
                                     <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                     <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
