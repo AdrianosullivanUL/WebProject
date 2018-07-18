@@ -252,7 +252,7 @@ input[type='range']:focus {
 
 output{
   display: block;
-  margin-top: 20px;
+  margin-top: 10px;
   color: #777;
 }
 output:before{
@@ -260,7 +260,7 @@ output:before{
   font-weight: bold;
 }
 body {
-  font-family: Calibri, Arial;
+  font-family:Arial;
 }
         </style>
     </head>
