@@ -8,7 +8,9 @@ require_once 'database_config.php';
 include 'group05_library.php';
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
+$last_communication_id = $_SESSION['last_communication_id'];
 
+$lastCommunicationId = 0;
 //echo "session user " . $user_id;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -28,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         <style>
-            
-                        body{color:#444;font:100%/1.4 sans-serif;}
+
+            body{color:#444;font:100%/1.4 sans-serif;}
             body {
                 background-image:    url(backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
@@ -96,37 +98,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <h1 style=" background-color: #6495ed;color: white;"><?php echo $name ?>-online</h1>
             <div class="output col-sm-6 container border border-primary rounded bg-light text-dark">
 
-				 <?php
-					// force user id's just for testing:
-					// $user_id = 24;
-					// $matching_user_id = 15;
-					$result = get_communications_thread($db_connection, $user_id, $matching_user_id);
-					if ($result == null)
-						echo "no thread found";
-					else {
-						while ($row = mysqli_fetch_array($result)) {
-							echo $row['id'] . " - " . $row['message'] . "<br>";
-						}
-					}
+                <?php
+                // force user id's just for testing:
+                // $user_id = 24;
+                // $matching_user_id = 15;
+                $result = get_communications_thread($db_connection, $user_id, $matching_user_id);
+                if ($result == null)
+                    echo "no thread found";
+                else {
+                    while ($row = mysqli_fetch_array($result)) {
+                        if ($row['from_user_id'] == $user_id)
+                            echo "<div class='float-sm-left col-sm-6 container border border-primary rounded text-dark bg-success'>";
+                        else
+                            echo "<div class='float-sm-right col-sm-6 container border border-primary rounded text-dark bg-info'>";
+
+                        echo $row['message'] . "<br>";
+                        echo "</div>";
+                        echo "<br>";
+                        $lastCommunicationId = $row['id'];
+                    }
+                }
+                $_SESSION['last_communication_id'] = $lastCommunicationId;
                 ?>
 
 
             </div>
-<div class="output col-sm-6 container border border-primary rounded bg-light text-dark">
-    <br>
-            <form method="post" action="Send.php">
-                <textarea name="msg" placeholder="Type to send message...."
-                          class="form-control"></textarea><br>
-                <input type="submit" value="Send">
-            </form>
-            <br>
-            <form action="Logout.php">
+            <div class="output col-sm-6 container border border-primary rounded bg-light text-dark">
+                <br>
+                <form method="post" action="Send.php">
+                    <textarea name="msg" placeholder="Type to send message...."
+                              class="form-control"></textarea><br>
+                    <input type="submit" value="Send">
+                </form>
+                <br>
+                <form action="Logout.php">
 
-                <input stype="width: 100%;background-color: #6495ed;color:
-                       white;font-size: 20px;" type="submit" value="Logout">
-            </form>
-</div>
+                    <input stype="width: 100%;background-color: #6495ed;color:
+                           white;font-size: 20px;" type="submit" value="Logout">
+                </form>
+            </div>
         </div>
 
-</body>
+    </body>
 </html> 
