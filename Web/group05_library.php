@@ -4,15 +4,16 @@
  * This file stores all shared php functions for the group05 project
  */
 
-function update_match_status($db_connection, $match_id, $match_status_id, $updateUserStatus) {
+function update_match_status($db_connection, $match_id, $match_status, $updateUser1or2) {
     // TBD fire updates on the match tabel
-    if ($updateUserStatus == 1) {
-        $sql = "UPDATE  SET user_1_match_status_id = (select id from status_master where status_description ='"
-                . $match_status_id . "' and is_match_table_status = true) where id = " . $match_id;
+    if ($updateUser1or2 == 1) {
+        $sql = "UPDATE match_table SET user_1_match_status_id = (select id from status_master where status_description ='"
+                . $match_status . "' and is_match_table_status = true) where id = " . $match_id;
     } else {
-        $sql = "UPDATE  SET user_2_match_status_id = (select id from status_master where status_description ='"
-                . $match_status_id . "' and is_match_table_status = true) where id = " . $match_id;
+        $sql = "UPDATE match_table SET user_2_match_status_id = (select id from status_master where status_description ='"
+                . $match_status . "' and is_match_table_status = true) where id = " . $match_id;
     }
+    echo $sql;
     return execute_sql_update($db_connection, $sql);
 }
 
@@ -37,6 +38,7 @@ function execute_sql_update($db_connection, $sql) {
     if ($db_connection->query($sql) === TRUE) {
         return $db_connection->affected_rows;
     } else {
+        echo "Error updating record: " . $db_connection->error;
         error_log("Error updating record: " . $db_connection->error);
         return false;
     }

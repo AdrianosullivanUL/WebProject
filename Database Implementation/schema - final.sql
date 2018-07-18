@@ -316,7 +316,7 @@ read_loop: LOOP
                              user_1_match_status_id, user_1_match_status_date,
                              user_2_match_status_id, user_2_match_status_date,
                              system_generated_match)
-        select loc_id, up.id, now(), 1, now(),1, now(),true
+        select loc_id, up.id, now(), 5, now(),5, now(),true
         from user_profile up
         join city c on c.id = up.city_id
         where up.id != loc_id
