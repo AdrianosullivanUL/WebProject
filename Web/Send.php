@@ -14,8 +14,10 @@
 	echo "user_id user no. " . $user_id . "<br>";
 	echo "msg is " . $msg . "<br>";
 	echo "matching_user_id use no. " . $matching_user_id . "<br>";
-	$sql="insert into user_communications(from_user_id, to_user_id, message) values('$user_id', '$matching_user_id', '$msg')";
-	$result = execute_sql_query($db_connection, $sql);
+	$sql="insert into user_communication(from_user_id, to_user_id, message, status_id) values('$user_id', '$matching_user_id', '$msg', '11')";
+	echo $sql . "<br>";
+	$result = execute_sql_update($db_connection, $sql);
+	
 	echo $result;
 	header("Location: ChatLine.php");
 ?>
