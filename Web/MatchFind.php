@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-md-offset-0.5" >
-                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" action="#" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
+                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
                         <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
                             <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Perfect Match Filter</legend>
 
@@ -182,10 +182,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>				
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt; padding-top: 3px; text-align: left;">
+                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt; padding-top: 10px; text-align: left;">
                                     Gender Preference <span style="color: red">*</span> :</div>
-                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">">
-                                    <select class="selectpicker form-control"style=" font-size:15pt;height: 40px;"">
+                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                    <select class="selectpicker form-control"style=" font-size:15pt;height: 40px;"value=" <?php echo $preferred_gender_name; ?>">
                                         <option>Female</option>
                                         <option>Male</option>
                                         <option>TransGender</option>
@@ -228,72 +228,107 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-3 col-md-3 col-lg-4 col-xs-8 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
                                     Interests <span style="color: red">*</span> :</div>
-                                    
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xs-10 mobileLabel"></div>
-                                    <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                                    <div class="col-sm-11 col-md-11 col-lg-11 col-xs-9 mobileLabel">
+
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-10 mobileLabel"></div>
+                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                                <div class="col-sm-11 col-md-11 col-lg-11 col-xs-9 mobileLabel">
                                     <div class="checkbox" style=" font-size: 15pt;width: auto;">
+
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Music
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Sport
+                                            <input type="checkbox" <input name="check_list[]" value="value 1">Music
                                         </label>
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Traveling
-                                        </label>
-                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Sailing
+                                            <input type="checkbox" <input name="check_list[]" value="value 2">Sport
                                         </label>
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Food
+                                            <input type="checkbox" <input name="check_list[]" value="value 3">Traveling
                                         </label>
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Work
-                                        </label>
-                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Family
+                                            <input type="checkbox" <input name="check_list[]" value="value 4">Sailing
                                         </label>
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Cooking
+                                            <input type="checkbox" <input name="check_list[]" value="value 5">Food
                                         </label>
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Gym
+                                            <input type="checkbox" <input name="check_list[]" value="value 6">Work
                                         </label>
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Reading
+                                            <input type="checkbox" <input name="check_list[]" value="value 7">Family
                                         </label>
-                                        
-                                        
-                                     </div>   
-                                        
-                                    </div>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" <input name="check_list[]" value="value 8">Cooking
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" v<input name="check_list[]" value="value 9">Gym
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" <input name="check_list[]" value="value 10">Reading
+                                        </label>
+
+
+                                    </div>   
+
                                 </div>
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
-                                <<div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
-                                <div class="form-group">
-                                    <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                                    <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
-                                        <button id="valuser" type="button" onclick="submitForm()"
-                                                class="btn btn-success">
-                                            Submit</button>
-                                    </div>
-
-                                    <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                                </div>   
-                                <div class="form-group" style="text-align:center;font-weight:bold">
-
-                                    </fieldset>
-
-                                    </form>
-//--------------------------------------
-                                </div>
-
                             </div>
+                            <?php
+                            if (!empty($_POST['check_list'])) {
+                                foreach ($_POST['check_list'] as $check) {
+                                    echo $check;
+                                    //echoes the value set in the HTML form for each checked checkbox.
+                                    //so, if I were to check 1, 3, and 5 it would echo value 1, value 3, value 5.
+                                    //in your case, it would echo whatever $row['Report ID'] is equivalent to.
+                                }
+                            }
+                            ?>
 
-                            </body>
-                            </body>
-                            </html>
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
 
-                            </html>
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+                            <div class="form-group">
+                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
+                                    Seeking Age Profile <span style="color: red">*</span> :</div>
+                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                    <input type="range" min="18" max="100" value="18" step="5" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
+                                    <datalist id="tickmarks">
+                                        <option value="18 to 100">18</option>
+                                        <option>20</option>
+                                        <option>40</option>
+                                        <option>60</option>
+                                        <option>80</option>
+                                        <option>100</option>
+                                    </datalist>
+                                    <output id="output" for="rangeInput">50</output> <!-- Just to display selected value -->
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+
+
+
+
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+                            <div class="form-group">
+                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                                <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
+                                    <button id="valuser" type="button" onclick="submitForm()"
+                                            class="btn btn-success">
+                                        Submit</button>
+                                </div>
+
+                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            </div>   
+                            <div class="form-group" style="text-align:center;font-weight:bold">
+
+                        </fieldset>
+
+                    </form>
+                    //--------------------------------------
+                </div>
+
+            </div>
+
+    </body>
+</body>
+</html>
+
+</html>
