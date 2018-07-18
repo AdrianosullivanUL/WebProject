@@ -816,6 +816,7 @@ insert into status_master (status_description,is_user_status,is_match_table_stat
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Maybe',0,1,0);
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Chatting',0,1,0);
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Goodbye',0,1,0);
+insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Report',0,1,0);
 
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Message Sent',0,0,1);
 insert into status_master (status_description,is_user_status,is_match_table_status,is_user_communication_status ) values  ('Message Received',0,0,1);
