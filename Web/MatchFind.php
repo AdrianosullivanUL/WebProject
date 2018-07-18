@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="container">
             <div class="row">
-                <div class="col-md-8 col-md-offset-2" >
+                <div class="col-md-12 col-md-offset-0.5" >
                     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" action="#" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
                         <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
                             <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Perfect Match Filter</legend>
@@ -184,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt; padding-top: 3px; text-align: left;">
                                     Gender Preference <span style="color: red">*</span> :</div>
-                                <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 mobileLabel">
+                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">">
                                     <select class="selectpicker form-control"style=" font-size:15pt;height: 40px;"">
                                         <option>Female</option>
                                         <option>Male</option>
@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
                                     Preferred Location <span style="color: red">*</span> :</div>
-                                <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 mobileLabel">
+                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select class="selectpicker form-control"style=" font-size:15pt;height: 40px;background-color: whitesmoke!important;">
                                         <option>Limerick</option>
                                         <option>Galway</option>
@@ -213,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
                                     Relationship Type <span style="color: red">*</span> :</div>
-                                <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 mobileLabel">
+                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
                                         <option>Love</option>
                                         <option>Casual</option>
@@ -228,20 +228,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-3 col-md-3 col-lg-4 col-xs-8 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
                                     Interests <span style="color: red">*</span> :</div>
-                                <div class="col-sm-8 col-md-8 col-lg-7 col-xs-10 mobileLabel">
+                                    
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xs-10 mobileLabel"></div>
+                                    <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                                    <div class="col-sm-11 col-md-11 col-lg-11 col-xs-9 mobileLabel">
                                     <div class="checkbox" style=" font-size: 15pt;width: auto;">
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Sports
+                                            <input type="checkbox" value="">Music
                                         </label>
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Outdoors
+                                            <input type="checkbox" value="">Sport
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" value="">Traveling
+                                        </label>
+                                         <label class="checkbox-inline">
+                                            <input type="checkbox" value="">Sailing
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" value="">Food
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" value="">Work
+                                        </label>
+                                         <label class="checkbox-inline">
+                                            <input type="checkbox" value="">Family
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" value="">Cooking
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" value="">Gym
                                         </label>
                                         <label class="checkbox-inline">
                                             <input type="checkbox" value="">Reading
                                         </label>
-                                         <label class="checkbox-inline">
-                                            <input type="checkbox" value="">Fun
-                                        </label>
+                                        
+                                        
+                                     </div>   
+                                        
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
