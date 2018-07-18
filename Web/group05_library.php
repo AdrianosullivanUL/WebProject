@@ -43,3 +43,30 @@ function execute_sql_update($db_connection, $sql) {
         return false;
     }
 }
+
+function get_communications_thread($db_connection, $userId, $matchUserId) {
+    $sql = "Select communication_id from match_table "
+            ." where (match_user_id_1 = " . $userId . " and match_user_id_2 = " . $matchUserId . ")"
+            ." or (match_user_id_1 = " . $matchUserId . " and match_user_id_2 = " . $userId . ")";
+   // echo $sql . "<br>";
+    $result = execute_sql_query($db_connection, $sql);
+    if ($result == null)
+        return null;
+    while ($row = mysqli_fetch_array($result)) {
+        $sql = "select uc.* from ("
+                . "select " . $row['communication_id'] . " as id,0 as replying_to_id"
+                . " union"
+                . " select  id, replying_to_communication_id"
+                . " from    (select * from user_communication"
+                . "          order by replying_to_communication_id, id) comms_sorted,"
+                . "        (select @pv := '" . $row['communication_id'] . "') initialisation"
+                . " where   find_in_set(replying_to_communication_id, @pv)"
+                . " and     length(@pv := concat(@pv, ',', id))) h"
+                . " join user_communication uc on uc.id = h.id";
+       // echo $sql . "<br>";
+            $result = execute_sql_query($db_connection, $sql);
+            return $result;
+            exit;
+    }
+}
+    

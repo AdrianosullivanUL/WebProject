@@ -924,9 +924,6 @@ values('24', '15', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-
 -- Create communications chain
 update match_table set user_1_match_status_id = 8, user_2_match_status_id = 8, communication_id = 1 where id = 32;
 
-select * from match_table where id = 32;
-
-delete from user_communication where id > 1;
 INSERT INTO `group05`.`user_communication`
 (`from_user_id`,`communication_datetime`,`message`,`status_id`,`to_user_id`,`replying_to_communication_id`,`black_listed`,`black_listed_date`,`black_listed_word_id`)
 VALUES(24,now(),'Hello, how are you?',11,15,null,false,null,null);
@@ -938,5 +935,7 @@ VALUES(15,now(),'I am good, and you?',11,24,1,false,null,null);
 
 INSERT INTO `group05`.`user_communication`
 (`from_user_id`,`communication_datetime`,`message`,`status_id`,`to_user_id`,`replying_to_communication_id`,`black_listed`,`black_listed_date`,`black_listed_word_id`)
-VALUES(24,now(),'great, weather good your end?',11,15,6,false,null,null);
+VALUES(24,now(),'great, weather good your end?',11,15,2,false,null,null);
+
+update match_table set communication_id = 1 where id = 28;
 
