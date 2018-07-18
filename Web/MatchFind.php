@@ -147,6 +147,121 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 opacity: 0.1;
                 filter: alpha(opacity=10); 
             }
+            input[type='range'] {
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  padding: 0px;
+  margin: 0px;
+  width: 210px;
+  height: 50px;
+  cursor: pointer;
+  background: -webkit-repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
+  background: -moz-repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
+  background: repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
+  background-size: 122px 25px;
+  font-size: 16px;
+}
+input[type='range'],
+input[type='range']::-webkit-slider-runnable-track,
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  box-sizing: border-box;
+  width: 200px;
+  height: 5px;
+  border-radius: 2px;
+  background: #777;
+}
+input[type='range']::-moz-range-track {
+  box-sizing: border-box;
+  width: 200px;
+  height: 5px;
+  border-radius: 2px;
+  padding: 0px;
+  background: #777;
+}
+input[type='range']::-moz-range-thumb {
+  box-sizing: border-box;
+  padding: 0px;
+  height: 20px;
+  width: 10px;
+  border-radius: 2px;
+  border: 1px solid;
+  background: #EEE;
+}
+input[type='range']::-ms-track {
+  box-sizing: border-box;
+  width: 210px;
+  height: 5px;
+  border-radius: 2px;
+  padding: 0px;
+  background: #777;
+  color: #777;
+}
+input[type='range']::-webkit-slider-thumb {
+  box-sizing: border-box;
+  padding: 0px;
+  height: 20px;
+  width: 10px;
+  border-radius: 2px;
+  border: 1px solid;
+  margin-top: -8px;
+  background: #EEE;
+}
+input[type='range']::-ms-thumb {
+  box-sizing: border-box;
+  padding: 0px;
+  height: 20px;
+  width: 10px;
+  border-radius: 2px;
+  border: 1px solid;
+  background: #EEE;
+}
+input[type="range"]::-ms-fill-lower {
+  background: transparent;
+}
+input[type='range']:focus {
+  outline: none;
+}
+/*input[type='range']:after{
+  position: absolute;
+  content: '20 40 60 80';
+  padding: 25px 4035px;
+  word-spacing: 20px;
+  left: 0px;
+  top: 0px;
+}*/
+
+.container:after {
+  position: absolute;
+  color: #777;
+  content: '20 40 60 80';
+  padding: 40px;
+  word-spacing: 20px;
+  left: 0px;
+  top: 0px;
+  z-index: -1;
+}
+.container {
+  padding: 0px;
+  position: relative;
+}
+
+/* Just for demo */
+
+output{
+  display: block;
+  margin-top: 20px;
+  color: #777;
+}
+output:before{
+  content:"Selected Age: ";
+  font-weight: bold;
+}
+body {
+  font-family: Calibri, Arial;
+}
         </style>
     </head>
     <body>
@@ -289,7 +404,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
                                     Seeking Age Profile <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
-                                    <input type="range" min="18" max="100" value="18" step="5" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
+                                    <input type="range" min="18" max="100" value="18" step="2" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
                                     <datalist id="tickmarks">
                                         <option value="18 to 100">18</option>
                                         <option>20</option>
@@ -298,7 +413,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <option>80</option>
                                         <option>100</option>
                                     </datalist>
-                                    <output id="output" for="rangeInput">50</output> <!-- Just to display selected value -->
+                                    <output id="output" for="rangeInput">18</output> <!-- Just to display selected Age -->
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
