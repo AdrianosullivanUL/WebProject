@@ -48,23 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="container border border-primary rounded bg-light text-dark col-sm-4">
             <h1>Reach Out to your future partner</h1>
             <br><br>
-            <a href="Logon.php?userid=24">Log on</a> 
+            <a href="Logon.php">Log on</a> 
             &nbsp
             <a href="Register.php">Register</a>
         </div>
-        <!--
-        <br><br>
-        <div class="container border border-primary rounded bg-light text-dark col-sm-6">
-            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
-                <h1>Test Links (to be removed later)</h1>
-                <br><br>
-                <button name="btnAction" class="btn btn-success" type="submit" value="MeetingSpace">Meeting Space</button>
-                <button name="btnAction" class="btn btn-success" type="submit" value="ViewMatchingProfile">View Matching Profile</button>
-                <button name="btnAction" class="btn btn-success" type="submit" value="UpdateProfile">Update Profile</button>
-
-            </form>
-
-        </div>
-        -->
     </body>
 </html> 
