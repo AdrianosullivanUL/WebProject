@@ -922,6 +922,7 @@ insert into match_table (match_user_id_1, match_user_id_2, match_date, response_
 values('24', '15', '2018-07-10 13:22:19', NULL, NULL, NULL, NULL, '1', '2018-07-10 13:22:19', '8', '2018-07-10 13:22:19', '0');
 
 -- Create communications chain
+-- ---------------------------
 update match_table set user_1_match_status_id = 8, user_2_match_status_id = 8, communication_id = 1 where id = 32;
 
 INSERT INTO `group05`.`user_communication`
