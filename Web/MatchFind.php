@@ -6,7 +6,7 @@ if ($_SESSION['user_logged_in'] == 0) {
 }
 // Get a database connection
 require_once 'database_config.php';
-
+include 'group05_library.php';
 // Get the standard session parameters
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
@@ -15,40 +15,6 @@ $matching_user_id = $_SESSION['matching_user_id'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // check the button selected (these are at the end of this form
-    if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
-        // Validate user inputs
-        // --------------------
-        $valid = true;
-        $message = "";
-
-        // Get the form inputs
-        $preferredGender = $_POST['preferredGenderInput'];
-        $ageSelection = $_POST['seekingAgeSelectionName'];
-        $travelDistance = $_POST['travelDistanceSelection'];
-        $relationshipType = $_POST['relationshipType'];
-
-        if (strlen($firstname) == 0) { // validate first name
-            $valid = false;
-            //$message = "First Name must be populated";
-        }
-
-        // are all inputs valid?
-        if ($valid == true) {
-
-            // Update database
-            // ---------------
-            $sql = "update user_profile set first_name = '" . $firstname . " "
-                    // need to add other columns here
-                    . "where id = " . $user_id . ";";
-
-            // open User profile 2 page
-            // ------------------------
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['matching_user_id'] = $matching_user_id;
-            header("Location: UpdateProfile2.php");
-            exit();
-        }
-    }
     if ($_POST['btnAction'] == "Cancel") { // cancel the update
         echo "Cancel pressed";
         header("Location: meetingspace.php");
@@ -103,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <style>
             body {
                 background-image:    url(backlit-bonding-casual-708392.jpg);
@@ -145,123 +111,123 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             iv.first {
                 opacity: 0.1;
-                filter: alpha(opacity=10); 
+                filter: alpha(opacity=10);
             }
             input[type='range'] {
-  box-sizing: border-box;
-  border: 0px solid transparent;
-  padding: 0px;
-  margin: 0px;
-  width: 210px;
-  height: 50px;
-  cursor: pointer;
-  background: -webkit-repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
-  background: -moz-repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
-  background: repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
-  background-size: 122px 25px;
-  font-size: 16px;
-}
-input[type='range'],
-input[type='range']::-webkit-slider-runnable-track,
-input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-}
-input[type='range']::-webkit-slider-runnable-track {
-  box-sizing: border-box;
-  width: 200px;
-  height: 5px;
-  border-radius: 2px;
-  background: #777;
-}
-input[type='range']::-moz-range-track {
-  box-sizing: border-box;
-  width: 200px;
-  height: 5px;
-  border-radius: 2px;
-  padding: 0px;
-  background: #777;
-}
-input[type='range']::-moz-range-thumb {
-  box-sizing: border-box;
-  padding: 0px;
-  height: 20px;
-  width: 10px;
-  border-radius: 2px;
-  border: 1px solid;
-  background: #EEE;
-}
-input[type='range']::-ms-track {
-  box-sizing: border-box;
-  width: 210px;
-  height: 5px;
-  border-radius: 2px;
-  padding: 0px;
-  background: #777;
-  color: #777;
-}
-input[type='range']::-webkit-slider-thumb {
-  box-sizing: border-box;
-  padding: 0px;
-  height: 20px;
-  width: 10px;
-  border-radius: 2px;
-  border: 1px solid;
-  margin-top: -8px;
-  background: #EEE;
-}
-input[type='range']::-ms-thumb {
-  box-sizing: border-box;
-  padding: 0px;
-  height: 20px;
-  width: 10px;
-  border-radius: 2px;
-  border: 1px solid;
-  background: #EEE;
-}
-input[type="range"]::-ms-fill-lower {
-  background: transparent;
-}
-input[type='range']:focus {
-  outline: none;
-}
-/*input[type='range']:after{
-  position: absolute;
-  content: '20 40 60 80';
-  padding: 25px 4035px;
-  word-spacing: 20px;
-  left: 0px;
-  top: 0px;
-}*/
+                box-sizing: border-box;
+                border: 0px solid transparent;
+                padding: 0px;
+                margin: 0px;
+                width: 210px;
+                height: 50px;
+                cursor: pointer;
+                background: -webkit-repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
+                background: -moz-repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
+                background: repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
+                background-size: 122px 25px;
+                font-size: 16px;
+            }
+            input[type='range'],
+            input[type='range']::-webkit-slider-runnable-track,
+            input[type='range']::-webkit-slider-thumb {
+                -webkit-appearance: none;
+            }
+            input[type='range']::-webkit-slider-runnable-track {
+                box-sizing: border-box;
+                width: 200px;
+                height: 5px;
+                border-radius: 2px;
+                background: #777;
+            }
+            input[type='range']::-moz-range-track {
+                box-sizing: border-box;
+                width: 200px;
+                height: 5px;
+                border-radius: 2px;
+                padding: 0px;
+                background: #777;
+            }
+            input[type='range']::-moz-range-thumb {
+                box-sizing: border-box;
+                padding: 0px;
+                height: 20px;
+                width: 10px;
+                border-radius: 2px;
+                border: 1px solid;
+                background: #EEE;
+            }
+            input[type='range']::-ms-track {
+                box-sizing: border-box;
+                width: 210px;
+                height: 5px;
+                border-radius: 2px;
+                padding: 0px;
+                background: #777;
+                color: #777;
+            }
+            input[type='range']::-webkit-slider-thumb {
+                box-sizing: border-box;
+                padding: 0px;
+                height: 20px;
+                width: 10px;
+                border-radius: 2px;
+                border: 1px solid;
+                margin-top: -8px;
+                background: #EEE;
+            }
+            input[type='range']::-ms-thumb {
+                box-sizing: border-box;
+                padding: 0px;
+                height: 20px;
+                width: 10px;
+                border-radius: 2px;
+                border: 1px solid;
+                background: #EEE;
+            }
+            input[type="range"]::-ms-fill-lower {
+                background: transparent;
+            }
+            input[type='range']:focus {
+                outline: none;
+            }
+            /*input[type='range']:after{
+              position: absolute;
+              content: '20 40 60 80';
+              padding: 25px 4035px;
+              word-spacing: 20px;
+              left: 0px;
+              top: 0px;
+            }*/
 
-.container:after {
-  position: absolute;
-  color: #777;
-  content: '20 40 60 80';
-  padding: 40px;
-  word-spacing: 20px;
-  left: 0px;
-  top: 0px;
-  z-index: -1;
-}
-.container {
-  padding: 0px;
-  position: relative;
-}
+            .container:after {
+                position: absolute;
+                color: #777;
+                content: '20 40 60 80';
+                padding: 40px;
+                word-spacing: 20px;
+                left: 0px;
+                top: 0px;
+                z-index: -1;
+            }
+            .container {
+                padding: 0px;
+                position: relative;
+            }
 
-/* Just for demo */
+            /* Just for demo */
 
-output{
-  display: block;
-  margin-top: 10px;
-  color: #777;
-}
-output:before{
-  content:"Selected Age: ";
-  font-weight: bold;
-}
-body {
-  font-family:Arial;
-}
+            output{
+                display: block;
+                margin-top: 10px;
+                color: #777;
+            }
+            output:before{
+                content:"Selected Age: ";
+                font-weight: bold;
+            }
+            body {
+                font-family:Arial;
+            }
         </style>
     </head>
     <body>
@@ -289,18 +255,18 @@ body {
                                 <div class="col-sm-8 col-md-8 col-lg-8 col-xs-8" style="text-align: right;">
                                     <span style="color: red">*</span> <span style="font-size: 8pt;">mandatory fields</span>
                                 </div>
-                            </div>	
+                            </div>
                             <div class="form-group" style="margin-bottom: 0px;">
                                 <div class="col-sm-8 col-md-8 col-lg-8 col-xs-8"></div>
-                                <div class="col-sm-8 col-md-8 col-lg-7 col-xs-10 mobilePad" id="message10" style=" font-size: 15pt;padding-left: 0px;"></div>                      
+                                <div class="col-sm-8 col-md-8 col-lg-7 col-xs-10 mobilePad" id="message10" style=" font-size: 15pt;padding-left: 0px;"></div>
 
-                            </div>				
+                            </div>
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt; padding-top: 10px; text-align: left;">
                                     Gender Preference <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
-                                    <select class="selectpicker form-control"style=" font-size:15pt;height: 40px;"value=" <?php echo $preferred_gender_name; ?>">
+                                    <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;" value=" <?php echo $preferred_gender_name; ?>">
                                         <option>Female</option>
                                         <option>Male</option>
                                         <option>TransGender</option>
@@ -336,7 +302,7 @@ body {
                                         <option>relationship</option>
                                     </select>
                                 </div>
-                            </div> 
+                            </div>
 
 
                             <div class="form-group">
@@ -381,7 +347,7 @@ body {
                                         </label>
 
 
-                                    </div>   
+                                    </div>
 
                                 </div>
                             </div>
@@ -425,13 +391,14 @@ body {
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
-                                    <button id="valuser" type="button" onclick="submitForm()"
-                                            class="btn btn-success">
+                                    <button id="valuser" type="button" name="btnAction" value="Submit" class="btn btn-success">
+
                                         Submit</button>
+                                    <button class="btn btn-primary" name="btnAction" type="submit" value="Submit"><img height="32" width="32"  title="Edit Profile" src='/images/Edit.png'/></button>
                                 </div>
 
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                            </div>   
+                            </div>
                             <div class="form-group" style="text-align:center;font-weight:bold">
 
                         </fieldset>
@@ -440,9 +407,66 @@ body {
                     //--------------------------------------
                 </div>
 
-            </div>
+                <div class="row">
+                    <div class="col-md-12 col-md-offset-0.5" >
+                        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
+                            <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">
+                                <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Perfect Match Filter</legend>
 
-    </body>
+
+
+
+                                <?php
+                                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                                    echo "posting";
+                                    // check the button selected (these are at the end of this form
+                                    if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
+                                        // Validate user inputs
+                                        // --------------------
+                                        $valid = true;
+                                        $message = "";
+
+                                        // Get the form inputs
+                                        $preferredGender = $_POST['preferredGenderInput'];
+                                        // $ageSelection = $_POST['seekingAgeSelectionName'];
+                                        //  $travelDistance = $_POST['travelDistanceSelection'];
+                                        //  $relationshipType = $_POST['relationshipType'];
+
+                                        echo 'gender ' . $preferredGender;
+                                        //if (strlen($firstname) == 0) { // validate first name
+                                        //    $valid = false;
+                                        //    //$message = "First Name must be populated";
+                                        // }
+                                        // are all inputs valid?
+                                        if ($valid == true) {
+
+                                            // Update database
+                                            // ---------------
+
+
+                                            $sql = "select * from user_profile where gender_id in (select id from gender where gender_name = '" . $preferredGender . "');";
+                                            //echo $sql;
+                                            // need to add other columns here
+                                            //            . "where id = " . $user_id . ";";
+
+                                            $result = execute_sql_query($db_connection, $sql);
+                                            if ($result == null) {
+                                                $message = "ERROR: Cannot match entry " . $matchId;
+                                            } else {
+                                                while ($row = mysqli_fetch_array($result)) {
+                                                    echo $row['first_name'] . "<br>";
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                ?>
+                            </fieldset>
+                        </form>
+                        //--------------------------------------
+                    </div>
+                </div>
+            </div>
 </body>
 </html>
 
