@@ -417,7 +417,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     echo "        <label for='radio" . $pictureIndex . "'>";
                                     echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                     echo "<br>";
-                                    if (strlen($row['user_profile_2_picture']) > 0)
+                                    if (strlen($row['user_profile_2_picture']) > 0) 
                                         echo "<img class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                     else
                                         echo ("<img class='rounded-circle' height='100' width='100' src='camera-photo-7.png'/><i></i>'");
