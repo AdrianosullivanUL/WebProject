@@ -21,40 +21,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 } else {
+
     // prepare the page variables for presentation
+
     $message = "";
     $email = "";
     $preferred_gender_name = "";
-    $relationshipTypeLove = true;
-    $relationshipTypeCasual = false;
-    $relationshipTypeFriendship = false;
-    $relationshipTypeRelationship = false;
-    $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
-    if ($result = mysqli_query($db_connection, $sql)) {
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_array($result)) {
-                $email = $row['email'];
+    $selectedCity = "";
 
-                $preferred_gender_name = $row['preferred_gender_name'];
-                $relationshipTypeId = $row['relationship_type_id'];
-
-                if ($relationshipTypeId == 1) {
-                    $relationshipTypeLove = true;
-                }
-                if ($relationshipTypeId == 2) {
-                    $relationshipTypeCasual = true;
-                }
-                if ($relationshipTypeId == 3) {
-                    $relationshipTypeFriendship = true;
-                }
-                if ($relationshipTypeId == 4) {
-                    $relationshipTypeRelationship = true;
-                }
-            }
-        } else {
-            $message = "Cannot find user profile";
-        }
-    }
+    $preferred_gender_name = $row['preferred_gender_name'];
+    $selectedCity = $row['selectedCity'];
+//    else {
+    //      $message = "Cannot find user profile";
 }
 ?>
 <!DOCTYPE html>
@@ -279,13 +257,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
                                     Preferred Location <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
-                                    <select class="selectpicker form-control"style=" font-size:15pt;height: 40px;background-color: whitesmoke!important;">
-                                        <option>Limerick</option>
-                                        <option>Galway</option>
-                                        <option>Cork</option>
-                                        <option>Waterford</option>
-                                        <option>Dublin</option>
-                                        <option>Belfast</option>
+                                    <select name="selectedCity" class="selectpicker form-control"style=" font-size:15pt;height: 40px;background-color: whitesmoke!important;">
+                                        <?php 
+                                        // get the user_profile record here
+                                        // $user_city_id = $row['city_id'];
+                                        $sql = "select city from city";                                           
+                                        $result = execute_sql_query($db_connection, $sql);
+                                            if ($result == null) {
+                                                echo "ERROR: Cannot find match entry to update status with, id =" . $matchId;
+                                            } else {
+                                                while ($row = mysqli_fetch_array($result)) {
+                                                    // if the city_id from the user profile matches the id from city, populate $selected ="selected"
+                                                   $selected = "";
+                                                    echo  "<option value=". $row['city'] ." ".$selected.">" . $row['city'] ."</option>";
+                                                }
+                                            }
+                                            ?>
                                     </select>
                                 </div>
                             </div>
@@ -443,18 +430,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             // Update database
                                             // ---------------
 
-
-                                            $sql = "select * from user_profile where gender_id in (select id from gender where gender_name = '" . $preferredGender . "');";
-                                            //echo $sql;
-                                            // need to add other columns here
-                                            //            . "where id = " . $user_id . ";";
-
+                                            $city = $_POST['selectedCity'];
+                                            $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city "
+                                                    . "FROM user_profile up "
+                                                    . "join gender g1 on g1.id = up.gender_id "
+                                                    . "join gender g2 on g2.id = up.gender_preference_id "
+                                                    . "join city c on c.id = up.city_id "
+                                                    . "where city_id in (select id from city where city = '" . $city . "')"
+                                                    . "and up.id in (select user_id from user_interests where interest_id "
+                                                    . "in (select id from interests where description in ('Music','Sport','Traveling')));";
                                             $result = execute_sql_query($db_connection, $sql);
                                             if ($result == null) {
-                                                $message = "ERROR: Cannot match entry " . $matchId;
+                                                echo "ERROR: Cannot find match entry to update status with, id =" . $matchId;
                                             } else {
                                                 while ($row = mysqli_fetch_array($result)) {
-                                                    echo $row['first_name'] . "<br>";
+                                                    echo $row['first_name'];
+                                                    if (strlen($row['picture']) > 0)
+                                                        echo "<img  class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
+                                                    else
+                                                        echo ("<img height='100' width='100' src='camera-photo-7.png'/><i></i>'");
+                                                    echo "</label>";
                                                 }
                                             }
                                         }
@@ -467,7 +462,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </div>
             </div>
-</body>
+    </body>
 </html>
 
 </html>
