@@ -11,10 +11,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // check the button selected (these are at the end of this form
     echo "EditPRofile call";
     if ($_POST['btnAction'] == "Save") { //save the detils
+        $sql = "UPDATE user_profile SET firstnameInput='$firstname', surnameInput ='$surname', dateOfBirthInput ='$DOB', " +
+        " genderInput='$gender', preferredGenderInput='$preferredGender', relationshipType ='$relationshipType'";
         echo "Saved";
         $_SESSION['user_id'] = $user_id;
         $_SESSION['matching_user_id'] = $matching_user_id;
         header("Location: UpdateProfile2.php");
+        // update data in  database  ds
+
+
+
+$result=mysqli_query($_SESSION, $sql) or die('Error querying database.');
+
+//Ds EXIT
         exit();
     }
     if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
@@ -40,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
         </script>
         <style>
+             body{color:#444;font:100%/1.4 sans-serif;}
             body {
                 background-image:    url(backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
@@ -127,10 +137,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             while ($row = mysqli_fetch_array($result)) {
                                 echo('<div class="form-group">');
                                 if (strlen($row['picture']) > 0) {
+                                    echo ("get photo from user profile");
                                     echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
                                 } else {
+                                    echo ("get photo from file");
                                     echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
                                 }
+                                echo ("after photo shoot"); 
                                 echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
                                 echo ("");
 
@@ -143,10 +156,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </br>
                         </br>
                         </br>
-                        <div class="form-group">
+                       
+                       <div class="form-group">
                             <label class="header">Profile Photo:</label>
-                            <input id="image" type="file" name="profile_photo" placeholder="Photo" required="" capture>
+                         <!- commented out for moment - load photo from file
+                         <input id="image" type="file" name="profile_photo" placeholder="Photo" required="" capture>
+                         ->
                         </div>
+                      
 
 
                     </div>           
