@@ -219,7 +219,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="container-fluid">
 
                 <div class="row">
-
+                    <!-- 
+                    Header section
+                    ---------------------  -->
                     <div  class="col-sm-6 container border border-primary rounded bg-light text-dark" >
                         <h1>Meeting Space</h1>
                     </div>
@@ -227,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <br>
                         <?php
                         $sql = "SELECT first_name, surname FROM user_profile where id = " . $user_id . ";";
-//echo $sql;
+                        //echo $sql;
                         $result = execute_sql_query($db_connection, $sql);
                         if ($result == null) {
                             echo "ERROR: Cannot find profile for user id " . $user_id;
@@ -246,13 +248,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 </div>
                 <br>  
+                <!-- 
+                Chatting With Section 
+                ---------------------  -->
                 <?php if (strlen($message) > 0) echo "<p><font color='red'>" . $message . "</font></p>" ?>
                 <div class="row">
                     <div class="col-sm-11 container border border-primary rounded bg-light text-dark">
                         <h3>Chatting with</h3>
 
                         <?php
-                        echo "<ul>";
+                        //echo "<ul>";
                         $sql = "SELECT * FROM matches_view where (match_user_id_1 =" . $user_id
                                 . " or  match_user_id_2 =" . $user_id . ")"
                                 . " and (user_profile_1_match_status = 'Chatting'"
@@ -263,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         } else {
                             while ($row = mysqli_fetch_array($result)) {
                                 $pictureIndex++;
-                                echo ("<li>");
+                                //echo ("<li>");
                                 if ($row['match_user_id_1'] == $user_id) {
                                     echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                     echo "        <label for='radio" . $pictureIndex . "'>";
@@ -285,8 +290,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo ("<img height='100' width='100' src='camera-photo-7.png'/><i></i>'");
                                     echo "</label>";
                                 }
-                                echo "    </li>";
-                                echo "</ul>";
+                                //echo "    </li>";
+                                //echo "</ul>";
                             }
                         }
                         ?>
@@ -302,9 +307,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </div>
                 <br>
+                
                 <div class="row">
+                <!-- 
+                System Matches Section 
+                ---------------------  -->
                     <div class="col-sm-7 container border border-primary rounded bg-light text-dark">
-                        <!-- SYSTEM MATCHES -->
                         <h3>System Matches</h3>
                         <ul>
                             <?php
@@ -332,10 +340,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             echo ("<img height='100' width='100' src='camera-photo-7.png'/>");
                                         switch ($row['user_profile_1_match_status']) {
                                             case 'Like':
-                                                echo ("<div class=''><img height='32' width='32' src='/images/Like.png'/></div>");
+                                                echo ("<div class=''><img height='32' width='32' tiitle='Liked' src='/images/Like.png'/></div>");
                                                 break;
                                             case 'Maybe':
-                                                echo ("<div class=''><img height='32' width='32' src='/images/Maybe.png'/></div>");
+                                                echo ("<div class=''><img height='32' width='32' tiitle='Maybe interested' src='/images/Maybe.png'/></div>");
                                                 break;
                                             case 'Matched':
                                                 echo ("<div class=''><img height='32' width='32' src='/images/SystemGenerated.png'/></div>");
@@ -368,7 +376,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             case 'Report':
                                                 echo ("<div class=''><img height='32' width='32' src='/images/Report.png'/></div>");
                                                 break;
-                                        }                                        
+                                        }
                                         echo "</label>";
                                     }
                                     //   echo "<div>";
@@ -387,8 +395,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="32" width="32"  title="Report" src='/images/Report.png'/></button>
                         </div>    
                     </div>
-
-                    <div class="col-sm-3 container border border-primary rounded bg-light text-dark" ><h3>Interested in Me</h3>
+                <!-- 
+                Interested in me section
+                ---------------------  -->
+                    <div class="col-sm-3 container border border-primary rounded bg-light text-dark" >
+                        <h3>Interested in Me</h3>
                         <?php
                         $sql = "SELECT * FROM matches_view where system_generated_match = false and (match_user_id_1 =" . $user_id
                                 . " or  match_user_id_2 =" . $user_id . ")"

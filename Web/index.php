@@ -44,13 +44,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </style>
     </head>
     <body >
-        <br>
-        <div class="container border border-primary rounded bg-light text-dark col-sm-4">
-            <h1>Reach Out to your future partner</h1>
-            <br><br>
-            <a href="Logon.php">Log on</a> 
-            &nbsp
-            <a href="Register.php">Register</a>
+        <div class="container-fluid">        
+            <br>
+            <div class="row">
+                <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
+                    <h1>Reach Out to your future partner</h1>
+                    <br><br>
+                    <a href="Logon.php">Log on</a> 
+                    &nbsp;
+                    <a href="Register.php">Register</a>
+                </div>
+            </div>            
+            &nbsp;
+            <div class="row">
+                <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
+                    <h1>Who are we?</h1>
+                    <p>We are a dating agency focused on helping single people to find a partner on the island of Ireland. We are a small technologically minded group based in in Limerick and our aim is to help you find your perfect match</p>
+                </div>
+            </div>
+            &nbsp;
+            <div class="row">
+                <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
+                    <h1>How does it work?</h1>
+                    <p>Our process is simple and easy to use, we don't focus on asking you a million questions or doing psychological tests! We ask you a few simple questions and ask you to post a recent picture of yourself. After that we do the following for you:</p>
+                    <ul>
+                        <li>Based on the criteria you have entered, we will find people who match your preferences and present these in the Meeting Space under the System Matches heading</li>
+                        <li>From here you can view all of the people matched to you and do the following</li>
+                        <ul>
+                            <li>Like - You would like to engage with this person, if they also like you then you are both free to chat</li>
+                            <li>Maybe - This keeps the person in your meeting space and you can decide later, by default people who you don't action are removed after 1 month</li>
+                            <li>Goodbye - You are not interested in this person, they will not be presented to you again</li>
+                            <li>Report - THis person has posted an offensive photo or used inappropriate language, this reports them to the site administrator for review/sanction</li>
+                        </ul>
+                        <li>If you "like" someone, you will be added to their "Interested in me" list in their Meeting Space, if they also "like" you then you are free to chat</li>
+                        <li>A list of people who you are "chatting" with are presented in your Meeting Space also, click on their picture and click on the Chat button to communicate with them</li>
+                    </ul>
+                    &nbsp;
+                    <p>Note: Distance willing to travel is used to calculate the distance from your town to your potential match, this is done using "as the crow flies", please bear this in mind when contacting people.</p>
+                </div>
+            </div>            
         </div>
     </body>
 </html> 

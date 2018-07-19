@@ -8,7 +8,6 @@ require_once 'database_config.php';
 include 'group05_library.php';
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
-$last_communication_id = $_SESSION['last_communication_id'];
 
 $lastCommunicationId = 0;
 //echo "session user " . $user_id;
