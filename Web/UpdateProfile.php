@@ -1,4 +1,4 @@
-<?php
+    <?php
 session_start();
 // redirect to the logon screen if the user is not logged in
 if ($_SESSION['user_logged_in'] == 0) {
@@ -133,6 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </script>
 
         <style>
+             body{color:#444;font:100%/1.4 sans-serif;}
             body {
                 background-image:    url(backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
