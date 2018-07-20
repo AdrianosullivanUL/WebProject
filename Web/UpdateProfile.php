@@ -1,4 +1,4 @@
-    <?php
+<?php
 session_start();
 // redirect to the logon screen if the user is not logged in
 if ($_SESSION['user_logged_in'] == 0) {
@@ -16,24 +16,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "Next") { // Call Edit Profile
+        // Get the form inputs
+        // -------------------
+        $firstname = $_POST['firstnameInput'];
+        $surname = $_POST['surnameInput'];
+        $dob = $_POST['dateOfBirthInput'];
+        $gender = $_POST['genderInput'];
+        $preferredGender = $_POST['preferredGenderInput'];
+        $ageSelectionFrom = $_POST['seekingAgeFromSelection'];
+        $ageSelectionTo = $_POST['seekingAgeToSelection'];
+        $travelDistance = $_POST['travelDistanceSelection'];
+        $relationshipType = $_POST['relationshipTypeInput'];
+        $email = $_POST['emailInput'];
+
         // Validate user inputs
         // --------------------
         $valid = true;
         $message = "";
-
-        // Get the form inputs
-        $firstname = $_POST['firstnameInput'];
-        $surname = $_POST['surnameInput'];
-        $DOB = $_POST['dateOfBirthInput'];
-        $gender = $_POST['genderInput'];
-        $preferredGender = $_POST['preferredGenderInput'];
-        $ageSelection = $_POST['seekingAgeSelectionName'];
-        $travelDistance = $_POST['travelDistanceSelection'];
-        $relationshipType = $_POST['relationshipType'];
-
         if (strlen($firstname) == 0) { // validate first name
             $valid = false;
             $message = "First Name must be populated";
+        }
+        if (strlen($firstname) > 50) { // validate first name
+            $valid = false;
+            $message = "First Name Cannot be longer than 50 characters";
         }
 
         // are all inputs valid?
@@ -41,16 +47,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Update database
             // ---------------
-            $sql = "update user_profile set first_name = '" . $firstname . " "
-                    // need to add other columns here
-                    . "where id = " . $user_id . ";";
-
+            $sql = "update user_profile set first_name = '" . $firstname . "', "
+                    . " surname = '" . $surname . "',"
+                    . " date_of_birth = '" . $dob . "',"
+                    . " gender_id  = (select id from gender where gender_name ='" . $gender . "'),"
+                    . " gender_preference_id  = (select id from gender where gender_name ='" . $preferredGender . "'),"
+                    . " from_age = '" . $ageSelectionFrom . "',"
+                    . " to_age = '" . $ageSelectionTo . "',"
+                    . " travel_distance = '" . $travelDistance . "',"
+                    . " relationship_type_id  = (select id from relationship_type where relationship_type ='" . $relationshipType . "'),"
+                    . " email = '" . $email . "'"
+                    . " where id = " . $user_id . ";";
+            echo $sql;
             // open User profile 2 page
             // ------------------------
             $_SESSION['user_id'] = $user_id;
             $_SESSION['matching_user_id'] = $matching_user_id;
-            header("Location: UpdateProfile2.php");
-            exit();
+            //   header("Location: UpdateProfile2.php");
+            //   exit();
         }
     }
     if ($_POST['btnAction'] == "Cancel") { // cancel the update
@@ -71,7 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $relationshipTypeCasual = false;
     $relationshipTypeFriendship = false;
     $relationshipTypeRelationship = false;
-    $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
+    $sql = "SELECT up.*, DATE_FORMAT(up.date_of_birth,'%d/%m/%Y') as formatted_dob, g1.gender_name, g2.gender_name as preferred_gender_name, rt.relationship_type "
+            . " FROM user_profile up "
+            . " left join gender g1 on g1.id = up.gender_id "
+            . " left join gender g2 on g2.id = up.gender_preference_id "
+            . " left join relationship_type rt on rt.id = up.relationship_type_id "
+            . " where up.id =" . $user_id . ";";
+    echo $sql;
     if ($result = mysqli_query($db_connection, $sql)) {
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_array($result)) {
@@ -80,21 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $firstname = $row['first_name'];
                 $gender_name = $row['gender_name'];
                 $dob = $row['date_of_birth'];
+                echo "DOB " . $dob;
                 $preferred_gender_name = $row['preferred_gender_name'];
                 $relationshipTypeId = $row['relationship_type_id'];
-                
-                  if ($relationshipTypeId == 1) {
-                    $relationshipTypeLove = true;
-                }
-                if ($relationshipTypeId == 2) {
-                    $relationshipTypeCasual = true;
-                }
-                if ($relationshipTypeId == 3) {
-                    $relationshipTypeFriendship = true;
-                }
-                if ($relationshipTypeId == 4) {
-                    $relationshipTypeRelationship = true;
-                }
+                $relationshipType = $row['relationship_type'];
             }
         } else {
             $message = "Cannot find user profile";
@@ -133,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </script>
 
         <style>
-             body{color:#444;font:100%/1.4 sans-serif;}
+            body{color:#444;font:100%/1.4 sans-serif;}
             body {
                 background-image:    url(backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
@@ -171,32 +180,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="form-group">
                         <label for="dateOfBirthInput">Date of Birth</label>
-                        <input type="text" class="form-control" name="dateOfBirthInput" value=" <?php echo $dob; ?> ">
+                        <input type="date" class="form-control" name="dateOfBirthInput" value=" <?php echo trim(date('Y-m-d', strtotime($dob))); ?> ">
                     </div>
                     <div class="form-group">
                         <label for="genderInput">Gender</label>
-                        <input type="text" class="form-control" name="genderInput" value=" <?php echo $gender_name; ?> ">
+                        <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                            <?php
+                            $sql = "select gender_name  from gender";
+                            if ($result = mysqli_query($db_connection, $sql)) {
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_array($result)) {
+                                        if ($row[gender_name] == $gender_name) {
+                                            echo "<option selected value ='" . $row[gender_name] . "'>" . $row[gender_name] . "</option>";
+                                        } else {
+                                            echo "<option value ='" . $row[gender_name] . "'>" . $row[gender_name] . "</option>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="genderInput">Preferred Gender</label>
-                        <input type="text" class="form-control" name="preferredGenderInput" value=" <?php echo $preferred_gender_name; ?> ">
+                        <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                            <?php
+                            $sql = "select gender_name  from gender";
+                            if ($result = mysqli_query($db_connection, $sql)) {
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_array($result)) {
+                                        if ($row[gender_name] == $preferred_gender_name) {
+                                            echo "<option selected value ='" . $row[gender_name] . "'>" . $row[gender_name] . "</option>";
+                                        } else {
+                                            echo "<option value ='" . $row[gender_name] . "'>" . $row[gender_name] . "</option>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </select>
+
                     </div>
                     <div class="form-group">
                         <div class="form-group">
                             <label for="seekingAgeSelection">Seeking Age Profile</label>
-                            <input type="range" min="1" max="100" value="50" class="slider" name="seekingAgeSelectionName">
+                            <!-- TODO add a single slider later -->
+                            <label for="seekingAgeSelection">From</label>
+                            <input type="range" min="18" max="120" value="50" class="slider" data-show-value="true" name="seekingAgeFromSelection">
+                            <label for="seekingAgeSelection">To</label>
+                            <input type="range" min="18" max="120" value="50" class="slider" data-show-value="true" name="seekingAgeToSelection">
+
                         </div>
 
                         <div class="form-group">
                             <label for="travelDistanceSelection">Distance I will travel</label>
-                            <input type="range" min="1" max="100" value="50" class="slider" name="travelDistanceSelection">
+                            <input type="range" min="0" max="500" value="50" class="slider" name="travelDistanceSelection">
                         </div>
                         <label for="relationshipType">Relationship Type</label>
                         <br>
-                        <input type="radio" value="Love" <?php if($relationshipTypeLove == true) echo 'checked'; ?> name="relationshipType">Love</input>&nbsp;
-                        <input type="radio" value="Casual" <?php  if($relationshipTypeCasual == true) echo 'checked'; ?> name="relationshipType">Casual</input>&nbsp;
-                        <input type="radio" value="Friendship" <?php  if($relationshipTypeFriendship == true) echo 'checked'; ?> name="relationshipType">Friendship</input>&nbsp;
-                        <input type="radio" value="Relationship" <?php  if($relationshipTypeRelationship == true) echo 'checked'; ?> name="relationshipType">Relationship</input>
+                        <input type="radio" value="Love" <?php if ($relationshipType == "Love") echo 'checked'; ?> name="relationshipTypeInput">Love</input>&nbsp;
+                        <input type="radio" value="Casual" <?php if ($relationshipType == "Casual") echo 'checked'; ?> name="relationshipTypeInput">Casual</input>&nbsp;
+                        <input type="radio" value="Friendship" <?php if ($relationshipType == "Friendship") echo 'checked'; ?> name="relationshipTypeInput">Friendship</input>&nbsp;
+                        <input type="radio" value="Relationship" <?php if ($relationshipType == "Relationship") echo 'checked'; ?> name="relationshipTypeInput">Relationship</input>
                         <b/>
                         <p > <?php echo $message ?></p>
                     </div>
