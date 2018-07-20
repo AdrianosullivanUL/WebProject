@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     . " travel_distance = '" . $travelDistance . "',"
                     . " relationship_type_id  = (select id from relationship_type where relationship_type ='" . $relationshipType . "'),"
                     . " email = '" . $email . "'"
-                    . " city_id = (select id from city where city = '". $city . ")"
+                    . " city_id = (select id from city where city = '" . $city . ")"
                     . " where id = " . $user_id . ";";
             //echo $sql;
             // open User profile 2 page
@@ -91,11 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $city = "";
     $dob = "";
 
-    $sql = "SELECT up.*, DATE_FORMAT(up.date_of_birth,'%d/%m/%Y') as formatted_dob, g1.gender_name, g2.gender_name as preferred_gender_name, rt.relationship_type "
+    $sql = "SELECT up.*, DATE_FORMAT(up.date_of_birth,'%d/%m/%Y') as formatted_dob, g1.gender_name, g2.gender_name as preferred_gender_name, rt.relationship_type, c.city "
             . " FROM user_profile up "
             . " left join gender g1 on g1.id = up.gender_id "
             . " left join gender g2 on g2.id = up.gender_preference_id "
             . " left join relationship_type rt on rt.id = up.relationship_type_id "
+            . " left join city c on c.id = up.city_id "
             . " where up.id =" . $user_id . ";";
     //echo $sql;
     if ($result = mysqli_query($db_connection, $sql)) {
@@ -104,12 +105,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $surname = $row['surname'];
                 $email = $row['email'];
                 $firstname = $row['first_name'];
-                $gender_name = $row['gender_name'];
+                $gender = $row['gender_name'];
+                $preferredGender = $row['preferred_gender_name'];
                 $dob = $row['date_of_birth'];
-                echo "DOB " . $dob;
-                $preferred_gender_name = $row['preferred_gender_name'];
-                $relationshipTypeId = $row['relationship_type_id'];
                 $relationshipType = $row['relationship_type'];
+                $ageSelectionFrom = $row['From_age'];
+                $ageSelectionTo = $row['to_age'];
+                $travelDistance = $row['Travel_distance'];
+                $city = $row['city'];
             }
         } else {
             $message = "Cannot find user profile";
@@ -191,59 +194,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="form-group">
                         <label for="city Label">Nearest City/Town</label>
                         <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-                            <?php
-                            $sql = "select city  from city";
-                            if ($result = mysqli_query($db_connection, $sql)) {
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_array($result)) {
-                                        if ($row['coty'] == $city) {
-                                            echo "<option selected value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
-                                        } else {
-                                            echo "<option value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
-                                        }
-                                    }
-                                }
-                            }
-                            ?>
+<?php
+$sql = "select city  from city";
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            if ($row['coty'] == $city) {
+                echo "<option selected value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
+            } else {
+                echo "<option value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
+            }
+        }
+    }
+}
+?>
                         </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="genderLabel">Gender</label>
                         <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-                            <?php
-                            $sql = "select gender_name  from gender";
-                            if ($result = mysqli_query($db_connection, $sql)) {
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_array($result)) {
-                                        if ($row['gender_name'] == $gender) {
-                                            echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
-                                        } else {
-                                            echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
-                                        }
-                                    }
-                                }
-                            }
-                            ?>
+<?php
+$sql = "select gender_name  from gender";
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            if ($row['gender_name'] == $gender) {
+                echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+            } else {
+                echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+            }
+        }
+    }
+}
+?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="genderInput">Preferred Gender</label>
                         <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-                            <?php
-                            $sql = "select gender_name  from gender";
-                            if ($result = mysqli_query($db_connection, $sql)) {
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_array($result)) {
-                                        if ($row['gender_name'] == $preferredGender) {
-                                            echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
-                                        } else {
-                                            echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
-                                        }
-                                    }
-                                }
-                            }
-                            ?>
+<?php
+$sql = "select gender_name  from gender";
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            if ($row['gender_name'] == $preferredGender) {
+                echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+            } else {
+                echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+            }
+        }
+    }
+}
+?>
                         </select>
                     </div>
                     <div class="form-group">
