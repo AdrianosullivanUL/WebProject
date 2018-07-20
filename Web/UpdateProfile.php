@@ -18,16 +18,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['btnAction'] == "Next") { // Call Edit Profile
         // Get the form inputs
         // -------------------
-        $firstname = $_POST['firstnameInput'];
-        $surname = $_POST['surnameInput'];
+        $firstname = trim($_POST['firstnameInput']);
+        $surname = trim($_POST['surnameInput']);
         $dob = $_POST['dateOfBirthInput'];
         $gender = $_POST['genderInput'];
-        $preferredGender = $_POST['preferredGenderInput'];
+        if (isset($_POST['preferredGenderInput']))
+            $preferredGender = $_POST['preferredGenderInput'];
+        else
+            $preferredGender = "";
         $ageSelectionFrom = $_POST['seekingAgeFromSelection'];
         $ageSelectionTo = $_POST['seekingAgeToSelection'];
         $travelDistance = $_POST['travelDistanceSelection'];
-        $relationshipType = $_POST['relationshipTypeInput'];
-        $email = $_POST['emailInput'];
+        if (isset($_POST['relationshipTypeInput']))
+            $relationshipType = $_POST['relationshipTypeInput'];
+        else
+            $relationshipType = '';
+        $email = trim($_POST['emailInput']);
 
         // Validate user inputs
         // --------------------
@@ -58,12 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     . " relationship_type_id  = (select id from relationship_type where relationship_type ='" . $relationshipType . "'),"
                     . " email = '" . $email . "'"
                     . " where id = " . $user_id . ";";
-            echo $sql;
+            //echo $sql;
             // open User profile 2 page
             // ------------------------
             $_SESSION['user_id'] = $user_id;
             $_SESSION['matching_user_id'] = $matching_user_id;
-            //   header("Location: UpdateProfile2.php");
+            header("Location: UpdateProfile2.php");
             //   exit();
         }
     }
@@ -81,10 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $gender_name = "";
     $preferred_gender_name = "";
     $dob = "";
-    $relationshipTypeLove = true;
-    $relationshipTypeCasual = false;
-    $relationshipTypeFriendship = false;
-    $relationshipTypeRelationship = false;
+
     $sql = "SELECT up.*, DATE_FORMAT(up.date_of_birth,'%d/%m/%Y') as formatted_dob, g1.gender_name, g2.gender_name as preferred_gender_name, rt.relationship_type "
             . " FROM user_profile up "
             . " left join gender g1 on g1.id = up.gender_id "
@@ -165,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="container border border-primary rounded bg-light text-dark col-sm-6">
                     <div class="form-group">
                         <label for="emailInput">Email</label>
-                        <input type="text" class="form-control" name="emailInput" value=" <?php echo $email; ?> ">
+                        <input type="text" class="form-control" name="emailInput" value="<?php echo $email; ?>">
 
                     </div>
                     <div class="form-group">
@@ -175,12 +178,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>                    
                     <div class="form-group">
                         <label for="surnameInput">Surname</label>
-                        <input type="text" class="form-control" name="surnameInput" value=" <?php echo $surname; ?> ">
+                        <input type="text" class="form-control" name="surnameInput" value="<?php echo trim($surname); ?>">
 
                     </div>
                     <div class="form-group">
                         <label for="dateOfBirthInput">Date of Birth</label>
-                        <input type="date" class="form-control" name="dateOfBirthInput" value=" <?php echo trim(date('Y-m-d', strtotime($dob))); ?> ">
+                        <input type="date" class="form-control" name="dateOfBirthInput" value="<?php echo $dob; ?>" min="1900-01-01" max="<?php echo (new \DateTime())->format('Y-m-d'); ?>" />
                     </div>
                     <div class="form-group">
                         <label for="genderInput">Gender</label>
@@ -190,10 +193,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             if ($result = mysqli_query($db_connection, $sql)) {
                                 if (mysqli_num_rows($result) > 0) {
                                     while ($row = mysqli_fetch_array($result)) {
-                                        if ($row[gender_name] == $gender_name) {
-                                            echo "<option selected value ='" . $row[gender_name] . "'>" . $row[gender_name] . "</option>";
+                                        if ($row['gender_name'] == $gender) {
+                                            echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
                                         } else {
-                                            echo "<option value ='" . $row[gender_name] . "'>" . $row[gender_name] . "</option>";
+                                            echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
                                         }
                                     }
                                 }
@@ -209,32 +212,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             if ($result = mysqli_query($db_connection, $sql)) {
                                 if (mysqli_num_rows($result) > 0) {
                                     while ($row = mysqli_fetch_array($result)) {
-                                        if ($row[gender_name] == $preferred_gender_name) {
-                                            echo "<option selected value ='" . $row[gender_name] . "'>" . $row[gender_name] . "</option>";
+                                        if ($row['gender_name'] == $preferredGender) {
+                                            echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
                                         } else {
-                                            echo "<option value ='" . $row[gender_name] . "'>" . $row[gender_name] . "</option>";
+                                            echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
                                         }
                                     }
                                 }
                             }
                             ?>
                         </select>
-
                     </div>
                     <div class="form-group">
                         <div class="form-group">
                             <label for="seekingAgeSelection">Seeking Age Profile</label>
                             <!-- TODO add a single slider later -->
                             <label for="seekingAgeSelection">From</label>
-                            <input type="range" min="18" max="120" value="50" class="slider" data-show-value="true" name="seekingAgeFromSelection">
+                            <input type="range" min="18" max="120" value="<?php echo $ageSelectionFrom; ?>" class="slider" data-show-value="true" name="seekingAgeFromSelection">
                             <label for="seekingAgeSelection">To</label>
-                            <input type="range" min="18" max="120" value="50" class="slider" data-show-value="true" name="seekingAgeToSelection">
+                            <input type="range" min="18" max="120" value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
 
                         </div>
 
                         <div class="form-group">
                             <label for="travelDistanceSelection">Distance I will travel</label>
-                            <input type="range" min="0" max="500" value="50" class="slider" name="travelDistanceSelection">
+                            <input type="range" min="0" max="500" value="<?php echo $travelDistance; ?>" class="slider" name="travelDistanceSelection">
                         </div>
                         <label for="relationshipType">Relationship Type</label>
                         <br>
