@@ -6,23 +6,56 @@ $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
 //echo "session user " . $user_id;
 
+$myBio = "";
+$picture = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo "I am a post";
 // check the button selected (these are at the end of this form
     echo "EditPRofile call";
     if ($_POST['btnAction'] == "Save") { //save the detils
-        $sql = "UPDATE user_profile SET firstnameInput='$firstname', surnameInput ='$surname', dateOfBirthInput ='$DOB', " +
-        " genderInput='$gender', preferredGenderInput='$preferredGender', relationshipType ='$relationshipType'";
-        echo "Saved";
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['matching_user_id'] = $matching_user_id;
-        header("Location: UpdateProfile2.php");
+        // Get the form inputs
+        // -------------------
+        $myBio = trim($_POST['myBioInput']);
+        
+        // Get the uploaded picture
+        $picture = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if($check !== false) {
+        echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+    } else {
+        echo "File is not an image.";
+        $uploadOk = 0;
+    }
+        
+        
+        
+        if (isset($_POST['pictureInput']))
+            $picture = trim($_POST['pictureInput']);
+        else
+            $picture = "";
+
+        // Validate inputs 
+        // ---------------
+        $valid = true;
+        if (strlen($myBio) == 0) {
+            $message = "Please provide a short bio for your profile";
+            $valid = false;
+        }
+
+        // Do Update
+        // ---------
+        if ($valid == true) {
+
+
+            $sql = "UPDATE user_profile SET picture='" . $picture . "', my_bio ='" . $myBio . "' "
+                    . " where id = " . $user_id;
+            //echo $sql;
+            $result = execute_sql_update($db_connection, $sql);
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['matching_user_id'] = $matching_user_id;
+            //header("Location: MeetingSpace.php");
+        }
         // update data in  database  ds
-
-
-
-$result=mysqli_query($_SESSION, $sql) or die('Error querying database.');
-
 //Ds EXIT
         exit();
     }
@@ -32,6 +65,19 @@ $result=mysqli_query($_SESSION, $sql) or die('Error querying database.');
         exit();
     } else {
         echo "I am called from another form";
+    }
+} else {
+    $sql = "SELECT my_bio, picture from user_profile where up.id =" . $user_id . ";";
+    echo $sql;
+    if ($result = mysqli_query($db_connection, $sql)) {
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_array($result)) {
+                $myBio = $row['my_bio'];
+                $picture = $row['picture'];
+            }
+        } else {
+            $message = "Cannot find user profile";
+        }
     }
 }
 ?>
@@ -49,7 +95,7 @@ $result=mysqli_query($_SESSION, $sql) or die('Error querying database.');
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
         </script>
         <style>
-             body{color:#444;font:100%/1.4 sans-serif;}
+            body{color:#444;font:100%/1.4 sans-serif;}
             body {
                 background-image:    url(backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
@@ -110,118 +156,120 @@ $result=mysqli_query($_SESSION, $sql) or die('Error querying database.');
 
         <div class="container-fluid">
 
-           
 
 
 
-        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
-            <div class="row">
-                <div class="col-sm-5 container border border-primary rounded bg-light text-dark ">
-                    <h1>Personal Details Page 2</h1>
-                    <div class="topnav">
-                    </div>
-                    </br>
-                    <div class="container border border-primary rounded bg-light text-dark col-sm-6">
-                        <?php
-                        $picture = "";
-                        // Get User Profile
-                        $sql = " SELECT up1.* "
-                                . " FROM user_profile up1"
-                                . " where up1.id=" . $user_id . "; ";
 
-                        // echo ("sql" . $sql);
-                        $result = execute_sql_query($db_connection, $sql);
-                        if ($result == null) {
-                            $message = "ERROR: Cannot match entry " . $matchId;
-                        } else {
-                            while ($row = mysqli_fetch_array($result)) {
-                                echo('<div class="form-group">');
-                                if (strlen($row['picture']) > 0) {
-                                    echo ("get photo from user profile");
-                                    echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
-                                } else {
-                                    echo ("get photo from file");
-                                    echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
-                                }
-                                echo ("after photo shoot"); 
-                                echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
-                                echo ("");
-
-
-                                echo('</div>');
-                            }
-                        }
-                        ?>
-
-                        </br>
-                        </br>
-                        </br>
-                       
-                       <div class="form-group">
-                            <label class="header">Profile Photo:</label>
-                         <!- commented out for moment - load photo from file
-                         <input id="image" type="file" name="profile_photo" placeholder="Photo" required="" capture>
-                         ->
+            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+                <div class="row">
+                    <div class="col-sm-5 container border border-primary rounded bg-light text-dark ">
+                        <h1>Personal Details Page 2</h1>
+                        <div class="topnav">
                         </div>
-                      
+                        </br>
+                        <div class="container border border-primary rounded bg-light text-dark col-sm-6">
+<?php
+$picture = "";
+// Get User Profile
+$sql = " SELECT up1.* "
+        . " FROM user_profile up1"
+        . " where up1.id=" . $user_id . "; ";
+
+// echo ("sql" . $sql);
+$result = execute_sql_query($db_connection, $sql);
+if ($result == null) {
+    $message = "ERROR: Cannot match entry " . $matchId;
+} else {
+    while ($row = mysqli_fetch_array($result)) {
+        echo('<div class="form-group">');
+        if (strlen($row['picture']) > 0) {
+            echo ("get photo from user profile");
+            echo '<img name = "pictureInput" class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
+        } else {
+            echo ("get photo from file");
+            echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
+        }
+        echo ("after photo shoot");
+        echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
+        echo ("");
 
 
-                    </div>           
+        echo('</div>');
+    }
+}
+?>
+                            </br>
+                            </br>
+                            </br>
 
-                    </br>
-                    </br>
-                    </br>
+                            <div class="form-group">
+                                <label class="header">Profile Photo:</label>
+                                <input type="file" name="fileToUpload" id="fileToUpload">
+                            </div>
+                        </div>           
+                        </br>
+                        </br>
+                        </br>
 
 
-
-                </div>
-                <!--Lets try and do hobbies-->
-
-                <div class="col-sm-3 container border border-primary rounded bg-light text-dark ">
-
-                    <div class="form-group">
-                        <h3>Hobbies</h3>
 
                     </div>
-                    <?php
-                    // Get user Interests
-                    $sql = "  SELECT  ud1.id, ud1.description , ui1.user_id "
-                            . " FROM interests ud1 "
-                            . " left join user_interests ui1 on ui1.interest_id = ud1.id "
-                            . " where ui1.user_id is null or ui1.user_id=" . $user_id . "; ";
 
-                    //echo ("sql" . $sql);
-                    $result = execute_sql_query($db_connection, $sql);
-                    if ($result == null) {
-                        $message = "ERROR: No interests found " . $user_id;
-                    } else {
-                        while ($row = mysqli_fetch_array($result)) {
-                            if ($row['user_id'] != null)
-                                $checked = "checked";
-                            else
-                                $checked = "";
-                            echo "<div class='checkbox'>";
-                            echo "    <p align='middle>'";
-                            echo "        <label><input type='checkbox' " . $checked . "  value=''>" . $row['description'] . "</label>";
-                            echo "</div>";
-                        }
-                    }
-                    ?>
+                    <div class="col-sm-3 container border border-primary rounded bg-light text-dark ">
 
-                    <!------Include the above in your HEAD tag ---------->
+                        <div class="form-group">
+                            <h3>Bio</h3>
+
+                            <input type="text" class="form-control" name="myBioInput" value="<?php echo $myBio; ?>">
+                        </div>
+                    </div>
+
+                    <!--Lets try and do hobbies-->
+
+                    <div class="col-sm-3 container border border-primary rounded bg-light text-dark ">
+
+                        <div class="form-group">
+                            <h3>Hobbies</h3>
+
+                        </div>
+<?php
+// Get user Interests
+$sql = "  SELECT  ud1.id, ud1.description , ui1.user_id "
+        . " FROM interests ud1 "
+        . " left join user_interests ui1 on ui1.interest_id = ud1.id "
+        . " where ui1.user_id is null or ui1.user_id=" . $user_id . "; ";
+
+//echo ("sql" . $sql);
+$result = execute_sql_query($db_connection, $sql);
+if ($result == null) {
+    $message = "ERROR: No interests found " . $user_id;
+} else {
+    while ($row = mysqli_fetch_array($result)) {
+        if ($row['user_id'] != null)
+            $checked = "checked";
+        else
+            $checked = "";
+        echo "<div class='checkbox'>";
+        echo "    <p align='middle>'";
+        echo "        <label><input type='checkbox' " . $checked . "  value=''>" . $row['description'] . "</label>";
+        echo "</div>";
+    }
+}
+?>
+
+                        <!------Include the above in your HEAD tag ---------->
 
 
-                    <p align = "right">
+                        <p align = "right">
+                            <button class="btn btn-primary" name="btnAction" type="submit" value="Save">Save</button>
+                        </p>
 
-                        <input class = "btn btn-default" type = "submit" value = "Save">
-                    </p>
-
+                    </div>
                 </div>
-            </div>
 
-        </form>
+            </form>
 
-    </div>
-</body>
+        </div>
+    </body>
 
 </html>

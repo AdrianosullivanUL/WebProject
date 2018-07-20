@@ -6,6 +6,7 @@ if ($_SESSION['user_logged_in'] == 0) {
 }
 // Get a database connection
 require_once 'database_config.php';
+include 'group05_library.php';
 
 // Get the standard session parameters
 $user_id = $_SESSION['user_id'];
@@ -67,12 +68,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     . " city_id = (select id from city where city = '" . $city . ")"
                     . " where id = " . $user_id . ";";
             //echo $sql;
+            $result = execute_sql_update($db_connection, $sql);
+
             // open User profile 2 page
             // ------------------------
             $_SESSION['user_id'] = $user_id;
             $_SESSION['matching_user_id'] = $matching_user_id;
             header("Location: UpdateProfile2.php");
-            //   exit();
+              exit();
         }
     }
     if ($_POST['btnAction'] == "Cancel") { // cancel the update
@@ -194,59 +197,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="form-group">
                         <label for="city Label">Nearest City/Town</label>
                         <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-<?php
-$sql = "select city  from city";
-if ($result = mysqli_query($db_connection, $sql)) {
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_array($result)) {
-            if ($row['coty'] == $city) {
-                echo "<option selected value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
-            } else {
-                echo "<option value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
-            }
-        }
-    }
-}
-?>
+                            <?php
+                            $sql = "select city  from city";
+                            if ($result = mysqli_query($db_connection, $sql)) {
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_array($result)) {
+                                        if ($row['coty'] == $city) {
+                                            echo "<option selected value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
+                                        } else {
+                                            echo "<option value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="genderLabel">Gender</label>
                         <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-<?php
-$sql = "select gender_name  from gender";
-if ($result = mysqli_query($db_connection, $sql)) {
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_array($result)) {
-            if ($row['gender_name'] == $gender) {
-                echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
-            } else {
-                echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
-            }
-        }
-    }
-}
-?>
+                            <?php
+                            $sql = "select gender_name  from gender";
+                            if ($result = mysqli_query($db_connection, $sql)) {
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_array($result)) {
+                                        if ($row['gender_name'] == $gender) {
+                                            echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+                                        } else {
+                                            echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="genderInput">Preferred Gender</label>
                         <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-<?php
-$sql = "select gender_name  from gender";
-if ($result = mysqli_query($db_connection, $sql)) {
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_array($result)) {
-            if ($row['gender_name'] == $preferredGender) {
-                echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
-            } else {
-                echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
-            }
-        }
-    }
-}
-?>
+                            <?php
+                            $sql = "select gender_name  from gender";
+                            if ($result = mysqli_query($db_connection, $sql)) {
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_array($result)) {
+                                        if ($row['gender_name'] == $preferredGender) {
+                                            echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+                                        } else {
+                                            echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="form-group">
