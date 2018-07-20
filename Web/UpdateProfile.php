@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $surname = trim($_POST['surnameInput']);
         $dob = $_POST['dateOfBirthInput'];
         $gender = $_POST['genderInput'];
+        $city = $_POST['cityInput'];
         if (isset($_POST['preferredGenderInput']))
             $preferredGender = $_POST['preferredGenderInput'];
         else
@@ -63,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     . " travel_distance = '" . $travelDistance . "',"
                     . " relationship_type_id  = (select id from relationship_type where relationship_type ='" . $relationshipType . "'),"
                     . " email = '" . $email . "'"
+                    . " city_id = (select id from city where city = '". $city . ")"
                     . " where id = " . $user_id . ";";
             //echo $sql;
             // open User profile 2 page
@@ -86,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $surname = "";
     $gender_name = "";
     $preferred_gender_name = "";
+    $city = "";
     $dob = "";
 
     $sql = "SELECT up.*, DATE_FORMAT(up.date_of_birth,'%d/%m/%Y') as formatted_dob, g1.gender_name, g2.gender_name as preferred_gender_name, rt.relationship_type "
@@ -94,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             . " left join gender g2 on g2.id = up.gender_preference_id "
             . " left join relationship_type rt on rt.id = up.relationship_type_id "
             . " where up.id =" . $user_id . ";";
-    echo $sql;
+    //echo $sql;
     if ($result = mysqli_query($db_connection, $sql)) {
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_array($result)) {
@@ -186,7 +189,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="date" class="form-control" name="dateOfBirthInput" value="<?php echo $dob; ?>" min="1900-01-01" max="<?php echo (new \DateTime())->format('Y-m-d'); ?>" />
                     </div>
                     <div class="form-group">
-                        <label for="genderInput">Gender</label>
+                        <label for="city Label">Nearest City/Town</label>
+                        <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                            <?php
+                            $sql = "select city  from city";
+                            if ($result = mysqli_query($db_connection, $sql)) {
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_array($result)) {
+                                        if ($row['coty'] == $city) {
+                                            echo "<option selected value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
+                                        } else {
+                                            echo "<option value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="genderLabel">Gender</label>
                         <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
                             <?php
                             $sql = "select gender_name  from gender";
