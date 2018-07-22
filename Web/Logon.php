@@ -16,7 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['btnAction'] == "Logon") { // Call Edit Profile
         $email = $_POST['email'];
         $password = $_POST['password'];
-        $sql = "select * from user_profile where email = '" . $email . "' and password_hash = sha2('" . $password . "',256);";
+        $sql = "select * from user_profile where trim(email) = trim('" . $email . "') and password_hash = sha2('" . $password . "',256);";
+        echo $sql;
         if ($result = mysqli_query($db_connection, $sql)) {
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_array($result)) {
