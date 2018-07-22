@@ -85,100 +85,101 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             </div>
             <div class="container-fluid">
-                <div class="row">
-
-                </div>
-                <br>
                 <div class ="row">
-                    <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
-                        <p> " "/p>
-                    </div>
-                    <div class="col-xs-6 col-sm-4" style="background-color:whitesmoke; opacity: 0.9;">
-                        <?php
-                        $sql = "SELECT * FROM user_profile where id =" . $matching_user_id . ";";
-                        $mibio = "";
-                        $picture = "";
-                        $first_name = "";
-                        $surname = "";
-                        if ($result = mysqli_query($db_connection, $sql)) {
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_array($result)) {
-                                    $mybio = $row['my_bio'];
-                                    if (strlen($row['picture']) > 0) {
-                                        $picture = base64_encode($row['picture']);
-                                    } else {
-                                        
-                                    }
-                                    $first_name = $row['first_name'];
-                                    $surname = $row['surname'];
+                    <div class="col-xs-12 col-sm-12 col-lg-12 col-xs-12 " style="border-style: solid;border-color: silver;background-color:transparent; opacity: 0.0;">
+                    </div> 
+                </div>
+            </div>
+            <div class ="row">
+                <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
+                    <p> " "</p>
+                </div>
+                <div class="col-xs-6 col-sm-4" style="border-style: solid;border-color:silver;background-color:whitesmoke; opacity: 1;">
+                    <?php
+                    $sql = "SELECT * FROM user_profile where id =" . $matching_user_id . ";";
+                    $mibio = "";
+                    $picture = "";
+                    $first_name = "";
+                    $surname = "";
+                    if ($result = mysqli_query($db_connection, $sql)) {
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_array($result)) {
+                                $mybio = $row['my_bio'];
+                                if (strlen($row['picture']) > 0) {
+                                    $picture = base64_encode($row['picture']);
+                                } else {
+                                    
                                 }
+                                $first_name = $row['first_name'];
+                                $surname = $row['surname'];
                             }
                         }
-                        ?>
-                        <h4><?php echo $first_name . " " . $surname ?> </h4>
-                        <!-- Display Image -->
-                        <?php
-                        if (strlen($picture) > 0) {
-                            echo '<img class="portrait"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
-                        } else {
-                            echo ("<img class='portrait' src='camera-photo-7.png'/><i></i>'");
-                        }
-                        ?>
-                    </div>
-                    <div class="col-xs-6 col-sm-6" style="background-color:lavender; opacity: 0.9;">
-                        <h3><?php echo $first_name ?>'s bio</h3>
-                        <h4><?php echo $mybio ?></h4>
-
-                    </div>
+                    }
+                    ?>
+                    <h4><?php echo $first_name . " " . $surname ?> </h4>
+                    <!-- Display Image -->
+                    <?php
+                    if (strlen($picture) > 0) {
+                        echo '<img class="portrait"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
+                    } else {
+                        echo ("<img class='portrait' src='camera-photo-7.png'/><i></i>'");
+                    }
+                    ?>
                 </div>
-                <div class ="row">
-                    <div class="col-sm-12" style="background-color:transparent; opacity: 0.0;">
+                <div class="col-xs-6 col-sm-6" style="background-color:lavender; opacity: 0.9;">
+                    <h3><?php echo $first_name ?>'s bio</h3>
+                    <h4><?php echo $mybio ?></h4>
 
-                    </div>
                 </div>
+            </div>
+            <div class ="row">
+                <div class="col-sm-12" style="background-color:transparent; opacity: 0.0;">
 
-                <div class ="row">
-                    <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
-                        <p> " "/p>
-                    </div>
-                    <div class ="col-xs-4 col-sm-4"style="background-color:lavender; opacity: 0.9;">
-                        <?php
-                        echo "<h3> $first_name's Interests </h3> ";
-                        $sql = "SELECT description
+                </div>
+            </div>
+
+            <div class ="row">
+                <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
+                    <p> " "/p>
+                </div>
+                <div class ="col-xs-4 col-sm-4"style="background-color:lavender; opacity: 0.9;">
+                    <?php
+                    echo "<h3> $first_name's Interests </h3> ";
+                    $sql = "SELECT description
                        FROM interests
                        LEFT JOIN user_interests ON interest_id = interests.id
                        where user_id = " . $matching_user_id . ";";
-                        $interest = "";
-                        if ($result = mysqli_query($db_connection, $sql)) {
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_array($result)) {
-                                    $description = $row['description'];
-                                    echo("<h4>. $description ");
-                                }
+                    $interest = "";
+                    if ($result = mysqli_query($db_connection, $sql)) {
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_array($result)) {
+                                $description = $row['description'];
+                                echo("<h4>. $description ");
                             }
                         }
-                        ?>
-                    </div>
-                    <div class="col-xs-6 col-sm-6"style="background-color:whitesmoke; opacity: 0.9;text-align:right">
-
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
-                        <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
-                        <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
-                        <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
-                        <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
-                    </div>
-
-
-
+                    }
+                    ?>
                 </div>
+                <div class="col-xs-6 col-sm-6"style="background-color:whitesmoke; opacity: 0.9;text-align:right">
+
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
+                    <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
+                    <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
+                    <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
+                    <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                </div>
+
+
+
+            </div>
 
         </form>
 

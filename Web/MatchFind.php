@@ -25,24 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $message = "";
     $email = "";
     $preferred_gender_name = "";
-    if (isset($_POST['selectedCity']))
-        $city = $_POST['selectedCity'];
-    else
-        $city = "";
-    // put in location here
     $relationshipTypeLove = true;
     $relationshipTypeCasual = false;
     $relationshipTypeFriendship = false;
     $relationshipTypeRelationship = false;
-    $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1"
-            . " join gender g1 on g1.id = up1.gender_id "
-            . " join gender g2 on g2.id = up1.gender_preference_id "
-            . " where up1.id =" . $user_id . ";"
-            . " and city_id in (select id from city where city = '" . $city . "')"
-            . ";";
-    echo $sql;
-
-
+    $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
     if ($result = mysqli_query($db_connection, $sql)) {
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_array($result)) {
@@ -82,6 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <style>
             body {
@@ -252,12 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <a href="logout.php">Log Out</a>
             </div>
         </div>
-        <<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-        <!------ Include the above in your HEAD tag ---------->
-
-        <div class="container">
+                <div class="container">
             <div class="row">
                 <div class="col-md-12 col-md-offset-0.5" >
                     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
@@ -280,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     Gender Preference <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-                                        <<?php
+                                        <?php
                                         $sql = "select gender_name  from gender";
                                         if ($result = mysqli_query($db_connection, $sql)) {
                                             if (mysqli_num_rows($result) > 0) {
@@ -300,9 +285,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select name ="selectedCity" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
                                         <?php
-                                        // get the user_profile record here
-                                        // $user_city_id = $row['city_id'];
                                         
+                                        
+                                        // get the user_profile record here
+                                        // 
+                                        echo $user_id;
+                                         $sql = "SELECT city FROM city LEFT JOIN user_profile ON city.id = user_profile.city_id  "
+                                               . "where user_profile.id = '" . $user_id . "'";
+                                         echo "<option>" . $row[city] . "</option>"; 
+                                        // 
+                                      
                                         $sql = "select city from city";
                                         if ($result = mysqli_query($db_connection, $sql)) {
                                             if (mysqli_num_rows($result) > 0) {
@@ -430,11 +422,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
-                                    <button id="valuser" type="button" name="btnAction" value="Submit" class="btn btn-success">
-
+                                    <button class="btn btn-primary" id="valuser" type="submit" name="btnAction" name="btnAction" value="Submit" class="btn btn-success">
                                         Submit</button>
-                                    <button class="btn btn-primary" name="btnAction" type="submit" value="Submit"><img height="32" width="32"  title="Edit Profile" src='/images/Edit.png'/></button>
-                                </div>
+                                                                    </div>
 
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                             </div>
@@ -443,8 +433,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </fieldset>
 
                     </form>
-                    //--------------------------------------
-                </div>
+                   </div>
 
                 <div class="row">
                     <div class="col-md-12 col-md-offset-0.5" >
@@ -473,6 +462,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         //  $relationshipType = $_POST['relationshipType'];
 
                                         echo 'gender ' . $preferredGender;
+                                        echo 'userid  ' .$user_id;
                                         //echo location here
                                         //if (strlen($firstname) == 0) { // validate first name
                                         //    $valid = false;
@@ -494,8 +484,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     . " join city c on c.id = up.city_id "
                                                     . " where city_id in (select id from city where city = '" . $city . "')"
                                                     . ";";
-                                            echo $sql;
-
+                                            //echo $sql;
                                             //                         $sql = "select * from user_profile where gender_id in (select id from gender where gender_name = '" . $preferredGender . "');";
                                             //echo $sql;
                                             // need to add other columns here
@@ -519,7 +508,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 ?>
                             </fieldset>
                         </form>
-                        //--------------------------------------
                     </div>
                 </div<!-- and up.id in (select user_id from user_interests where interest_id 
                         //in (select id from interests where description in ('Music','Sport','Traveling')));-->
