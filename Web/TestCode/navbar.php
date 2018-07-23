@@ -4,8 +4,8 @@ session_start();
 if ($_SESSION['user_logged_in'] == 0) {
     header("Location: Logon.php");
 }
-require_once 'database_config.php';
-include 'group05_library.php';
+require_once '../database_config.php';
+include '../group05_library.php';
 
 $user_id = $_SESSION['user_id'];
 if (isset($_SESSION['matching_user_id']))
@@ -160,26 +160,134 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
-<html lang="en">
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
     <head>
-        <title>meeting space</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            body {
-                background-image:    url(backlit-bonding-casual-708392.jpg);
-                background-size:     cover;                      /* <------ */
-                background-repeat:   no-repeat;
-                background-position: center center;              /* optional, center the image */
+            /* Add a black background color to the top navigation */
+            .topnav {
+                background-color: #333;
+                overflow: hidden;
             }
 
+            /* Style the links inside the navigation bar */
+            .topnav a {
+                float: left;
+                display: block;
+                color: #f2f2f2;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 17px;
+            }
 
+            /* Add an active class to highlight the current page */
+            .active {
+                background-color: #4CAF50;
+                color: white;
+            }
 
-            <!-- invisible radio button with image select -->
+            /* Hide the link that should open and close the topnav on small screens */
+            .topnav .icon {
+                display: none;
+            }
+
+            /* Dropdown container - needed to position the dropdown content */
+            .dropdown {
+                float: left;
+                overflow: hidden;
+            }
+
+            /* Style the dropdown button to fit inside the topnav */
+            .dropdown .dropbtn {
+                font-size: 17px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 14px 16px;
+                background-color: inherit;
+                font-family: inherit;
+                margin: 0;
+            }
+
+            /* Style the dropdown content (hidden by default) */
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+            }
+
+            /* Style the links inside the dropdown */
+            .dropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+            }
+
+            /* Add a dark background on topnav links and the dropdown button on hover */
+            .topnav a:hover, .dropdown:hover .dropbtn {
+                background-color: #555;
+                color: white;
+            }
+
+            /* Add a grey background to dropdown links on hover */
+            .dropdown-content a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+            /* Show the dropdown menu when the user moves the mouse over the dropdown button */
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
+            @media screen and (max-width: 600px) {
+                .topnav a:not(:first-child), .dropdown .dropbtn {
+                    display: none;
+                }
+                .topnav a.icon {
+                    float: right;
+                    display: block;
+                }
+            }
+
+            /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
+            @media screen and (max-width: 600px) {
+                .topnav.responsive {position: relative;}
+                .topnav.responsive a.icon {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                }
+                .topnav.responsive a {
+                    float: none;
+                    display: block;
+                    text-align: left;
+                }
+                .topnav.responsive .dropdown {float: none;}
+                .topnav.responsive .dropdown-content {position: relative;}
+                .topnav.responsive .dropdown .dropbtn {
+                    display: block;
+                    width: 100%;
+                    text-align: left;
+                }
+            } 
+             <!-- invisible radio button with image select -->
             ul {
                 list-style: none;
             }
@@ -199,168 +307,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             .stackem div {
                 width: 100%;
             }
-
-            <!-- NAVBAR -->
-                         /* Add a black background color to the top navigation */
-.topnav {
-    background-color: #333;
-    overflow: hidden;
-}
-
-/* Style the links inside the navigation bar */
-.topnav a {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-}
-
-/* Add an active class to highlight the current page */
-.active {
-    background-color: #4CAF50;
-    color: white;
-}
-
-/* Hide the link that should open and close the topnav on small screens */
-.topnav .icon {
-    display: none;
-}
-
-/* Dropdown container - needed to position the dropdown content */
-.dropdown {
-    float: left;
-    overflow: hidden;
-}
-
-/* Style the dropdown button to fit inside the topnav */
-.dropdown .dropbtn {
-    font-size: 17px;
-    border: none;
-    outline: none;
-    color: white;
-    padding: 14px 16px;
-    background-color: inherit;
-    font-family: inherit;
-    margin: 0;
-}
-
-/* Style the dropdown content (hidden by default) */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-/* Style the links inside the dropdown */
-.dropdown-content a {
-    float: none;
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-}
-
-/* Add a dark background on topnav links and the dropdown button on hover */
-.topnav a:hover, .dropdown:hover .dropbtn {
-    background-color: #555;
-    color: white;
-}
-
-/* Add a grey background to dropdown links on hover */
-.dropdown-content a:hover {
-    background-color: #ddd;
-    color: black;
-}
-
-/* Show the dropdown menu when the user moves the mouse over the dropdown button */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
-@media screen and (max-width: 600px) {
-  .topnav a:not(:first-child), .dropdown .dropbtn {
-    display: none;
-  }
-  .topnav a.icon {
-    float: right;
-    display: block;
-  }
-}
-
-/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
-@media screen and (max-width: 600px) {
-  .topnav.responsive {position: relative;}
-  .topnav.responsive a.icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-  .topnav.responsive a {
-    float: none;
-    display: block;
-    text-align: left;
-  }
-  .topnav.responsive .dropdown {float: none;}
-  .topnav.responsive .dropdown-content {position: relative;}
-  .topnav.responsive .dropdown .dropbtn {
-    display: block;
-    width: 100%;
-    text-align: left;
-  }
-} 
+                        body {
+                background-image:    url(backlit-bonding-casual-708392.jpg);
+                background-size:     cover;                      /* <------ */
+                background-repeat:   no-repeat;
+                background-position: center center;              /* optional, center the image */
+            }
         </style>
     </head>
     <body>
-        <?php
-        $first_name = "";
-        $surname = "";
-        $sql = "SELECT first_name, surname FROM user_profile where id = " . $user_id . ";";
-        //echo $sql;
-        $result = execute_sql_query($db_connection, $sql);
-        if ($result == null) {
-            echo "ERROR: Cannot find profile for user id " . $user_id;
-        } else {
-            while ($row = mysqli_fetch_array($result)) {
-                $first_name = $row['first_name'];
-                $surname = $row['surname'];
-            }
-        }
-        ?>  
-        
-
- <div class="topnav" id="myTopnav">
-  <a href="#home" class="active">Home</a>
-  <a href="#news">News</a>
-  <a href="#contact">Contact</a>
-  <div class="dropdown">
-      <button class="dropbtn"><img height="32" width="32"  title="Edit Profile" src='/images/menubutton.png'/> Menu
-          <i class="fa fa-caret-down"></i>
-      </button>
-      <div class="dropdown-content">
-          <a href="#"><img height="16" width="16"  title="Edit Profile" src='/images/Edit.png'/> Edit</a>
-          <a href="#"><img height="16" width="16"  title="Match Finder" src='/images/Find.png'/> Find Matches</a>
-          <a href="#"><img height="16" width="16"  title="Remove Account" src='/images/Delete.png'/> Remove Account</a>
-          <a href="#"><img height="16" width="16"  title="Logoff" src='/images/Logoff.png'/> Logoff</a>
-          <!--
-                            <button name="btnAction" class="btn-primary-outline" type="submit" value="EditProfile"><img height="16" width="16"  title="Edit Profile" src='/images/Edit.png'/> Edit</button>
-                            <button name="btnAction" class="dropbtn" type="submit" value="MatchFinder"><img height="16" width="16"  title="Match Finder" src='/images/Find.png'/> Find Matches</button>
-                            <button name="btnAction" class="dropbtn" type="submit" value="RemoveAccount"><img height="16" width="16"  title="Remove Account" src='/images/Delete.png'/> Remove Account</button>
-                            <button name="btnAction" class="dropbtn" type="submit" value="Logoff"><img height="16" width="16"  title="Logoff" src='/images/Logoff.png'/> Logoff</button>
-          -->
-      </div>
-  </div>
-  <a href="#about">About</a>
-  <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
-</div> 
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-group" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >        
+        <div class="topnav" id="myTopnav">
+            <a href="#home" class="active">Home</a>
+            <a href="#news">News</a>
+            <a href="#contact">Contact</a>
+            <div class="dropdown">
+                <button class="dropbtn"><img height="32" width="32"  title="Edit Profile" src='/images/menubutton.png'/> Menu
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#"><img height="16" width="16"  title="Edit Profile" src='/images/Edit.png'/> Edit</a>
+                    <a href="#"><img height="16" width="16"  title="Match Finder" src='/images/Find.png'/> Find Matches</a>
+                    <a href="#"><img height="16" width="16"  title="Remove Account" src='/images/Delete.png'/> Remove Account</a>
+                    <a href="#"><img height="16" width="16"  title="Logoff" src='/images/Logoff.png'/> Logoff</a>
+                </div>
+            </div>
+            <a href="#about">About</a>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+        </div> 
+                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-group" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >        
             
             
             <!--
@@ -603,7 +577,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 </div>
         </form>
+
     </body>
 </html>
-
-

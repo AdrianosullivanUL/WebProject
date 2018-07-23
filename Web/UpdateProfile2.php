@@ -16,22 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Get the form inputs
         // -------------------
         $myBio = trim($_POST['myBioInput']);
-        
+
         // Get the uploaded picture
-        $picture = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-    if($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
-        $uploadOk = 1;
-    } else {
-        echo "File is not an image.";
-        $uploadOk = 0;
-    }
-        
-        
-        
-        if (isset($_POST['pictureInput']))
-            $picture = trim($_POST['pictureInput']);
-        else
+        if (isset($_POST['pictureInput'])) {
+            $imgData = base64_encode(file_get_contents($img_file));
+            $picture = 'data: ' . mime_content_type($img_file) . ';base64,' . $imgData;
+        } else
             $picture = "";
 
         // Validate inputs 
@@ -45,10 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Do Update
         // ---------
         if ($valid == true) {
-
-
-            $sql = "UPDATE user_profile SET picture='" . $picture . "', my_bio ='" . $myBio . "' "
-                    . " where id = " . $user_id;
+            if ($picture = "") {
+                $sql = "UPDATE user_profile SET my_bio ='" . $myBio . "' "
+                        . " where id = " . $user_id;
+            } else {
+                $sql = "UPDATE user_profile SET picture='" . $picture . "', my_bio ='" . $myBio . "' "
+                        . " where id = " . $user_id;
+            }
             //echo $sql;
             $result = execute_sql_update($db_connection, $sql);
             $_SESSION['user_id'] = $user_id;
@@ -61,23 +54,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
         echo "Cancel pressed";
-        header("Location: index.php");
+        header("Location: MeetingSpace.php");
         exit();
-    } else {
-        echo "I am called from another form";
     }
-} else {
-    $sql = "SELECT my_bio, picture from user_profile where up.id =" . $user_id . ";";
-    echo $sql;
-    if ($result = mysqli_query($db_connection, $sql)) {
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_array($result)) {
-                $myBio = $row['my_bio'];
-                $picture = $row['picture'];
-            }
-        } else {
-            $message = "Cannot find user profile";
+}
+$myBio = "";
+$picture = "";
+$first_name = "";
+$surname = "";
+$sql = "SELECT first_name, surname, my_bio, picture from user_profile where id =" . $user_id . ";";
+echo $sql;
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            echo "found user";
+            $myBio = $row['my_bio'];
+            $picture = base64_encode($row["picture"]) ;
+            $first_name = $row['first_name'];
+            $surname = $row['surname'];
         }
+    } else {
+        echo "found user";
+        $message = "Cannot find user profile";
     }
 }
 ?>
@@ -168,59 +166,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         </br>
                         <div class="container border border-primary rounded bg-light text-dark col-sm-6">
-<?php
-$picture = "";
-// Get User Profile
-$sql = " SELECT up1.* "
-        . " FROM user_profile up1"
-        . " where up1.id=" . $user_id . "; ";
-
-// echo ("sql" . $sql);
-$result = execute_sql_query($db_connection, $sql);
-if ($result == null) {
-    $message = "ERROR: Cannot match entry " . $matchId;
-} else {
-    while ($row = mysqli_fetch_array($result)) {
-        echo('<div class="form-group">');
-        if (strlen($row['picture']) > 0) {
-            echo ("get photo from user profile");
-            echo '<img name = "pictureInput" class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"/><i></i>';
-        } else {
-            echo ("get photo from file");
-            echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
-        }
-        echo ("after photo shoot");
-        echo ("<figcaption>" . $row['first_name'] . " " . $row['surname'] . "</figcaption>");
-        echo ("");
+                            <div class="form-group">
+                                <?php
+                                if (strlen($picture) > 0) {
+                                    //echo ("Current photo");
+                                    echo '<img name = "pictureInput" class="portrait rounded-circle" src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
+                                } else {
+                                    // echo ("No photo uploaded");
+                                    echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
+                                }
+                                //        echo ("after photo shoot");
+                                echo ("<figcaption>" . $first_name . " " . $first_name . "</figcaption>");
+                                ?>
 
 
-        echo('</div>');
-    }
-}
-?>
+                            </div>
+
                             </br>
-                            </br>
-                            </br>
-
                             <div class="form-group">
                                 <label class="header">Profile Photo:</label>
                                 <input type="file" name="fileToUpload" id="fileToUpload">
                             </div>
                         </div>           
                         </br>
-                        </br>
-                        </br>
-
-
-
                     </div>
-
                     <div class="col-sm-3 container border border-primary rounded bg-light text-dark ">
 
                         <div class="form-group">
                             <h3>Bio</h3>
-
-                            <input type="text" class="form-control" name="myBioInput" value="<?php echo $myBio; ?>">
+                            <textarea rows="15" cols="50" class="form-control" name="myBioInput" value="<?php echo $myBio; ?>"></textarea>
                         </div>
                     </div>
 
@@ -232,30 +206,30 @@ if ($result == null) {
                             <h3>Hobbies</h3>
 
                         </div>
-<?php
-// Get user Interests
-$sql = "  SELECT  ud1.id, ud1.description , ui1.user_id "
-        . " FROM interests ud1 "
-        . " left join user_interests ui1 on ui1.interest_id = ud1.id "
-        . " where ui1.user_id is null or ui1.user_id=" . $user_id . "; ";
+                        <?php
+                        // Get user Interests
+                        $sql = "  SELECT  ud1.id, ud1.description , ui1.user_id "
+                                . " FROM interests ud1 "
+                                . " left join user_interests ui1 on ui1.interest_id = ud1.id "
+                                . " where ui1.user_id is null or ui1.user_id=" . $user_id . "; ";
 
-//echo ("sql" . $sql);
-$result = execute_sql_query($db_connection, $sql);
-if ($result == null) {
-    $message = "ERROR: No interests found " . $user_id;
-} else {
-    while ($row = mysqli_fetch_array($result)) {
-        if ($row['user_id'] != null)
-            $checked = "checked";
-        else
-            $checked = "";
-        echo "<div class='checkbox'>";
-        echo "    <p align='middle>'";
-        echo "        <label><input type='checkbox' " . $checked . "  value=''>" . $row['description'] . "</label>";
-        echo "</div>";
-    }
-}
-?>
+                        //echo ("sql" . $sql);
+                        $result = execute_sql_query($db_connection, $sql);
+                        if ($result == null) {
+                            $message = "ERROR: No interests found " . $user_id;
+                        } else {
+                            while ($row = mysqli_fetch_array($result)) {
+                                if ($row['user_id'] != null)
+                                    $checked = "checked";
+                                else
+                                    $checked = "";
+                                echo "<div class='checkbox'>";
+                                echo "    <p align='middle>'";
+                                echo "        <label><input type='checkbox' " . $checked . "  value=''>" . $row['description'] . "</label>";
+                                echo "</div>";
+                            }
+                        }
+                        ?>
 
                         <!------Include the above in your HEAD tag ---------->
 

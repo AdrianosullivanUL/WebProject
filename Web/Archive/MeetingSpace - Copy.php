@@ -212,9 +212,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_2'] . "'>");
                                         echo("");
                                         if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['user_profile_2_picture']) . '"/><i></i>';
+                                            echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['user_profile_2_picture']) . '"/>';
                                         } else {
-                                            echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
+                                            echo ("<img class='portrait rounded-circle' src='../images/camera-photo-7.png'/>'");
                                         }
                                         echo ("<figcaption>" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</figcaption>");
                                         echo ("");
@@ -223,9 +223,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo ("<figcaption>" . $row['user_profile_1_first_name'] . "</figcaption>");
                                         echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_1'] . "'>");
                                         if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo ("<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_1_picture']) . "/><i></i>");
+                                            echo ("<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_1_picture']) . "/>");
                                         } else {
-                                            echo ("<img class='portrait  rounded-circle' src='camera-photo-7.png'/><i></i>'");
+                                            echo ("<img class='portrait  rounded-circle' src='../images/camera-photo-7.png'/>'");
                                         }
                                         echo ("<figcaption>" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</figcaption>");
                                         echo ("</label>");
@@ -268,9 +268,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_2'] . "'>");
                                         echo("");
                                         if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['user_profile_2_picture']) . '"/><i></i>';
+                                            echo '<img class="portrait rounded-circle" src="data:image/jpeg;base64,' . base64_encode($row['user_profile_2_picture']) . '"/>';
                                         } else {
-                                            echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
+                                            echo ("<img class='portrait rounded-circle' src='../images/camera-photo-7.png'/>'");
                                         }
                                         echo ("<figcaption>" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</figcaption>");
                                         echo ("");
@@ -279,9 +279,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo ("<figcaption>" . $row['user_profile_1_first_name'] . "</figcaption>");
                                         echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_1'] . "'>");
                                         if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo ("<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_1_picture']) . "/><i></i>");
+                                            echo ("<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_1_picture']) . "/>");
                                         } else {
-                                            echo ("<img class='portrait  rounded-circle' src='camera-photo-7.png'/><i></i>'");
+                                            echo ("<img class='portrait  rounded-circle' src='../images/camera-photo-7.png'/>'");
                                         }
                                         echo ("<figcaption>" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</figcaption>");
                                         echo ("</label>");
@@ -317,9 +317,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo ("<label class='rad'>");
                                         echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_2'] . "'>");
                                         if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo "<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_2_picture']) . "'/><i></i>";
+                                            echo "<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_2_picture']) . "'/>";
                                         } else {
-                                            echo ("<img class='portrait' src='camera-photo-7.png'/><i></i>'");
+                                            echo ("<img class='portrait' src='../images/camera-photo-7.png'/>'");
                                         }
                                         echo ("<figcaption>" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</figcaption>");
                                         echo ("");
@@ -328,9 +328,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo ("<figcaption>" . $row['user_profile_1_first_name'] . "</figcaption>");
                                         echo("<input type='radio' name='selected_user' value='" . $row['match_user_id_1'] . "'>");
                                         if (strlen($row['user_profile_2_picture']) > 0) {
-                                            echo ("<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_1_picture']) . "'/><i></i>");
+                                            echo ("<img class='portrait  rounded-circle' src='data:image/jpeg;base64," . base64_encode($row['user_profile_1_picture']) . "'/>");
                                         } else {
-                                            echo ("<img class='portrait' src='camera-photo-7.png'/><i></i>'");
+                                            echo ("<img class='portrait' src='../images/camera-photo-7.png'/>'");
                                         }
                                         echo ("<figcaption>" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</figcaption>");
                                         echo ("</label>");

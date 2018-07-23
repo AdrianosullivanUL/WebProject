@@ -1,0 +1,21 @@
+<p>Hello, click this button: <a id="button" href="receiver.php">Click me</a></p>
+<p id="container"><!-- currently it's empty --></p>
+
+<!-- including jQuery from the google cdn -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+// This is our actual script
+$(document).ready(function(){
+    $('a#button').click(function(){
+        $.ajax({
+            url: this.href,
+            type: 'GET',
+            dataType: 'html',
+            success: function (data) {
+                $('#container').html(data);
+            }
+        });
+    });
+});
+</script>

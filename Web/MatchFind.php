@@ -10,7 +10,60 @@ include 'group05_library.php';
 // Get the standard session parameters
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
-//echo "session user " . $user_id;
+echo "session user " . $user_id;
+$city = "";
+$first_name = "";
+$surname = "";
+$gender_name = "";
+$preferred_gender_name = "";
+$message = "";
+$email = "";
+
+$relationshipTypeLove = true;
+$relationshipTypeCasual = false;
+$relationshipTypeFriendship = false;
+$relationshipTypeRelationship = false;
+$sql = "SELECT up.*, c.city, g1.gender_name, g2.gender_name as preferred_gender_name "
+        . " FROM user_profile up   "
+        . "LEFT JOIN city c ON c.id = up.city_id   "
+        . "LEFT JOIN gender g1 ON g1.id = up.gender_preference_id  "
+        . "left join gender g2 on g2.id = up.gender_id "
+        . "where up.id = '" . $user_id . "'";
+echo $sql;
+// 
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            $city = $row['city'];
+            $first_name = $row['first_name'];
+            $surname = $row['surname'];
+            $gender_name = $row['gender_name'];
+            $preferred_gender_name = $row['preferred_gender_name'];
+            echo "city " . $city;
+            echo "pref " . $preferred_gender_name;
+            $email = $row['email'];
+            $relationshipTypeId = $row['relationship_type_id'];
+
+            if ($relationshipTypeId == 1) {
+                $relationshipTypeLove = true;
+            }
+            if ($relationshipTypeId == 2) {
+                $relationshipTypeCasual = true;
+            }
+            if ($relationshipTypeId == 3) {
+                $relationshipTypeFriendship = true;
+            }
+            if ($relationshipTypeId == 4) {
+                $relationshipTypeRelationship = true;
+            }
+        }
+    } else {
+        $message = "Cannot find user profile";
+    }
+}
+echo "I Am here" . $preferred_gender_name ." " .$city;
+
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -19,41 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Cancel pressed";
         header("Location: meetingspace.php");
         exit();
-    }
-} else {
-    // prepare the page variables for presentation
-    $message = "";
-    $email = "";
-    $preferred_gender_name = "";
-    $relationshipTypeLove = true;
-    $relationshipTypeCasual = false;
-    $relationshipTypeFriendship = false;
-    $relationshipTypeRelationship = false;
-    $sql = "SELECT up1.*, g1.gender_name, g2.gender_name as preferred_gender_name FROM user_profile up1 join gender g1 on g1.id = up1.gender_id join gender g2 on g2.id = up1.gender_preference_id where up1.id =" . $user_id . ";";
-    if ($result = mysqli_query($db_connection, $sql)) {
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_array($result)) {
-                $email = $row['email'];
-
-                $preferred_gender_name = $row['preferred_gender_name'];
-                $relationshipTypeId = $row['relationship_type_id'];
-
-                if ($relationshipTypeId == 1) {
-                    $relationshipTypeLove = true;
-                }
-                if ($relationshipTypeId == 2) {
-                    $relationshipTypeCasual = true;
-                }
-                if ($relationshipTypeId == 3) {
-                    $relationshipTypeFriendship = true;
-                }
-                if ($relationshipTypeId == 4) {
-                    $relationshipTypeRelationship = true;
-                }
-            }
-        } else {
-            $message = "Cannot find user profile";
-        }
     }
 }
 ?>
@@ -234,6 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </style>
     </head>
     <body>
+        
         <div class="topnav">
             <a class="active">FIND YOUR MATCH</a>
             <a href="MeetingSpace.php">Home</a>
@@ -242,7 +261,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <a href="logout.php">Log Out</a>
             </div>
         </div>
-                <div class="container">
+        
+        <div class="container">
             <div class="row">
                 <div class="col-md-12 col-md-offset-0.5" >
                     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
@@ -259,18 +279,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-8 col-md-8 col-lg-7 col-xs-10 mobilePad" id="message10" style=" font-size: 15pt;padding-left: 0px;"></div>
 
                             </div>
+                            
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt; padding-top: 10px; text-align: left;">
                                     Gender Preference <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                    <?php echo "I Am here" . $preferred_gender_name ." " .$city; ?>
                                     <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                                        
                                         <?php
                                         $sql = "select gender_name  from gender";
                                         if ($result = mysqli_query($db_connection, $sql)) {
                                             if (mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_array($result)) {
-                                                    echo "<option>" . $row[gender_name] . "</option>";
+                                                    if ($preferred_gender_name == $row['gender_name'])
+                                                        echo "<option selected>" . $row['gender_name'] . "</option>";
+                                                    else
+                                                        echo "<option>" . $row['gender_name'] . "</option>";
                                                 }
                                             }
                                         }
@@ -285,21 +311,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select name ="selectedCity" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
                                         <?php
-                                        
-                                        
                                         // get the user_profile record here
                                         // 
-                                        echo $user_id;
-                                         $sql = "SELECT city FROM city LEFT JOIN user_profile ON city.id = user_profile.city_id  "
-                                               . "where user_profile.id = '" . $user_id . "'";
-                                         echo "<option>" . $row[city] . "</option>"; 
-                                        // 
-                                      
+
                                         $sql = "select city from city";
                                         if ($result = mysqli_query($db_connection, $sql)) {
                                             if (mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_array($result)) {
-                                                    echo "<option>" . $row[city] . "</option>";
+                                                    echo $city . " " . $row['city'];
+                                                    if ($city == $row['city'])
+                                                        echo "<option selected='selected'>" . $row['city'] . "</option>";
+                                                    else
+                                                        echo "<option>" . $row['city'] . "</option>";
                                                 }
                                             }
                                         }
@@ -325,7 +348,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         if ($result = mysqli_query($db_connection, $sql)) {
                                             if (mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_array($result)) {
-                                                    echo "<option>" . $row[relationship_type] . "</option>";
+                                                    echo "<option>" . $row['relationship_type'] . "</option>";
                                                 }
                                             }
                                         }
@@ -424,7 +447,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
                                     <button class="btn btn-primary" id="valuser" type="submit" name="btnAction" name="btnAction" value="Submit" class="btn btn-success">
                                         Submit</button>
-                                                                    </div>
+                                </div>
 
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                             </div>
@@ -433,7 +456,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </fieldset>
 
                     </form>
-                   </div>
+                </div>
 
                 <div class="row">
                     <div class="col-md-12 col-md-offset-0.5" >
@@ -462,7 +485,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         //  $relationshipType = $_POST['relationshipType'];
 
                                         echo 'gender ' . $preferredGender;
-                                        echo 'userid  ' .$user_id;
+                                        echo 'userid  ' . $user_id;
                                         //echo location here
                                         //if (strlen($firstname) == 0) { // validate first name
                                         //    $valid = false;
