@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (strlen($firstname) > 50) { // validate first name
             $valid = false;
             $message = "First Name Cannot be longer than 50 characters";
-        }
+        }        
 
         // are all inputs valid?
         if ($valid == true) {
@@ -137,12 +137,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script>
-            $(function () {
+                    $(function () {
                 $("#slider-range").slider({
                     echo "first part of slider"
                             range: true,
                     min: 18,
-                    max: 120,
+                    max: 65,
                     values: [18, 65],
                     slide: function (event, ui) {
                         $("#age").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
@@ -256,12 +256,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="form-group">
                             <label for="seekingAgeSelection">Seeking Age Profile</label>
                             <!-- TODO add a single slider later -->
-                            <label for="seekingAgeSelection">From</label>
+                    <!-- MM
+                    <label for="seekingAgeSelection">From</label>
                             <input type="range" min="18" max="120" value="<?php echo $ageSelectionFrom; ?>" class="slider" data-show-value="true" name="seekingAgeFromSelection">
                             <label for="seekingAgeSelection">To</label>
                             <input type="range" min="18" max="120" value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
-
-                        </div>
+                    -->
+                            <label for="seekingAgeSelection">From</label>
+                            <input type="range" min="18" max="65" value="<?php echo $ageSelectionFrom; ?>" class="slider" name="seekingAgeFromSelection">
+                                            <label for="seekingAgeSelection">To</label>
+                            <input type="range" min="18" max="120" value="35"
+                                   value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
+                        </div>                       
 
                         <div class="form-group">
                             <label for="travelDistanceSelection">Distance I will travel</label>
