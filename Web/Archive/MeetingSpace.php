@@ -6,15 +6,19 @@ if ($_SESSION['user_logged_in'] == 0) {
 }
 require_once 'database_config.php';
 include 'group05_library.php';
+
 $user_id = $_SESSION['user_id'];
 if (isset($_SESSION['matching_user_id']))
     $matching_user_id = $_SESSION['matching_user_id'];
 else
     $matching_user_id = 0;
 //echo "session user " . $user_id;
+
 $pictureIndex = 0;
 $message = "";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
 // check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "EditProfile") { // Call Edit Profile
         $_SESSION['user_id'] = $user_id;
@@ -39,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: RemoveAccount.php");
         exit();
     }
+
     // CHAT
     if ($_POST['btnAction'] == "Chat") { // Call RemoveAccount
         if (isset($_POST['selected_user'])) {
@@ -116,11 +121,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 // Maybe Button
                 // -----------
+
                 if ($_POST['btnAction'] == "Maybe") { // Update Status
                     if ($row['match_user_id_1'] == $user_id)
                         $updateUser1or2 = 1;
                     else
                         $updateUser1or2 = 2;
+
                     $updateResult = update_match_status($db_connection, $matchId, 'Maybe', $updateUser1or2);
                     //echo "Update result " . $updateResult;
                 }
@@ -131,6 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $updateUser1or2 = 1;
                     else
                         $updateUser1or2 = 2;
+
                     $updateResult = update_match_status($db_connection, $matchId, 'Goodbye', $updateUser1or2);
                 }
                 // Report Button
@@ -140,6 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $updateUser1or2 = 1;
                     else
                         $updateUser1or2 = 2;
+
                     $updateResult = update_match_status($db_connection, $matchId, 'Report', $updateUser1or2);
                 }
             }
@@ -167,38 +176,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 background-repeat:   no-repeat;
                 background-position: center center;              /* optional, center the image */
             }
-            /* Add a black background color to the top navigation */
-            .topnav {
-                background-color: #333;
-                overflow: hidden;
-            }
-            /* Style the links inside the navigation bar */
-            .topnav a {
-                float: left;
-                color: #F0F8FF;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                font-size: 17px;
-            }
-            /* Change the color of links on hover */
-            .topnav a:hover {
-                background-color: #ddd;
-                color: grey;
-            }
-            /* Add a color to the active/current link */
-            .topnav a.active {
-                background-color: #A9A9A9;
-                color: white;
-            }
-            /* Right-aligned section inside the top navigation */
-            .topnav-right {
-                float: right;
-            }
-            iv.first {
-                opacity: 0.1;
-                filter: alpha(opacity=10); 
-            }
+
+
+
             <!-- invisible radio button with image select -->
             ul {
                 list-style: none;
@@ -219,6 +199,123 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             .stackem div {
                 width: 100%;
             }
+
+            <!-- NAVBAR -->
+                         /* Add a black background color to the top navigation */
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+/* Add an active class to highlight the current page */
+.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Hide the link that should open and close the topnav on small screens */
+.topnav .icon {
+    display: none;
+}
+
+/* Dropdown container - needed to position the dropdown content */
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+
+/* Style the dropdown button to fit inside the topnav */
+.dropdown .dropbtn {
+    font-size: 17px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+/* Style the dropdown content (hidden by default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Style the links inside the dropdown */
+.dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+/* Add a dark background on topnav links and the dropdown button on hover */
+.topnav a:hover, .dropdown:hover .dropbtn {
+    background-color: #555;
+    color: white;
+}
+
+/* Add a grey background to dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* Show the dropdown menu when the user moves the mouse over the dropdown button */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child), .dropdown .dropbtn {
+    display: none;
+  }
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive a.icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  .topnav.responsive .dropdown {float: none;}
+  .topnav.responsive .dropdown-content {position: relative;}
+  .topnav.responsive .dropdown .dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+} 
         </style>
     </head>
     <body>
@@ -237,21 +334,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
         ?>  
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-group" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >        
+        
 
+ <div class="topnav" id="myTopnav">
+  <a href="#home" class="active">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <div class="dropdown">
+      <button class="dropbtn"><img height="32" width="32"  title="Edit Profile" src='/images/menubutton.png'/> Menu
+          <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+          <a href="#"><img height="16" width="16"  title="Edit Profile" src='/images/Edit.png'/> Edit</a>
+          <a href="#"><img height="16" width="16"  title="Match Finder" src='/images/Find.png'/> Find Matches</a>
+          <a href="#"><img height="16" width="16"  title="Remove Account" src='/images/Delete.png'/> Remove Account</a>
+          <a href="#"><img height="16" width="16"  title="Logoff" src='/images/Logoff.png'/> Logoff</a>
+          <!--
+                            <button name="btnAction" class="btn-primary-outline" type="submit" value="EditProfile"><img height="16" width="16"  title="Edit Profile" src='/images/Edit.png'/> Edit</button>
+                            <button name="btnAction" class="dropbtn" type="submit" value="MatchFinder"><img height="16" width="16"  title="Match Finder" src='/images/Find.png'/> Find Matches</button>
+                            <button name="btnAction" class="dropbtn" type="submit" value="RemoveAccount"><img height="16" width="16"  title="Remove Account" src='/images/Delete.png'/> Remove Account</button>
+                            <button name="btnAction" class="dropbtn" type="submit" value="Logoff"><img height="16" width="16"  title="Logoff" src='/images/Logoff.png'/> Logoff</button>
+          -->
+      </div>
+  </div>
+  <a href="#about">About</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+</div> 
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-group" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >        
+            
+            
+            <!--
+            
             <div class="topnav">
                 <a class="active">MEETING SPACE</a>
-                <a href="MeetingSpace.php" title="Meeting Space">
+                <a href="MeetingSpace.php">
                     <?php echo $first_name . " " . $surname ?>
 
                 </a>
+
                 <div class="topnav-right">
-                                    <a href="UpdateProfile.php" title="Edit your User Profile"><img height="16" width="16"  src='/images/Edit.png'/>Edit Profile</a>
-                                    <a href="UpdateProfile.php" title="Find People"><img height="16" width="16"   src='/images/Find.png'/>Match Finder</a>
-                                    <a href="UpdateProfile.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Delete Profile</a>
-                                    <a href="UpdateProfile.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
+                    <button class="dropbtn"><img height="32" width="32"  title="Edit Profile" src='/images/menubutton.png'/> Menu
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#"><img height="16" width="16"  title="Edit Profile" src='/images/Edit.png'/> Edit</a>
+                        <a href="#"><img height="16" width="16"  title="Match Finder" src='/images/Find.png'/> Find Matches</a>
+                        <a href="#"><img height="16" width="16"  title="Remove Account" src='/images/Delete.png'/> Remove Account</a>
+                        <a href="#"><img height="16" width="16"  title="Logoff" src='/images/Logoff.png'/> Logoff</a>
+                    </div>
                 </div>
             </div>
+            
+            -->
             <div class="container">
                 <div class ="row">
                     <div class="col-md-12 col-md-offset-0.5" >
@@ -312,11 +446,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 }
                                                 ?>
                                             </div>
-                                            <p><b>Click on Photograph and do one of the following:</b></p>
-                                            <button name="btnAction" class="btn btn-success" type="submit" value="Chat"><img height="16" width="16"  title="Chat" src='/images/Chat.png'/>Chat</button>
-                                            <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16"  title="View" src='/images/View.png'/>View</button>
-                                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16"  title="Goodbye"  src='/images/Goodbye.png'/>Goodbye</button>
-                                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="16" width="16"  title="Report"  src='/images/Report.png'/>Report!</button>
+                                            <p>Click on Photograph and do one of the following:</p>
+                                            <button name="btnAction" class="btn btn-success" type="submit" value="Chat"><img height="32" width="32"  title="Chat" src='/images/Chat.png'/></button>
+                                            <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="32" width="32"  title="View" src='/images/View.png'/></button>
+                                            <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="32" width="32"  title="Goodbye"  src='/images/Goodbye.png'/></button>
+                                            <button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="32" width="32"  title="Report"  src='/images/Report.png'/></button>
 
 
                                             <div class="col-xs-5 col-sm-5 col-lg-4" style="background-color:lavender; opacity: 0.9;">
@@ -337,6 +471,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         . " or  match_user_id_2 =" . $user_id . ")"
                                                         . " and user_profile_1_match_status not in ('Chatting','Goodbye');";
                                                 $result = execute_sql_query($db_connection, $sql);
+
                                                 if ($result == null) {
                                                     echo "<br><p>No matches found</p>";
                                                 } else {
@@ -348,6 +483,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                             echo "        <label for='radio" . $pictureIndex . "'>";
                                                             echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                                             echo "<br>";
+
                                                             if (strlen($row['user_profile_2_picture']) > 0)
                                                                 echo "<img class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                                             else
@@ -366,6 +502,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                                     echo ("<div class='centred'><img height='32' width='32' src='/images/Report.png'/></div>");
                                                                     break;
                                                             }
+
                                                             echo "</label>";
                                                         } else {
                                                             echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
@@ -397,12 +534,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 ?>
                                             </div>
                                             <div class="col-xs-10 col-sm-10 col-lg-10" style="background-color:whites; opacity: 0.9;">
-                                                <p><b>Click on Photograph and do one of the following:</b></p>
-                                                <button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src='/images/Like.png'/>Like</button>
-                                                <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16"  title="View" src='/images/View.png'/>View</button>
-                                                <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16"  title="Maybe" src='/images/Maybe.png'/>Maybe</button>
-                                                <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16"  title="Goodbye" src='/images/Goodbye.png'/>Goodbye</button>
-                                                <button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="16" width="16"  title="Report" src='/images/Report.png'/>Report!</button>
+                                                <p>Click on Photograph and do one of the following:</p>
+
+                                                <button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="32" width="32"  title="Like" src='/images/Like.png'/></button>
+                                                <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="32" width="32"  title="View" src='/images/View.png'/></button>
+                                                <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="32" width="32"  title="Maybe" src='/images/Maybe.png'/></button>
+                                                <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="32" width="32"  title="Goodbye" src='/images/Goodbye.png'/></button>
+                                                <button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="32" width="32"  title="Report" src='/images/Report.png'/></button>
                                             </div>
                                         </div>                            
                                     </div>
@@ -449,12 +587,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             }
                                         }
                                         ?>
-                                        <p><b>Click on Photograph and do one of the following:</b></p>
-                                        <button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src='/images/Like.png'/>Like</button>
-                                        <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src='/images/View.png'/>View</button>
-                                        <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src='/images/Maybe.png'/>Maybe</button>
-                                        <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src='/images/Goodbye.png'/>Goodbye</button>
-                                        <button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src='/images/Report.png'/>Report</button>
+                                        <p>Click on Photograph and do one of the following:</p>
+                                        <button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="32" width="32"  title="Like" src='/images/Like.png'/></button>
+                                        <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="32" width="32"  title="View" src='/images/View.png'/></button>
+                                        <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="32" width="32"  title="Maybe" src='/images/Maybe.png'/></button>
+                                        <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="32" width="32"  title="Goodbye" src='/images/Goodbye.png'/></button>
+                                        <button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="32" width="32"  title="Report" src='/images/Report.png'/></button>
 
                                     </div>
 
@@ -467,4 +605,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </body>
 </html>
+
 
