@@ -61,7 +61,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
         $message = "Cannot find user profile";
     }
 }
-echo "I Am here" . $preferred_gender_name ." " .$city;
+echo "I Am here" . $preferred_gender_name . " " . $city;
 
 
 
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <style>
             body {
-                background-image:    url(backlit-bonding-casual-708392.jpg);
+                background-image:    url(images/backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
                 background-repeat:   no-repeat;
                 background-position: center center;              /* optional, center the image */
@@ -249,10 +249,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             body {
                 font-family:Arial;
             }
+                        <!-- invisible radio button with image select -->
+            ul {
+                list-style: none;
+            }
+            li {
+                display: inline-block;
+                margin-right: 15px;
+            }
+            input {
+                visibility:hidden;
+            }
+            img {
+                cursor: pointer;
+            }
+            input:checked + label {
+                border:2px solid #f00;
+            } 
+            .stackem div {
+                width: 100%;
+            }
         </style>
     </head>
     <body>
-        
+
         <div class="topnav">
             <a class="active">FIND YOUR MATCH</a>
             <a href="MeetingSpace.php">Home</a>
@@ -261,7 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <a href="logout.php">Log Out</a>
             </div>
         </div>
-        
+
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-md-offset-0.5" >
@@ -279,15 +299,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-8 col-md-8 col-lg-7 col-xs-10 mobilePad" id="message10" style=" font-size: 15pt;padding-left: 0px;"></div>
 
                             </div>
-                            
+
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt; padding-top: 10px; text-align: left;">
                                     Gender Preference <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
-                                    <?php echo "I Am here" . $preferred_gender_name ." " .$city; ?>
+                                    <?php echo "I Am here" . $preferred_gender_name . " " . $city; ?>
                                     <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-                                        
+
                                         <?php
                                         $sql = "select gender_name  from gender";
                                         if ($result = mysqli_query($db_connection, $sql)) {
@@ -512,8 +532,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             //echo $sql;
                                             // need to add other columns here
                                             //            . "where id = " . $user_id . ";";
-
+                                            $pictureIndex = 0;
                                             $result = execute_sql_query($db_connection, $sql);
+                                            if ($result == null) {
+                                                echo "<br><p>No matches found</p>";
+                                            } else {
+                                                while ($row = mysqli_fetch_array($result)) {
+                                                    $pictureIndex++;
+                                                    //echo ("<li>");
+                                                    // echo "<div class='container>";
+                                                    echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['id'] . "'/>";
+                                                    echo "        <label for='radio" . $pictureIndex . "'>";
+                                                    echo "        <label >" . $row['first_name'] . " " . $row['surname'] . "</label>";
+                                                    echo "<br>";
+                                                    if (strlen($row['picture']) > 0)
+                                                        echo "<img class='rounded-circle'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
+                                                    else
+                                                        echo ("<img height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                    echo "</label>";
+                                                }
+                                            }
+
+
                                             if ($result == null) {
                                                 $message = "ERROR: Cannot match entry " . $user_id;
                                             } else {
@@ -522,7 +562,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     if (strlen($row['picture']) > 0)
                                                         echo "<img class='rounded-circle'  height='32' width='32' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
                                                     else
-                                                        echo ("<img height='100' width='100' src='camera-photo-7.png'/><i></i>'");
+                                                        echo ("<img height='32' width='32' src='../images/camera-photo-7.png'/><i></i>'");
                                                 }
                                             }
                                         }
