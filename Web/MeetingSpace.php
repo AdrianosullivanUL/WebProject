@@ -236,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                             if (strlen($row['user_profile_2_picture']) > 0)
                                                                 echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                                             else
-                                                                echo ("<img height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                                echo ("<img class='hideinput' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                             echo "</label>";
                                                         } else {
                                                             echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
@@ -246,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                             if (strlen($row['user_profile_1_picture']) > 0)
                                                                 echo "<img  class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                                             else
-                                                                echo ("<img height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                                echo ("<img class='hideinput' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                             echo "</label>";
                                                         }
                                                     }

@@ -235,150 +235,154 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             });
         </script>
 
-        <style>
-            body{color:#444;font:100%/1.4 sans-serif;}
-            body {
-                background-image:    url(backlit-bonding-casual-708392.jpg);
-                background-size:     cover;                      /* <------ */
-                background-repeat:   no-repeat;
-                background-position: center center;              /* optional, center the image */
-            }
-
-
-        </style>
+        <link rel="stylesheet" href="StyleSheet.css">
 
     </head>
     <body>
         <div class="container">
+            <div class="topnav">
+                <a class="active">UPDATE PROFILE</a>
+                <a href="MeetingSpace.php" title="Meeting Space">
+                    <?php echo $firstname . " " . $surname ?>
 
-            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-                <div class="container border border-primary rounded bg-light text-dark col-sm-6">
-                    <h1>Personal Details</h1>
+                </a>
+                <div class="topnav-right">
+                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Delete Profile</a>
+                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
                 </div>
-                </br>
-                <div class="container border border-primary rounded bg-light text-dark col-sm-6">
-                    <div class="form-group">
-                        <label for="emailInput">Email</label>
-                        <input type="text" class="form-control" name="emailInput" value="<?php echo $email; ?>">
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3" >
 
-                    </div>
-                    <div class="form-group">
-                        <label for="firstnameInput">First Name</label>
-                        <input type="text" class="form-control" name="firstnameInput" value="<?php echo $firstname; ?>">
+                    <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" AUTOCOMPLETE = "off" >
+                        <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
 
-                    </div>                    
-                    <div class="form-group">
-                        <label for="surnameInput">Surname</label>
-                        <input type="text" class="form-control" name="surnameInput" value="<?php echo trim($surname); ?>">
+                            <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Profile</legend>
 
-                    </div>
-                    <div class="form-group">
-                        <label for="dateOfBirthInput">Date of Birth</label>
-                        <input type="date" class="form-control" name="dateOfBirthInput" value="<?php echo $dob; ?>" min="1900-01-01" max="<?php echo (new \DateTime())->format('Y-m-d'); ?>" />
-                    </div>
-                    <div class="form-group">
-                        <label for="city Label">Nearest City/Town</label>
-                        <select name="cityInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-                            <?php
-                            $sql = "select city  from city";
-                            if ($result = mysqli_query($db_connection, $sql)) {
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_array($result)) {
-                                        if ($row['city'] == $city) {
-                                            echo "<option selected value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
-                                        } else {
-                                            echo "<option value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
+                            <div class="form-group">
+                                <label for="emailInput">Email</label>
+                                <input type="text" class="form-control" name="emailInput" value="<?php echo $email; ?>">
+
+                            </div>
+                            <div class="form-group">
+                                <label for="firstnameInput">First Name</label>
+                                <input type="text" class="form-control" name="firstnameInput" value="<?php echo $firstname; ?>">
+
+                            </div>                    
+                            <div class="form-group">
+                                <label for="surnameInput">Surname</label>
+                                <input type="text" class="form-control" name="surnameInput" value="<?php echo trim($surname); ?>">
+
+                            </div>
+                            <div class="form-group">
+                                <label for="dateOfBirthInput">Date of Birth</label>
+                                <input type="date" class="form-control" name="dateOfBirthInput" value="<?php echo $dob; ?>" min="1900-01-01" max="<?php echo (new \DateTime())->format('Y-m-d'); ?>" />
+                            </div>
+                            <div class="form-group">
+                                <label for="city Label">Nearest City/Town</label>
+                                <select name="cityInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                                    <?php
+                                    $sql = "select city  from city";
+                                    if ($result = mysqli_query($db_connection, $sql)) {
+                                        if (mysqli_num_rows($result) > 0) {
+                                            while ($row = mysqli_fetch_array($result)) {
+                                                if ($row['city'] == $city) {
+                                                    echo "<option selected value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
+                                                } else {
+                                                    echo "<option value ='" . $row['city'] . "'>" . $row['city'] . "</option>";
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
+                                    ?>
+                                </select>
+                            </div>
 
-                    <div class="form-group">
-                        <label for="genderLabel">Gender</label>
-                        <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-                            <?php
-                            $sql = "select gender_name from gender order by gender_name";
-                            if ($result = mysqli_query($db_connection, $sql)) {
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_array($result)) {
-                                        if ($row['gender_name'] == $gender) {
-                                            echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
-                                        } else {
-                                            echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+                            <div class="form-group">
+                                <label for="genderLabel">Gender</label>
+                                <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                                    <?php
+                                    $sql = "select gender_name from gender order by gender_name";
+                                    if ($result = mysqli_query($db_connection, $sql)) {
+                                        if (mysqli_num_rows($result) > 0) {
+                                            while ($row = mysqli_fetch_array($result)) {
+                                                if ($row['gender_name'] == $gender) {
+                                                    echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+                                                } else {
+                                                    echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="genderInput">Preferred Gender</label>
-                        <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-                            <?php
-                            $sql = "select gender_name  from gender order by gender_name";
-                            if ($result = mysqli_query($db_connection, $sql)) {
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_array($result)) {
-                                        if ($row['gender_name'] == $preferredGender) {
-                                            echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
-                                        } else {
-                                            echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="genderInput">Preferred Gender</label>
+                                <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                                    <?php
+                                    $sql = "select gender_name  from gender order by gender_name";
+                                    if ($result = mysqli_query($db_connection, $sql)) {
+                                        if (mysqli_num_rows($result) > 0) {
+                                            while ($row = mysqli_fetch_array($result)) {
+                                                if ($row['gender_name'] == $preferredGender) {
+                                                    echo "<option selected value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+                                                } else {
+                                                    echo "<option value ='" . $row['gender_name'] . "'>" . $row['gender_name'] . "</option>";
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-group">
-                            <label for="seekingAgeSelection">Seeking Age Profile</label>
-                            <!-- TODO add a single slider later -->
-                            <!-- MM
-                            <label for="seekingAgeSelection">From</label>
-                                    <input type="range" min="18" max="120" value="<?php echo $ageSelectionFrom; ?>" class="slider" data-show-value="true" name="seekingAgeFromSelection">
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="seekingAgeSelection">Seeking Age Profile</label>
+                                    <!-- TODO add a single slider later -->
+                                    <!-- MM
+                                    <label for="seekingAgeSelection">From</label>
+                                            <input type="range" min="18" max="120" value="<?php echo $ageSelectionFrom; ?>" class="slider" data-show-value="true" name="seekingAgeFromSelection">
+                                            <label for="seekingAgeSelection">To</label>
+                                            <input type="range" min="18" max="120" value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
+                                    -->
+                                    <label for="seekingAgeSelection">From</label>
+                                    <input type="range" min="18" max="65" value="<?php echo $ageSelectionFrom; ?>" class="slider" name="seekingAgeFromSelection">
                                     <label for="seekingAgeSelection">To</label>
-                                    <input type="range" min="18" max="120" value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
-                            -->
-                            <label for="seekingAgeSelection">From</label>
-                            <input type="range" min="18" max="65" value="<?php echo $ageSelectionFrom; ?>" class="slider" name="seekingAgeFromSelection">
-                            <label for="seekingAgeSelection">To</label>
-                            <input type="range" min="18" max="120" value="35"
-                                   value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
-                        </div>                       
+                                    <input type="range" min="18" max="120" value="35"
+                                           value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
+                                </div>                       
 
-                        <div class="form-group">
-                            <label for="travelDistanceSelection">Distance I will travel</label>
-                            <input type="range" min="0" max="500" value="<?php echo $travelDistance; ?>" class="slider" name="travelDistanceSelection">
-                        </div>
-                        <label for="relationshipType">Relationship Type</label>
-                        <br>
-                        <input type="radio" value="Love" <?php if ($relationshipType == "love") echo 'checked'; ?> name="relationshipTypeInput">Love</input>&nbsp;
-                        <input type="radio" value="Casual" <?php if ($relationshipType == "casual") echo 'checked'; ?> name="relationshipTypeInput">Casual</input>&nbsp;
-                        <input type="radio" value="Friendship" <?php if ($relationshipType == "friendship") echo 'checked'; ?> name="relationshipTypeInput">Friendship</input>&nbsp;
-                        <input type="radio" value="Relationship" <?php if ($relationshipType == "relationship") echo 'checked'; ?> name="relationshipTypeInput">Relationship</input>
-                        <?php
-                        if (strlen($message) > 0) {
-                            echo "<div class='alert alert-danger'>";
-                            echo "<p >" . $message . "></p>";
-                            echo "</div>";
-                        }
-                        ?>
-                    </div>
+                                <div class="form-group">
+                                    <label for="travelDistanceSelection">Distance I will travel</label>
+                                    <input type="range" min="0" max="500" value="<?php echo $travelDistance; ?>" class="slider" name="travelDistanceSelection">
+                                </div>
+                                <label for="relationshipType">Relationship Type</label>
+                                <br>
+                                <input type="radio" value="Love" <?php if ($relationshipType == "love") echo 'checked'; ?> name="relationshipTypeInput">Love</input>&nbsp;
+                                <input type="radio" value="Casual" <?php if ($relationshipType == "casual") echo 'checked'; ?> name="relationshipTypeInput">Casual</input>&nbsp;
+                                <input type="radio" value="Friendship" <?php if ($relationshipType == "friendship") echo 'checked'; ?> name="relationshipTypeInput">Friendship</input>&nbsp;
+                                <input type="radio" value="Relationship" <?php if ($relationshipType == "relationship") echo 'checked'; ?> name="relationshipTypeInput">Relationship</input>
+                                <?php
+                                if (strlen($message) > 0) {
+                                    echo "<div class='alert alert-danger'>";
+                                    echo "<p >" . $message . "></p>";
+                                    echo "</div>";
+                                }
+                                ?>
+                            </div>
 
-                    <p align="middle">
-                        <button class="btn btn-primary" name="btnAction" type="submit" value="Next">Next</button>
-                        <button class="btn btn-warning" name="btnAction" type="submit" value="Cancel">Cancel</button>
-                    </p>
+                            <p align="middle">
+                                <button class="btn btn-primary" name="btnAction" type="submit" value="Next">Next</button>
+                                <button class="btn btn-warning" name="btnAction" type="submit" value="Cancel">Cancel</button>
+                            </p>
+
+                        </fieldset> 
+
+                    </form>
                 </div>
-
-            </form>
-
-        </div>
+            </div>
+        </div>      
     </body>
 
 </html>
