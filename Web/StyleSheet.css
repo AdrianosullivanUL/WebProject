@@ -1,10 +1,9 @@
 body {
-    background-image:    url(backlit-bonding-casual-708392.jpg);
+    background-image:    url(../images/backlit-bonding-casual-708392.jpg);
     background-size:     cover;                      /* <------ */
     background-repeat:   no-repeat;
     background-position: center center;              /* optional, center the image */
 }
-/* Add a black background color to the top navigation */
 .topnav {
     background-color: #333;
     overflow: hidden;
@@ -36,6 +35,7 @@ iv.first {
     opacity: 0.1;
     filter: alpha(opacity=10); 
 }
+
 <!-- invisible radio button with image select -->
 ul {
     list-style: none;
@@ -44,10 +44,10 @@ li {
     display: inline-block;
     margin-right: 15px;
 }
-input {
+.hideinput {
     visibility:hidden;
 }
-img {
+.selectimg {
     cursor: pointer;
 }
 input:checked + label {
@@ -56,3 +56,4 @@ input:checked + label {
 .stackem div {
     width: 100%;
 }
+ 
