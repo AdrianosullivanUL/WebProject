@@ -13,7 +13,7 @@ function update_match_status($db_connection, $match_id, $match_status, $updateUs
         $sql = "UPDATE match_table SET user_2_match_status_id = (select id from status_master where status_description ='"
                 . $match_status . "' and is_match_table_status = true) where id = " . $match_id;
     }
-    echo $sql;
+    // echo $sql;
     return execute_sql_update($db_connection, $sql);
 }
 
