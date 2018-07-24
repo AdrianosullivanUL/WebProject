@@ -234,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                             echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                                             echo "<br>";
                                                             if (strlen($row['user_profile_2_picture']) > 0)
-                                                                echo "<img class='rounded-circle'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
+                                                                echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                                             else
                                                                 echo ("<img height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                             echo "</label>";
@@ -244,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                             echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                                             echo "<br>";
                                                             if (strlen($row['user_profile_1_picture']) > 0)
-                                                                echo "<img  class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
+                                                                echo "<img  class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                                             else
                                                                 echo ("<img height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                             echo "</label>";
@@ -285,14 +285,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         $pictureIndex++;
                                                         if ($row['match_user_id_1'] == $user_id) {
                                                             //   echo "<div class='col-sm-1'>";
-                                                            echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                            echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                             echo "        <label for='radio" . $pictureIndex . "'>";
                                                             echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                                             echo "<br>";
                                                             if (strlen($row['user_profile_2_picture']) > 0)
-                                                                echo "<img class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
+                                                                echo "<img class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                                             else
-                                                                echo ("<img height='100' width='100' src='../images/camera-photo-7.png'/>");
+                                                                echo ("<img height='100' class='selectimg' width='100' src='../images/camera-photo-7.png'/>");
                                                             switch ($row['user_profile_1_match_status']) {
                                                                 case 'Like':
                                                                     echo ("<div class=''><img height='32' width='32' tiitle='Liked' src='/images/Like.png'/></div>");
@@ -309,14 +309,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                             }
                                                             echo "</label>";
                                                         } else {
-                                                            echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                            echo "        <input type='radio' name='selected_user'  class='hideinput' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                             echo "        <label for='radio" . $pictureIndex . "'>";
                                                             echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                                             echo "<br>";
                                                             if (strlen($row['user_profile_1_picture']) > 0)
-                                                                echo "<img class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
+                                                                echo "<img class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                                             else
-                                                                echo ("<img height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                                echo ("<img class='selectimg' height='100' class='selectimg' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                             switch ($row['user_profile_2_match_status']) {
                                                                 case 'Like':
                                                                     echo ("<div class=''><img height='32' width='32' src='/images/Like.png'/></div>");
@@ -370,9 +370,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                                     echo "<br>";
                                                     if (strlen($row['user_profile_2_picture']) > 0)
-                                                        echo "<img class='rounded-circle' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
+                                                        echo "<img class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                                     else
-                                                        echo ("<img class='rounded-circle' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                        echo ("<img class='rounded-circle selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                     echo "</label>";
                                                 } else {
                                                     echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
@@ -380,9 +380,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                                     echo "<br>";
                                                     if (strlen($row['user_profile_1_picture']) > 0)
-                                                        echo "<img  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
+                                                        echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                                     else
-                                                        echo ("<img height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                        echo ("<img class='selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                     echo "</label>";
                                                 }
                                                 echo "    </li>";
