@@ -63,7 +63,7 @@ function get_communications_thread($db_connection, $userId, $matchUserId) {
                 . " where   find_in_set(replying_to_communication_id, @pv)"
                 . " and     length(@pv := concat(@pv, ',', id))) h"
                 . " join user_communication uc on uc.id = h.id";
-        echo $sql . "<br>";
+       // echo $sql . "<br>";
         $result = execute_sql_query($db_connection, $sql);
         return $result;
         exit;

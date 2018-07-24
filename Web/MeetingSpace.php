@@ -58,6 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($matching_user_id != 0) {
                         $_SESSION['user_id'] = $user_id;
                         $_SESSION['matching_user_id'] = $matching_user_id;
+                        $_SESSION['match_id'] = $row['match_id'];
+                        
                         header("Location: ChatLine.php");
                         exit();
                     } else {
