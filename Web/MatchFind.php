@@ -9,8 +9,7 @@ require_once 'database_config.php';
 include 'group05_library.php';
 // Get the standard session parameters
 $user_id = $_SESSION['user_id'];
-$matching_user_id = $_SESSION['matching_user_id'];
-echo "session user " . $user_id;
+//echo "session user " . $user_id;
 $city = "";
 $first_name = "";
 $surname = "";
@@ -18,14 +17,25 @@ $gender_name = "";
 $preferred_gender_name = "";
 $message = "";
 $email = "";
+$relationship_type = "";
 
-$relationshipTypeLove = true;
-$relationshipTypeCasual = false;
-$relationshipTypeFriendship = false;
-$relationshipTypeRelationship = false;
-$sql = "SELECT up.*, c.city, g1.gender_name, g2.gender_name as preferred_gender_name "
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $preferred_gender_name = $_POST['preferredGenderInput'];
+    $city = $_POST['selectedCity'];
+    $relationship_type = $_POST['selectedRelationship'];
+    // check the button selected (these are at the end of this form
+    if ($_POST['btnAction'] == "Cancel") { // cancel the update
+        echo "Cancel pressed";
+        header("Location: meetingspace.php");
+        exit();
+    }
+}else {
+$sql = "SELECT up.*, c.city, r.relationship_type, g1.gender_name, g2.gender_name as preferred_gender_name "
         . " FROM user_profile up   "
         . "LEFT JOIN city c ON c.id = up.city_id   "
+        . "LEFT JOIN city r ON r.id = up.relationship_type_id   "
         . "LEFT JOIN gender g1 ON g1.id = up.gender_preference_id  "
         . "left join gender g2 on g2.id = up.gender_id "
         . "where up.id = '" . $user_id . "'";
@@ -40,39 +50,33 @@ if ($result = mysqli_query($db_connection, $sql)) {
             $gender_name = $row['gender_name'];
             $preferred_gender_name = $row['preferred_gender_name'];
             echo "city " . $city;
-            echo "pref " . $preferred_gender_name;
+            //echo "pref " . $preferred_gender_name;
             $email = $row['email'];
             $relationshipTypeId = $row['relationship_type_id'];
+            $relationship_type = $row['relationship_type'];
+            echo "relationship " . $relationship_type;
 
-            if ($relationshipTypeId == 1) {
-                $relationshipTypeLove = true;
-            }
-            if ($relationshipTypeId == 2) {
-                $relationshipTypeCasual = true;
-            }
-            if ($relationshipTypeId == 3) {
-                $relationshipTypeFriendship = true;
-            }
-            if ($relationshipTypeId == 4) {
-                $relationshipTypeRelationship = true;
-            }
+            //if ($relationshipTypeId == 1) {
+               // $relationshipTypeLove = true;
+            //}
+            //if ($relationshipTypeId == 2) {
+                //$relationshipTypeCasual = true;
+            //}
+            //if ($relationshipTypeId == 3) {
+               // $relationshipTypeFriendship = true;
+            //}
+            //if ($relationshipTypeId == 4) {
+               // $relationshipTypeRelationship = true;
+            //}//
         }
     } else {
         $message = "Cannot find user profile";
     }
 }
-echo "I Am here" . $preferred_gender_name . " " . $city;
+//echo "I Am here" . $preferred_gender_name . " " . $city ;
 
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    // check the button selected (these are at the end of this form
-    if ($_POST['btnAction'] == "Cancel") { // cancel the update
-        echo "Cancel pressed";
-        header("Location: meetingspace.php");
-        exit();
-    }
 }
 ?>
 <!DOCTYPE html>
@@ -249,23 +253,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             body {
                 font-family:Arial;
             }
-                        <!-- invisible radio button with image select -->
-            ul {
-                list-style: none;
-            }
-            li {
-                display: inline-block;
-                margin-right: 15px;
-            }
-            input {
-                visibility:hidden;
-            }
-            img {
-                cursor: pointer;
-            }
-            input:checked + label {
-                border:2px solid #f00;
-            } 
+
+
             .stackem div {
                 width: 100%;
             }
@@ -305,16 +294,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt; padding-top: 10px; text-align: left;">
                                     Gender Preference <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
-                                    <?php echo "I Am here" . $preferred_gender_name . " " . $city; ?>
                                     <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
 
                                         <?php
-                                        $sql = "select gender_name  from gender";
+                                        $sql = "select gender_name  from gender order by gender_name";
                                         if ($result = mysqli_query($db_connection, $sql)) {
                                             if (mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_array($result)) {
                                                     if ($preferred_gender_name == $row['gender_name'])
-                                                        echo "<option selected>" . $row['gender_name'] . "</option>";
+                                                        echo "<option selected='selected'>" . $row['gender_name'] . "</option>";
                                                     else
                                                         echo "<option>" . $row['gender_name'] . "</option>";
                                                 }
@@ -338,7 +326,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         if ($result = mysqli_query($db_connection, $sql)) {
                                             if (mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_array($result)) {
-                                                    echo $city . " " . $row['city'];
+                                                    //echo $city . " " . $row['city'];
                                                     if ($city == $row['city'])
                                                         echo "<option selected='selected'>" . $row['city'] . "</option>";
                                                     else
@@ -347,12 +335,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             }
                                         }
                                         ?>
-                                        <!--<option>Limerick</option>
-                                        <option>Galway</option>
-                                        <option>Cork</option>
-                                        <option>Waterford</option>
-                                        <option>Dublin</option>
-                                        <option>Belfast</option>-->
+                                        
                                     </select>
                                 </div>
                             </div>
@@ -368,10 +351,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         if ($result = mysqli_query($db_connection, $sql)) {
                                             if (mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_array($result)) {
-                                                    echo "<option>" . $row['relationship_type'] . "</option>";
+                                                     if ($relationship_type == $row['relationship_type'])
+                                                        echo "<option selected='selected'>" . $row['relationship_type'] . "</option>";
+                                                    else
+                                                        echo "<option>" . $row['relationship_type'] . "</option>";
                                                 }
                                             }
                                         }
+                                        
+                                        
                                         ?>
 
                                     </select>
@@ -492,44 +480,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     echo "posting";
                                     // check the button selected (these are at the end of this form
                                     if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
-                                        // Validate user inputs
-                                        // --------------------
-                                        $valid = true;
-                                        $message = "";
-
-                                        // Get the form inputs
-                                        $preferredGender = $_POST['preferredGenderInput'];
-                                        // I put in location here
-                                        // $ageSelection = $_POST['seekingAgeSelectionName'];
-                                        //  $travelDistance = $_POST['travelDistanceSelection'];
-                                        //  $relationshipType = $_POST['relationshipType'];
-
-                                        echo 'gender ' . $preferredGender;
-                                        echo 'userid  ' . $user_id;
-                                        //echo location here
-                                        //if (strlen($firstname) == 0) { // validate first name
-                                        //    $valid = false;
-                                        //    //$message = "First Name must be populated";
-                                        // }
-                                        // are all inputs valid?
-                                        if ($valid == true) {
-
-                                            // Update database
-                                            // ---------------
-                                            if (isset($_POST['selectedCity']))
-                                                $city = $_POST['selectedCity'];
-                                            else
-                                                $city = "";
-                                            // put in location here
-                                            $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city FROM user_profile up"
+                                      // Sql to pull data from other users and match selected gender selectedcity and relationshiptyoe
+                                                             
+                                            $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city, r.relationship_type FROM user_profile up p"
                                                     . " join gender g1 on g1.id = up.gender_id "
-                                                    . " join gender g2 on g2.id = up.gender_preference_id "
+                                                    . " join gender g2 on g2.id = up.gender_preference_id  "
                                                     . " join city c on c.id = up.city_id "
-                                                    . " where city_id in (select id from city where city = '" . $city . "')"
-                                                    . ";";
-                                            //echo $sql;
-                                            //                         $sql = "select * from user_profile where gender_id in (select id from gender where gender_name = '" . $preferredGender . "');";
-                                            //echo $sql;
+                                                    . " join relationship_type r on r.id=up.relationship_type_id"
+                                                    . " where"
+                                                    . " gender_id in (select id from gender where gender = '" . $preferred_gender_name . "')"
+                                                    . " And"
+                                                   . " city_id in (select id from city where city = '" . $city . "')"
+                                                   . " And "
+                                                   . " relationship_type_id in (select id from relationship_type where relationship_type = '" . $relationship_type . "')";
+                                                    
+                                            echo $sql;
+                                            
+                                            //echo $sql; 
                                             // need to add other columns here
                                             //            . "where id = " . $user_id . ";";
                                             $pictureIndex = 0;
@@ -565,7 +532,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         echo ("<img height='32' width='32' src='../images/camera-photo-7.png'/><i></i>'");
                                                 }
                                             }
-                                        }
+                                        
                                     }
                                 }
                                 ?>
@@ -577,6 +544,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
     </body>
-</html>
-
 </html>
