@@ -103,8 +103,8 @@ echo " here1";
                                         ?>
                                         <p><b>Click on Photograph and do one of the following:</b></p>
                                         <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src='/images/View.png'/>View</button>
-                                        <button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Maybe" src='/images/Maybe.png'/>Suspend (1 Month)</button>
-                                        <button name="btnAction" class="btn btn-warning" type="submit" value="Terminate"><img height="16" width="16" title="Goodbye" src='/images/Goodbye.png'/>Terminate</button>
+                                        <button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Suspend" src='/images/Maybe.png'/>Suspend (1 Month)</button>
+                                        <button name="btnAction" class="btn btn-warning" type="submit" value="Bar"><img height="16" width="16" title="Bar" src='/images/Goodbye.png'/>Bar</button>
                                       
                                     </div>
  </form> 
