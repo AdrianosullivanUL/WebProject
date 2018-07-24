@@ -81,27 +81,27 @@ create table status_master(
 -- user_profile
 -- ------------------------------------------------
 
-CREATE TABLE `user_profile` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `password_hash` varchar(200) NOT NULL,
-  `first_name` varchar(50) NOT NULL,
-  `surname` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `date_of_birth` date DEFAULT NULL,
-  `gender_id` int(11) DEFAULT NULL,
-  `gender_preference_id` int(11) DEFAULT NULL,
-  `From_age` int(11) DEFAULT NULL,
-  `to_age` int(11) DEFAULT NULL,
-  `city_id` int(11) DEFAULT NULL,
-  `Travel_distance` int(11) DEFAULT NULL,
-  `relationship_type_id` int(11) DEFAULT NULL,
-  `picture` mediumblob,
-  `my_bio` varchar(1000) DEFAULT NULL,
-  `black_listed_user` tinyint(1) DEFAULT NULL,
-  `black_listed_reason` varchar(100) NOT NULL,
-  `black_listed_date` date DEFAULT NULL,
-  `user_status_id` int NOT NULL,
-  `is_administrator` boolean NOT NULL,
+CREATE TABLE user_profile (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  password_hash varchar(200) NOT NULL,
+  first_name varchar(50) NOT NULL,
+  surname varchar(100) NOT NULL,
+  email varchar(100) NOT NULL,
+  date_of_birth date DEFAULT NULL,
+  gender_id int(11) DEFAULT NULL,
+  gender_preference_id int(11) DEFAULT NULL,
+  From_age int(11) DEFAULT NULL,
+  to_age int(11) DEFAULT NULL,
+  city_id int(11) DEFAULT NULL,
+  Travel_distance int(11) DEFAULT NULL,
+  relationship_type_id int(11) DEFAULT NULL,
+  picture mediumblob,
+  my_bio varchar(1000) DEFAULT NULL,
+  black_listed_user tinyint(1) DEFAULT NULL,
+  black_listed_reason varchar(100) NOT NULL,
+  black_listed_date date DEFAULT NULL,
+  user_status_id int NOT NULL,
+  is_administrator boolean NOT NULL,
    PRIMARY KEY(id),
    FOREIGN KEY (gender_id) REFERENCES gender(id),
    FOREIGN KEY (gender_preference_id) REFERENCES gender(id),
@@ -244,8 +244,9 @@ from match_table mt
  left join gender g2 on g2.id = up2.gender_id
  left join gender gp2 on gp2.id = up2.gender_preference_id
 where  up1.is_administrator = false and up1.is_administrator = false
-and up1.user_status_id in (select id from status_master where status_description in ('Registered','Active')) and up2.is_administrator = false and up2.is_administrator = false
-and up2.user_status_id in (select id from status_master where status_description in ('Registered','Active')) ;
+and up1.user_status_id in (select id from status_master where status_description in ('Registered','Active', 'Like', 'Maybe', 'Chatting')) and up2.is_administrator = false and up2.is_administrator = false
+and up2.user_status_id in (select id from status_master where status_description in ('Registered','Active', 'Like', 'Maybe', 'Chatting')) ;
+
 
 -- stored procedure
 -- ------------------------------------------------
@@ -311,12 +312,14 @@ read_loop: LOOP
     END IF;                    
                
 	-- Insert a list of matching profiles
-    -- TODO - Fix problem with matching not functioning correctly
+    -- ----------------------------------
     insert into match_table (match_user_id_1, match_user_id_2, match_date, 
                              user_1_match_status_id, user_1_match_status_date,
                              user_2_match_status_id, user_2_match_status_date,
                              system_generated_match)
-        select loc_id, up.id, now(), 5, now(),5, now(),true
+        select 	loc_id, up.id, now(), 
+				(select id from status_master where status_description = 'Matched' and is_match_table_status = true), now(),
+				(select id from status_master where status_description = 'Matched' and is_match_table_status = true), now(),true
         from user_profile up
         join city c on c.id = up.city_id
         where up.id != loc_id
@@ -336,6 +339,19 @@ read_loop: LOOP
         and ( 6372.795 * acos( cos( radians(c.geo_x) ) * cos( radians( loc_geo_x ) ) 
 				* cos( radians(loc_geo_y) - radians(c.geo_y)) + sin(radians(c.geo_x)) 
 				* sin( radians(loc_geo_x)))) <= loc_Travel_distance;
+        
+	-- Set System Matches older than 1 month to Goodbye when neither user has statused the match 
+    -- (These matches are gone stale)
+    -- -----------------------------------------------------------------------------------------
+    update match_table 
+		set user_1_match_status_id = (select id from status_master where status_description = 'Goodbye' and is_match_table_status = true),
+			user_1_match_status_date = curdate(),
+            user_2_match_status_id = (select id from status_master where status_description = 'Goodbye' and is_match_table_status = true),
+			user_2_match_status_date = curdate()
+		where user_1_match_status_date <= DATE_SUB(curdate(), INTERVAL 1 MONTH)
+		and  user_1_match_status_id = (select id from status_master where status_description = 'Matched' and is_match_table_status = true)
+		and  user_2_match_status_id = (select id from status_master where status_description = 'Matched' and is_match_table_status = true);
+        
         
     -- reset done so that next cursor read controls it again
     set done = false; 

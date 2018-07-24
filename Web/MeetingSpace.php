@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['selected_user'])) {
             $matchId = $_POST['selected_user'];
             $sql = "SELECT * FROM matches_view where match_id = " . $matchId . ";";
-            echo $sql;
+            // echo $sql;
             $result = execute_sql_query($db_connection, $sql);
             if ($result == null) {
                 $message = "ERROR: Cannot match entry " . $matchId;

@@ -7,8 +7,8 @@ begin;
 delete from gender;
 insert into gender (gender_name) values  ('Male');
 insert into gender (gender_name) values  ('Female');
-insert into gender (gender_name) values  ('Trans Gender (M/F');
-insert into gender (gender_name) values  ('Trans Gender (F/M');
+insert into gender (gender_name) values  ('Trans Gender (M/F)');
+insert into gender (gender_name) values  ('Trans Gender (F/M)');
 
 
 
@@ -893,8 +893,6 @@ update user_profile set password_hash = sha2(password_hash,256);
 
 -- user_interests
 -- ------------------------------------------------
--- user interests
--- ---------------
 insert into user_interests (interest_id, user_id) values (1,24);
 insert into user_interests (interest_id, user_id) values (2,24);
 insert into user_interests (interest_id, user_id) values (3,24);

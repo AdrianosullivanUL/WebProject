@@ -35,22 +35,100 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $relationshipType = $_POST['relationshipTypeInput'];
         else
             $relationshipType = '';
+
         $email = trim($_POST['emailInput']);
+
+
+        ECHO " ageSelectionFrom " . $ageSelectionFrom
+        . " ageSelectionTo " . $ageSelectionTo
+        . " travelDistance " . $travelDistance
+        . " relationshipType " . $relationshipType;
+
+
 
         // Validate user inputs
         // --------------------
         $valid = true;
         $message = "";
+
+        // Validate Email
+        if (strlen($email) == 0) { // validate first name
+            $valid = false;
+            $message = "You must provide an email address";
+        }
+        if ((strpos($email, '.')) && (strpos($email, '@'))) {
+            
+        } else {
+            $valid = 0;
+            $message = 'Invalid email address';
+        }
         if (strlen($firstname) == 0) { // validate first name
             $valid = false;
             $message = "First Name must be populated";
         }
+
+        // Validate First name
+        if (strlen($firstname) == 0) { // validate first name
+            $valid = false;
+            $message = "You must provide a First Name";
+        }
         if (strlen($firstname) > 50) { // validate first name
             $valid = false;
             $message = "First Name Cannot be longer than 50 characters";
-        }        
+        }
+        // Validate Surname
+        if (strlen($surname) == 0) {
+            $valid = false;
+            $message = "You must provide a Surname";
+        }
+        if (strlen($surname) > 100) {
+            $valid = false;
+            $message = "Surname Cannot be longer than 100 characters";
+        }
+
+        // Validate DOB
+        //Create a DateTime object using the user's date of birth.
+        $checkkDOB = new DateTime($dob);
+        $now = new DateTime();
+        $difference = $now->diff($checkkDOB);
+        $age = $difference->y;
+
+        if ($age < 18) {
+            $valid = false;
+            $message = "You must be over 18 to use this site";
+        }
+        if ($age > 130) {
+            $valid = false;
+            $message = "Please check your age, it appears you are over 130?";
+        }
+        // Validate Surname
+        if (strlen($city) == 0) {
+            $valid = false;
+            $message = "Please select the City/Town nearest to you";
+        }
+        // Validate gender
+        if (strlen($gender) == 0) {
+            $valid = false;
+            $message = "Please select your gender";
+        }
+        // Validate gender preference
+        if (strlen($preferredGender) == 0) {
+            $valid = false;
+            $message = "Please select your gender preference";
+        }
+
+        if ($ageSelectionFrom > $ageSelectionTo) {
+            $valid = false;
+            $message = "Age Profile From cannot be greater than Age Profile To";
+        }
+        // Relationship Type
+        if (strlen($relationshipType) == 0) {
+            $valid = false;
+            $message = "Please select a relationship type";
+        }
 
         // are all inputs valid?
+        // ---------------------
         if ($valid == true) {
 
             // Update database
@@ -70,6 +148,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //echo $sql;
             $result = execute_sql_update($db_connection, $sql);
 
+            // Generate new matches based on updates to this users profile
+            // Note: This closes matches older than 1 month that are stale
+            $sql = "CALL generate_matches(" . $user_id . ", " . $user_id . ");";
+            $result = execute_sql_update($db_connection, $sql);
             // open User profile 2 page
             // ------------------------
             $_SESSION['user_id'] = $user_id;
@@ -137,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script>
-                    $(function () {
+            $(function () {
                 $("#slider-range").slider({
                     echo "first part of slider"
                             range: true,
@@ -218,7 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="genderLabel">Gender</label>
                         <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
                             <?php
-                            $sql = "select gender_name  from gender";
+                            $sql = "select gender_name from gender order by gender_name";
                             if ($result = mysqli_query($db_connection, $sql)) {
                                 if (mysqli_num_rows($result) > 0) {
                                     while ($row = mysqli_fetch_array($result)) {
@@ -237,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="genderInput">Preferred Gender</label>
                         <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
                             <?php
-                            $sql = "select gender_name  from gender";
+                            $sql = "select gender_name  from gender order by gender_name";
                             if ($result = mysqli_query($db_connection, $sql)) {
                                 if (mysqli_num_rows($result) > 0) {
                                     while ($row = mysqli_fetch_array($result)) {
@@ -256,15 +338,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="form-group">
                             <label for="seekingAgeSelection">Seeking Age Profile</label>
                             <!-- TODO add a single slider later -->
-                    <!-- MM
-                    <label for="seekingAgeSelection">From</label>
-                            <input type="range" min="18" max="120" value="<?php echo $ageSelectionFrom; ?>" class="slider" data-show-value="true" name="seekingAgeFromSelection">
-                            <label for="seekingAgeSelection">To</label>
-                            <input type="range" min="18" max="120" value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
-                    -->
+                            <!-- MM
+                            <label for="seekingAgeSelection">From</label>
+                                    <input type="range" min="18" max="120" value="<?php echo $ageSelectionFrom; ?>" class="slider" data-show-value="true" name="seekingAgeFromSelection">
+                                    <label for="seekingAgeSelection">To</label>
+                                    <input type="range" min="18" max="120" value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
+                            -->
                             <label for="seekingAgeSelection">From</label>
                             <input type="range" min="18" max="65" value="<?php echo $ageSelectionFrom; ?>" class="slider" name="seekingAgeFromSelection">
-                                            <label for="seekingAgeSelection">To</label>
+                            <label for="seekingAgeSelection">To</label>
                             <input type="range" min="18" max="120" value="35"
                                    value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
                         </div>                       
@@ -275,12 +357,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <label for="relationshipType">Relationship Type</label>
                         <br>
-                        <input type="radio" value="Love" <?php if ($relationshipType == "Love") echo 'checked'; ?> name="relationshipTypeInput">Love</input>&nbsp;
-                        <input type="radio" value="Casual" <?php if ($relationshipType == "Casual") echo 'checked'; ?> name="relationshipTypeInput">Casual</input>&nbsp;
-                        <input type="radio" value="Friendship" <?php if ($relationshipType == "Friendship") echo 'checked'; ?> name="relationshipTypeInput">Friendship</input>&nbsp;
-                        <input type="radio" value="Relationship" <?php if ($relationshipType == "Relationship") echo 'checked'; ?> name="relationshipTypeInput">Relationship</input>
-                        <b/>
-                        <p > <?php echo $message ?></p>
+                        <input type="radio" value="Love" <?php if ($relationshipType == "love") echo 'checked'; ?> name="relationshipTypeInput">Love</input>&nbsp;
+                        <input type="radio" value="Casual" <?php if ($relationshipType == "casual") echo 'checked'; ?> name="relationshipTypeInput">Casual</input>&nbsp;
+                        <input type="radio" value="Friendship" <?php if ($relationshipType == "friendship") echo 'checked'; ?> name="relationshipTypeInput">Friendship</input>&nbsp;
+                        <input type="radio" value="Relationship" <?php if ($relationshipType == "relationship") echo 'checked'; ?> name="relationshipTypeInput">Relationship</input>
+                        <?php
+                        if (strlen($message) > 0) {
+                            echo "<div class='alert alert-danger'>";
+                            echo "<p >" . $message . "></p>";
+                            echo "</div>";
+                        }
+                        ?>
                     </div>
 
                     <p align="middle">
