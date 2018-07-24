@@ -95,7 +95,8 @@ if ($result = mysqli_query($db_connection, $sql)) {
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-        <style>
+        <link rel="stylesheet" href="StyleSheet.css">
+        <!--<style>
             body {
                 background-image:    url(images/backlit-bonding-casual-708392.jpg);
                 background-size:     cover;                      /* <------ */
@@ -258,7 +259,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
             .stackem div {
                 width: 100%;
             }
-        </style>
+        </style>-->
     </head>
     <body>
 
@@ -461,40 +462,28 @@ if ($result = mysqli_query($db_connection, $sql)) {
                             </div>
                             <div class="form-group" style="text-align:center;font-weight:bold">
 
-                        </fieldset>
-
-                    </form>
-                </div>
-
+                        
                 <div class="row">
                     <div class="col-md-12 col-md-offset-0.5" >
-                        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
-                            <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">
-                                <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Perfect Match Filter</legend>
-
-
-
-
-                                <?php
+                                                        <?php
                                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                                    echo "posting";
                                     // check the button selected (these are at the end of this form
                                     if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
                                       // Sql to pull data from other users and match selected gender selectedcity and relationshiptyoe
                                                              
-                                            $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city, r.relationship_type FROM user_profile up p"
+                                            $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city, r.relationship_type FROM user_profile up"
                                                     . " join gender g1 on g1.id = up.gender_id "
                                                     . " join gender g2 on g2.id = up.gender_preference_id  "
                                                     . " join city c on c.id = up.city_id "
                                                     . " join relationship_type r on r.id=up.relationship_type_id"
                                                     . " where"
-                                                    . " gender_id in (select id from gender where gender = '" . $preferred_gender_name . "')"
+                                                    . " gender_id in (select id from gender where gender_name = '" . $preferred_gender_name . "')"
                                                     . " And"
                                                    . " city_id in (select id from city where city = '" . $city . "')"
                                                    . " And "
                                                    . " relationship_type_id in (select id from relationship_type where relationship_type = '" . $relationship_type . "')";
                                                     
-                                            echo $sql;
+                                            //echo $sql;
                                             
                                             //echo $sql; 
                                             // need to add other columns here
@@ -508,14 +497,14 @@ if ($result = mysqli_query($db_connection, $sql)) {
                                                     $pictureIndex++;
                                                     //echo ("<li>");
                                                     // echo "<div class='container>";
-                                                    echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['id'] . "'/>";
+                                                    echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['id'] . "'/>";
                                                     echo "        <label for='radio" . $pictureIndex . "'>";
                                                     echo "        <label >" . $row['first_name'] . " " . $row['surname'] . "</label>";
                                                     echo "<br>";
                                                     if (strlen($row['picture']) > 0)
-                                                        echo "<img class='rounded-circle'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
+                                                        echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
                                                     else
-                                                        echo ("<img height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                        echo ("<img class='selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                     echo "</label>";
                                                 }
                                             }
