@@ -12,6 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: PasswordReset.php");
         exit();
     }
+        if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
+        header("Location: index.php");
+        exit();
+    }
 
     if ($_POST['btnAction'] == "Logon") { // Call Edit Profile
         $email = $_POST['email'];
@@ -91,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <button name="btnAction" class="btn btn-primary" type="submit" value="Logon">Log on</button>
                             <button name="btnAction" class="btn btn-danger" type="submit" value="ForgotPassword">Forgot Password?</button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
 
                         </fieldset> 
 

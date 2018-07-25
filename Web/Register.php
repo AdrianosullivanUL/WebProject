@@ -2,6 +2,7 @@
 <?php
 session_start();
 require_once 'database_config.php';
+include 'group05_library.php';
 
 
 $user_id = $_SESSION['user_id'];
@@ -13,6 +14,10 @@ $message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // check the button selected (these are at the end of this form
+    if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
+        header("Location: index.php");
+        exit();
+    }
     if ($_POST['btnAction'] == "Next") { // Call Edit Profile
         // Validate the inputs
         $valid = 1;
@@ -69,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $user_id = $row['id'];
                             $_SESSION['user_id'] = $user_id;
                             $_SESSION['matching_user_id'] = 0;
-                            $_SESSION['user_logged_in'] = 1;        
+                            $_SESSION['user_logged_in'] = 1;
                             //        echo $_SESSION['user_id'];
                             header("Location: UpdateProfile.php");
                             exit();
@@ -89,61 +94,80 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <html lang="en">
     <head>
-        <title>register</title>
+    <head>
+        <title>Register</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
-        <style>
-            body {
-                background-image:    url(backlit-bonding-casual-708392.jpg);
-                background-size:     cover;                      /* <------ */
-                background-repeat:   no-repeat;
-                background-position: center center;              /* optional, center the image */
-            }
-
-
-        </style>
-
+        <link rel="stylesheet" href="StyleSheet.css">
     </head>
-    <body>
-        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
-            <div class="container">
-                <div class="row">
-                    <div class="container border border-primary rounded bg-light text-dark col-sm-6">
-                        <h1>Register</h1>
-                    </div>
-                </div>
 
-                <br>
-                <div class="container border border-primary rounded bg-light text-dark col-sm-6">
-                    <div class="row">
-                        <br>
-                        <div class="col">email:</div>
-                        <div class="col"><input type="text" name="email"></div>
-                    </div>
-                    <div class="row">
-                        <br>
-                        <div class="col">Password:</div>
-                        <div class="col"><input type="password" name="password"></div>
-                    </div>                    
-                    <div class="row">
-                        <br>
-                        <div class="col">Confirm Password:</div>
-                        <div class="col"><input type="password" name="confirmPassword"></div>
-                    </div>         
-                    <div class="row">
-                        <p style="color:red"> <?php echo $message; ?></p>
-                    </div>
+</head>
+<body>
+    <div class="topnav">
+        <a class="active">REGISTER</a>
+    </div> 
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3" >
 
-                    <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
-                    </form>
+                <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
+                    <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
 
-                </div>
+                        <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Registration Details</legend>
+
+                        <div class="form-group"></div>
+                        <div class="row">
+                            <br>
+                            <div class="col">email:</div>
+                            <div class="col"><input type="text" name="email"></div>
+                        </div>
+                        <div class="row">
+                            <br>
+                            <div class="col">Password:</div>
+                            <div class="col"><input type="password" name="password"></div>
+                        </div>                    
+                        <div class="row">
+                            <br>
+                            <div class="col">Confirm Password:</div>
+                            <div class="col"><input type="password" name="confirmPassword"></div>
+                        </div>         
+                        <div class="row">
+                            <p style="color:red"> <?php echo $message; ?></p>
+                        </div>
+
+                        <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
+                        <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-11 container border border-primary rounded bg-light text-dark">
+                                <h1>How does it work?</h1>
+                                <p>Our process is simple and easy to use, we don't focus on asking you a million questions or doing psychological tests! We ask you a few simple questions and ask you to post a recent picture of yourself. After that we do the following for you:</p>
+                                <ul>
+                                    <li>Based on the criteria you have entered, we will find people who match your preferences and present these in the Meeting Space under the System Matches heading</li>
+                                    <li>From here you can view all of the people matched to you and do the following</li>
+                                    <ul>
+                                        <li>Like - You would like to engage with this person, if they also like you then you are both free to chat</li>
+                                        <li>Maybe - This keeps the person in your meeting space and you can decide later, by default people who you don't action are removed after 1 month</li>
+                                        <li>Goodbye - You are not interested in this person, they will not be presented to you again</li>
+                                        <li>Report - THis person has posted an offensive photo or used inappropriate language, this reports them to the site administrator for review/sanction</li>
+                                    </ul>
+                                    <li>If you "like" someone, you will be added to their "Interested in me" list in their Meeting Space, if they also "like" you then you are free to chat</li>
+                                    <li>A list of people who you are "chatting" with are presented in your Meeting Space also, click on their picture and click on the Chat button to communicate with them</li>
+                                </ul>
+                                &nbsp;
+                                <p>Note: Distance willing to travel is used to calculate the distance from your town to your potential match, this is done using "as the crow flies", please bear this in mind when contacting people.</p>
+                            </div>
+                        </div>       
+                    </fieldset> 
+
+                </form>
             </div>
-        </form>
-    </body>
-
+            &nbsp;
+        </div>
+    </div> 
+</body>
 </html> 
