@@ -116,52 +116,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
                     <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
-
                         <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Registration Details</legend>
-
-                        <div class="form-group"></div>
-                        <div class="row">
-                            <br>
-                            <div class="col">email:</div>
-                            <div class="col"><input type="text" name="email"></div>
+                        <div class="form-group">
+                            <label for="email">email</label>
+                            <input type="text" class="form-control" name="email" value="">
+                            <label for="password">Password</label>
+                            <input type="Password" class="form-control" name="password">
+                            <label for="confirmPassword">Password</label>
+                            <input type="password" class="form-control" name="confirmPassword">
+                            <?php
+                            if (strlen($message) > 0) {
+                                echo "<div class='alert alert-danger'>";
+                                echo "<p>" . $message . "</p>";
+                                echo "</div>";
+                            }
+                            ?>
                         </div>
-                        <div class="row">
-                            <br>
-                            <div class="col">Password:</div>
-                            <div class="col"><input type="password" name="password"></div>
-                        </div>                    
-                        <div class="row">
-                            <br>
-                            <div class="col">Confirm Password:</div>
-                            <div class="col"><input type="password" name="confirmPassword"></div>
-                        </div>         
-                        <div class="row">
-                            <p style="color:red"> <?php echo $message; ?></p>
-                        </div>
-
                         <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
                         <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
                         <br>
-                        <div class="row">
-                            <div class="col-sm-11 container border border-primary rounded bg-light text-dark">
-                                <h1>How does it work?</h1>
-                                <p>Our process is simple and easy to use, we don't focus on asking you a million questions or doing psychological tests! We ask you a few simple questions and ask you to post a recent picture of yourself. After that we do the following for you:</p>
+
+                        <div class="col-sm-11 container border border-primary rounded bg-light text-dark">
+                            
+                            <h1>How does it work?</h1>
+                            <p>Our process is simple and easy to use, we don't focus on asking you a million questions or doing psychological tests! We ask you a few simple questions and ask you to post a recent picture of yourself. After that we do the following for you:</p>
+                            <ul>
+                                <li>Based on the criteria you have entered, we will find people who match your preferences and present these in the Meeting Space under the System Matches heading</li>
+                                <li>From here you can view all of the people matched to you and do the following</li>
                                 <ul>
-                                    <li>Based on the criteria you have entered, we will find people who match your preferences and present these in the Meeting Space under the System Matches heading</li>
-                                    <li>From here you can view all of the people matched to you and do the following</li>
-                                    <ul>
-                                        <li>Like - You would like to engage with this person, if they also like you then you are both free to chat</li>
-                                        <li>Maybe - This keeps the person in your meeting space and you can decide later, by default people who you don't action are removed after 1 month</li>
-                                        <li>Goodbye - You are not interested in this person, they will not be presented to you again</li>
-                                        <li>Report - THis person has posted an offensive photo or used inappropriate language, this reports them to the site administrator for review/sanction</li>
-                                    </ul>
-                                    <li>If you "like" someone, you will be added to their "Interested in me" list in their Meeting Space, if they also "like" you then you are free to chat</li>
-                                    <li>A list of people who you are "chatting" with are presented in your Meeting Space also, click on their picture and click on the Chat button to communicate with them</li>
+                                    <li>Like - You would like to engage with this person, if they also like you then you are both free to chat</li>
+                                    <li>Maybe - This keeps the person in your meeting space and you can decide later, by default people who you don't action are removed after 1 month</li>
+                                    <li>Goodbye - You are not interested in this person, they will not be presented to you again</li>
+                                    <li>Report - THis person has posted an offensive photo or used inappropriate language, this reports them to the site administrator for review/sanction</li>
                                 </ul>
-                                &nbsp;
-                                <p>Note: Distance willing to travel is used to calculate the distance from your town to your potential match, this is done using "as the crow flies", please bear this in mind when contacting people.</p>
-                            </div>
-                        </div>       
+                                <li>If you "like" someone, you will be added to their "Interested in me" list in their Meeting Space, if they also "like" you then you are free to chat</li>
+                                <li>A list of people who you are "chatting" with are presented in your Meeting Space also, click on their picture and click on the Chat button to communicate with them</li>
+                            </ul>
+                            &nbsp;
+                            <p>Note: Distance willing to travel is used to calculate the distance from your town to your potential match, this is done using "as the crow flies", please bear this in mind when contacting people.</p>
+                        </div>
+
                     </fieldset> 
 
                 </form>

@@ -56,6 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
                             <h1>Who are we?</h1>
                             <p>We are a dating agency focused on helping single people to find a partner on the island of Ireland. We are a small technologically minded group based in in Limerick and our aim is to help you find your perfect match.</p>
+                            <br>
+                            <p><i>Stock Images curtesy of: <a href="https://www.pexels.com">Pexels.com</a></i> </p>
                         </div>
                     </div>
                 </fieldset>
