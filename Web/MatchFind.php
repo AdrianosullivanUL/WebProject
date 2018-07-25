@@ -370,50 +370,25 @@ if ($result = mysqli_query($db_connection, $sql)) {
 
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                                <div class="col-sm-3 col-md-3 col-lg-4 col-xs-8 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
+                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
                                     Interests <span style="color: red">*</span> :</div>
-
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-10 mobileLabel"></div>
-                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                                <div class="col-sm-11 col-md-11 col-lg-11 col-xs-9 mobileLabel">
-                                    <div class="checkbox" style=" font-size: 15pt;width: auto;">
-
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 1">Music
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 2">Sport
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 3">Traveling
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 4">Sailing
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 5">Food
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 6">Work
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 7">Family
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 8">Cooking
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" v<input name="check_list[]" value="value 9">Gym
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 10">Reading
-                                        </label>
-
-
-                                    </div>
-
-                                </div>
-                            </div>
+                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                    <select name= "selectedHobby"class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                                        <?php
+                                        $sql = "select description from interests";
+                                        if ($result = mysqli_query($db_connection, $sql)) {
+                                            if (mysqli_num_rows($result) > 0) {
+                                                while ($row = mysqli_fetch_array($result)) {
+                                                     if ($description == $row['description'])
+                                                        echo "<option selected='selected'>" . $row['rdescrition'] . "</option>";
+                                                    else
+                                                        echo "<option>" . $row['description'] . "</option>";
+                                                }
+                                            
+                                            }
+                                        }
+                                       ?>     
+                                        
                             <?php
                             if (!empty($_POST['check_list'])) {
                                 foreach ($_POST['check_list'] as $check) {
