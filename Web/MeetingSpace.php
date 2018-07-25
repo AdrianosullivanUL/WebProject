@@ -58,6 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($matching_user_id != 0) {
                         $_SESSION['user_id'] = $user_id;
                         $_SESSION['matching_user_id'] = $matching_user_id;
+                        $_SESSION['match_id'] = $row['match_id'];
+
                         header("Location: ChatLine.php");
                         exit();
                     } else {
@@ -97,20 +99,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $newStatus = "";
                     if ($row['match_user_id_1'] == $user_id) {
                         $updateUser1or2 = 1;
-                        if ($row['user_profile_2_match_status'] == 'Like')
-                        // both users must like each other before chatting
+                        if ($row['user_profile_2_match_status'] == 'Like') {
+                            // both users must like each other before chatting
+                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
                             $newStatus = "Chatting";
-                        else
+                        } else
                             $newStatus = "Like";
                     } else {
                         $updateUser1or2 = 2;
-                        if ($row['user_profile_1_match_status'] == 'Like')
-                        // both users must like each other before chatting
+                        if ($row['user_profile_1_match_status'] == 'Like') {
+                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 1);
+// both users must like each other before chatting
                             $newStatus = "Chatting";
-                        else
+                        } else
                             $newStatus = "Like";
                     }
                     $updateResult = update_match_status($db_connection, $matchId, $newStatus, $updateUser1or2);
+                    // $updateResult = update_match_status($db_connection, $matchId, $newStatus, 2);
                     //echo "Update result " . $updateResult;
                     //  $message = "Failed to update user status for match id " . $matchId; 
                 }
@@ -167,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $first_name = "";
         $surname = "";
         $sql = "SELECT first_name, surname FROM user_profile where id = " . $user_id . ";";
-        //echo $sql;
+//echo $sql;
         $result = execute_sql_query($db_connection, $sql);
         if ($result == null) {
             echo "ERROR: Cannot find profile for user id " . $user_id;
@@ -187,10 +192,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 </a>
                 <div class="topnav-right">
-                                    <a href="UpdateProfile.php" title="Edit your User Profile"><img height="16" width="16"  src='/images/Edit.png'/>Edit Profile</a>
-                                    <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='/images/Find.png'/>Match Finder</a>
-                                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Delete Profile</a>
-                                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
+                    <a href="UpdateProfile.php" title="Edit your User Profile"><img height="16" width="16"  src='/images/Edit.png'/>Edit Profile</a>
+                    <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='/images/Find.png'/>Match Finder</a>
+                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Delete Profile</a>
+                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
                 </div>
             </div>
             <div class="container">
@@ -229,14 +234,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         //echo ("<li>");
                                                         if ($row['match_user_id_1'] == $user_id) {
                                                             // echo "<div class='container>";
-                                                            echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                            echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                             echo "        <label for='radio" . $pictureIndex . "'>";
                                                             echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                                             echo "<br>";
                                                             if (strlen($row['user_profile_2_picture']) > 0)
                                                                 echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                                             else
-                                                                echo ("<img class='hideinput' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                                echo ("<img class='selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>");
                                                             echo "</label>";
                                                         } else {
                                                             echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
@@ -246,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                             if (strlen($row['user_profile_1_picture']) > 0)
                                                                 echo "<img  class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                                             else
-                                                                echo ("<img class='hideinput' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                                echo ("<img class='selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>");
                                                             echo "</label>";
                                                         }
                                                     }
@@ -274,9 +279,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <h3>System Matches</h3>
                                             <div class="col-xs-12 col-sm-12 col-lg-12" style="background-color:white; opacity: 0.9;">
                                                 <?php
-                                                $sql = "SELECT * FROM matches_view where system_generated_match = true and (match_user_id_1 =" . $user_id
-                                                        . " or  match_user_id_2 =" . $user_id . ")"
-                                                        . " and user_profile_1_match_status not in ('Chatting','Goodbye');";
+                                                $sql = "SELECT * FROM matches_view where system_generated_match = true "
+                                                        . "and (match_user_id_1 =" . $user_id . " and user_profile_2_match_status not in ('Like','Chatting','Goodbye'))"
+                                                        . " or (match_user_id_2 =" . $user_id . " and user_profile_1_match_status not in ('Like','Chatting','Goodbye'));";
+// echo $sql;
                                                 $result = execute_sql_query($db_connection, $sql);
                                                 if ($result == null) {
                                                     echo "<br><p>No matches found</p>";
@@ -353,10 +359,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="col-xs-12 col-sm-12 col-lg-4" style="border-style:solid; border-color: silver;background-color:white; opacity: 1;">
                                         <h3>Interested in Me</h3>
                                         <?php
-                                        $sql = "SELECT * FROM matches_view where system_generated_match = false and (match_user_id_1 =" . $user_id
-                                                . " or  match_user_id_2 =" . $user_id . ")"
-                                                . " and user_profile_1_match_status not in ('Chatting','Goodbye') and user_profile_2_match_status not in ('Chatting','Goodbye');";
-                                        // echo $sql;
+                                        $sql = "SELECT * FROM matches_view where  "
+                                                . " (match_user_id_1 =" . $user_id . " and user_profile_1_match_status != 'Like' and user_profile_2_match_status = 'Like')"
+                                                . " or  (match_user_id_2 =" . $user_id . " and user_profile_2_match_status != 'Like' and user_profile_1_match_status ='Like');";
+// echo $sql;
                                         $result = execute_sql_query($db_connection, $sql);
                                         if ($result == null) {
                                             echo "<br><p>No matches found</p>";

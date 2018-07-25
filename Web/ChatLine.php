@@ -7,8 +7,8 @@ if ($_SESSION['user_logged_in'] == 0) {
 require_once 'database_config.php';
 include 'group05_library.php';
 $user_id = $_SESSION['user_id'];
+$match_id = $_SESSION['match_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
-
 $lastCommunicationId = 0;
 //echo "session user " . $user_id;
 

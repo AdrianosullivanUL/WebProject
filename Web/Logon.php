@@ -5,7 +5,9 @@ session_start();
 $_SESSION['user_logged_in'] = 0;
 $_SESSION['is_administrator'] = 0;
 $message = '';
+echo 'pre post';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    echo 'post ';
     $logon = 0;
     // check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "ForgotPassword") { // Call Edit Profile
@@ -14,9 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if ($_POST['btnAction'] == "Logon") { // Call Edit Profile
+        echo 'logon';
         $email = $_POST['email'];
         $password = $_POST['password'];
-        $sql = "select * from user_profile where trim(email) = trim('" . $email . "') and password_hash = sha2('" . $password . "',256);";
+        $sql = "select * from user_profile where LOWER(trim(email)) = trim('" . strtolower($email) . "') and password_hash = sha2('" . $password . "',256);";
         echo $sql;
         if ($result = mysqli_query($db_connection, $sql)) {
             if (mysqli_num_rows($result) > 0) {
@@ -28,9 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                 }
             }
+            echo "logon" . $logon;
             if ($logon == 1) {
-                $_SESSION['user_logged_in'] = 1;
-                header("Location: MeetingSpace.php");
+                echo "is admin" . $_SESSION['is_administrator'];
+                if ($_SESSION['is_administrator'] == 1) {
+                    header("Location: AdminScreen.php");
+                } else {
+                    $_SESSION['user_logged_in'] = 1;
+                    header("Location: MeetingSpace.php");
+                }
                 exit();
             } else {
                 $message = 'Logon failed, please ensure you are entering the correct email address and password';
@@ -54,25 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <link rel="stylesheet" href="StyleSheet.css">
     </head>
     <body>
-            <div class="topnav">
-                <a class="active">LOG ON</a>
-            </div>        
+        <div class="topnav">
+            <a class="active">LOG ON</a>
+        </div>        
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-md-offset-3" >
 
-                    <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" AUTOCOMPLETE = "off" >
+                    <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
                         <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
-                         
-                       <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Log On Details</legend>
+
+                            <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Log On Details</legend>
 
                             <div class="form-group"></div>
-                                <label for="email">Email</label>
-                                <input type="text" class="form-control" name="email" placeholder="">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" name="password" placeholder="">
-                                <p><?php echo $message; ?></p>
-                                
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" name="email" placeholder="">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" placeholder="">
+                            <p><?php echo $message; ?></p>
+
 
                             <button name="btnAction" class="btn btn-primary" type="submit" value="Logon">Log on</button>
                             <button name="btnAction" class="btn btn-danger" type="submit" value="ForgotPassword">Forgot Password?</button>

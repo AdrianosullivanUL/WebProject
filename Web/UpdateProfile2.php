@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "delete from user_interests where user_id = " . $user_id . ";";
         // echo $sql;
         $updateResult = execute_sql_update($db_connection, $sql);
-       // mysql_free_result($result);
+        // mysql_free_result($result);
         foreach ($_POST['check_list'] as $key => $value) {
 
             $sql = "select count(1) cnt from user_interests where user_id = " . $user_id . " and interest_id = " . $key . ";";
@@ -103,7 +103,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
         while ($row = mysqli_fetch_array($result)) {
             $myBio = $row['my_bio'];
             $picture = base64_encode($row["picture"]);
-            $first_name = $row['first_name'];
+            $firstname = $row['first_name'];
             $surname = $row['surname'];
         }
     } else {
@@ -124,71 +124,21 @@ if ($result = mysqli_query($db_connection, $sql)) {
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
         </script>
-        <style>
-            body{color:#444;font:100%/1.4 sans-serif;}
-            body {
-                background-image:    url(backlit-bonding-casual-708392.jpg);
-                background-size:     cover;                      /* <------ */
-                background-repeat:   no-repeat;
-                background-position: center center;              /* optional, center the image */
-            }
-
-
-        </style>
-        <style>
-            body {
-                background-image:    url(images/backlit-bonding-casual-708392.jpg);
-                background-size:     cover;                      /* <------ */
-                background-repeat:   no-repeat;
-                background-position: center center;              /* optional, center the image */
-            }
-            /* Add a black background color to the top navigation */
-            .topnav {
-                background-color: #333;
-                overflow: hidden;
-            }
-
-            /* Style the links inside the navigation bar */
-            .topnav a {
-                float: left;
-                color: #F0F8FF;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                font-size: 17px;
-            }
-
-            /* Change the color of links on hover */
-            .topnav a:hover {
-                background-color: #ddd;
-                color: grey;
-            }
-
-            /* Add a color to the active/current link */
-            .topnav a.active {
-                background-color: #A9A9A9;
-                color: white;
-            }
-
-            /* Right-aligned section inside the top navigation */
-            .topnav-right {
-                float: right;
-            }
-            iv.first {
-                opacity: 0.1;
-                filter: alpha(opacity=10); 
-            }
-        </style>
+        <link rel="stylesheet" href="StyleSheet.css">
     </head>
     <body>
-        <!--taken out 18.32 <div class="container">  es-->
-
-
         <div class="container-fluid">
+            <div class="topnav">
+                <a class="active">UPDATE PROFILE 2</a>
+                <a href="MeetingSpace.php" title="Meeting Space">
+                    <?php echo $firstname . " " . $surname ?>
 
-
-
-
+                </a>
+                <div class="topnav-right">
+                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Delete Profile</a>
+                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
+                </div>
+            </div>
 
             <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data">
                 <? echo $message; ?>
@@ -200,17 +150,17 @@ if ($result = mysqli_query($db_connection, $sql)) {
                         </br>
                         <div class="container border border-primary rounded bg-light text-dark col-sm-6">
                             <div class="form-group">
-<?php
-if (strlen($picture) > 0) {
-    //echo ("Current photo");
-    echo '<img name = "pictureInput" class="portrait rounded-circle" src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
-} else {
-    // echo ("No photo uploaded");
-    echo ("<img class='portrait rounded-circle' src='camera-photo-7.png'/><i></i>'");
-}
+                                <?php
+                                if (strlen($picture) > 0) {
+                                    //echo ("Current photo");
+                                    echo '<img name = "pictureInput" class="portrait rounded-circle" height="200" width="200" src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
+                                } else {
+                                    // echo ("No photo uploaded");
+                                    echo ("<img class='portrait rounded-circle' height='200' width='200' src='camera-photo-7.png'/><i></i>");
+                                }
 //        echo ("after photo shoot");
-echo ("<figcaption>" . $first_name . " " . $first_name . "</figcaption>");
-?>
+                                echo ("<figcaption>" . $first_name . " " . $first_name . "</figcaption>");
+                                ?>
 
 
                             </div>
@@ -239,32 +189,30 @@ echo ("<figcaption>" . $first_name . " " . $first_name . "</figcaption>");
                             <h3>Hobbies</h3>
 
                         </div>
-<?php
+                        <?php
 // Get user Interests
 // ------------------
-$sql = "  SELECT  ud1.id, ud1.description , ui1.user_id "
-        . " FROM interests ud1 "
-        . " left join user_interests ui1 on ui1.interest_id = ud1.id "
-        . " where ui1.user_id is null or ui1.user_id=" . $user_id . "; ";
+                        $sql = "  SELECT ud1.id, ud1.description , ui1.user_id FROM interests ud1 "
+                                . " left join (select * from user_interests where user_id = ". $user_id .") ui1 on ui1.interest_id = ud1.id ";
 
 //echo ("sql" . $sql);
-$result = execute_sql_query($db_connection, $sql);
-if ($result == null) {
-    $message = "ERROR: No interests found " . $user_id;
-} else {
-    $checkBoxNumber = 0;
-    while ($row = mysqli_fetch_array($result)) {
-        if ($row['user_id'] != null)
-            $isChecked = "checked";
-        else
-            $isChecked = "";
-        echo "<div class='checkbox'>";
-        echo "    <p align='middle>'";
-        echo "        <label><input type='checkbox' name='check_list[" . $row['id'] . "]' " . $isChecked . "  value=''>" . $row['description'] . "</label>";
-        echo "</div>";
-    }
-}
-?>
+                        $result = execute_sql_query($db_connection, $sql);
+                        if ($result == null) {
+                            $message = "ERROR: No interests found " . $user_id;
+                        } else {
+                            $checkBoxNumber = 0;
+                            while ($row = mysqli_fetch_array($result)) {
+                                if ($row['user_id'] != null)
+                                    $isChecked = "checked";
+                                else
+                                    $isChecked = "";
+                                echo "<div class='checkbox'>";
+                                echo "    <p align='middle>'";
+                                echo "        <label><input type='checkbox' name='check_list[" . $row['id'] . "]' " . $isChecked . "  value=''>" . $row['description'] . "</label>";
+                                echo "</div>";
+                            }
+                        }
+                        ?>
                         <p align = "right">
                             <button class="btn btn-primary" name="btnAction" type="submit" value="Save">Save</button>
                         </p>
