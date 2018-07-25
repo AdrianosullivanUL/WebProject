@@ -216,7 +216,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         Chatting With Section 
                                         ---------------------  -->
                                         <div class="col-xs-12 col-sm-12 col-lg-12" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
-                                            <?php if (strlen($message) > 0) echo "<p><font color='red'>" . $message . "</font></p>" ?>
+                                            <?php
+                                            if (strlen($message) > 0) {
+                                                echo "<div class='alert alert-danger'>";
+                                                echo "<p>" . $message . "</p>";
+                                                echo "</div>";
+                                            }
+                                            ?>
                                             <h3>You are Chatting with: </h3>
                                             <div class="container col-xs-12 col-sm-12 col-lg-12" style="background-color:white; opacity: 0.9;">
 
