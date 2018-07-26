@@ -5,42 +5,46 @@ session_start();
 $_SESSION['user_logged_in'] = 0;
 $_SESSION['is_administrator'] = 0;
 $message = '';
-echo 'pre post';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    echo 'post ';
     $logon = 0;
     // check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "ForgotPassword") { // Call Edit Profile
         header("Location: PasswordReset.php");
         exit();
     }
+        if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
+        header("Location: index.php");
+        exit();
+    }
 
     if ($_POST['btnAction'] == "Logon") { // Call Edit Profile
-        echo 'logon';
         $email = $_POST['email'];
         $password = $_POST['password'];
+        $isAdmin = 0;
         $sql = "select * from user_profile where LOWER(trim(email)) = trim('" . strtolower($email) . "') and password_hash = sha2('" . $password . "',256);";
-        echo $sql;
+        //echo $sql;
         if ($result = mysqli_query($db_connection, $sql)) {
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_array($result)) {
                     $logon = 1;
                     $_SESSION['user_id'] = $row['id'];
                     if ($row['is_administrator'] == 1) {
-                        $_SESSION['is_administrator'] = 1;
+                        $isAdmin = 1;
                     }
                 }
             }
-            echo "logon" . $logon;
             if ($logon == 1) {
-                echo "is admin" . $_SESSION['is_administrator'];
-                if ($_SESSION['is_administrator'] == 1) {
+                echo "is admin" . $isAdmin;
+                if ($isAdmin == 1) {
+                    $_SESSION['user_logged_in'] = 1;
+                    $_SESSION['is_administrator'] = $isAdmin;
                     header("Location: AdminScreen.php");
+                    exit();
                 } else {
                     $_SESSION['user_logged_in'] = 1;
                     header("Location: MeetingSpace.php");
+                    exit();
                 }
-                exit();
             } else {
                 $message = 'Logon failed, please ensure you are entering the correct email address and password';
             }
@@ -53,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Chance Dating</title>
+        <title>Logon</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
@@ -80,11 +84,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <input type="text" class="form-control" name="email" placeholder="">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" name="password" placeholder="">
-                            <p><?php echo $message; ?></p>
+                            <?php
+                            if (strlen($message) > 0) {
+                                echo "<div class='alert alert-danger'>";
+                                echo "<p>" . $message . "</p>";
+                                echo "</div>";
+                            }
+                            ?>
 
 
                             <button name="btnAction" class="btn btn-primary" type="submit" value="Logon">Log on</button>
                             <button name="btnAction" class="btn btn-danger" type="submit" value="ForgotPassword">Forgot Password?</button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
 
                         </fieldset> 
 

@@ -29,49 +29,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
+        <link rel="stylesheet" href="StyleSheet.css">
         <style>
-            body {
-                background-image:    url(backlit-bonding-casual-708392.jpg);
-                background-size:     cover;                      /* <------ */
-                background-repeat:   no-repeat;
-                background-position: center center;              /* optional, center the image */
-            }
-            /* Add a black background color to the top navigation */
-            .topnav {
-                background-color: #333;
-                overflow: hidden;
-            }
+
+            //body {
+            //  background-image:    url(backlit-bonding-casual-708392.jpg);
+            //background-size:     cover;                      /* <------ */
+            //background-repeat:   no-repeat;
+            //background-position: center center;              /* optional, center the image */
+            //}
+            ///* Add a black background color to the top navigation */
+            //.topnav {
+            //  background-color: #333;
+            //overflow: hidden;
+            //}
 
             /* Style the links inside the navigation bar */
-            .topnav a {
-                float: left;
-                color: #F0F8FF;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                font-size: 17px;
-            }
+            //.topnav a {
+            //  float: left;
+            // color: #F0F8FF;
+            // text-align: center;
+            // padding: 14px 16px;
+            // text-decoration: none;
+            //font-size: 17px;
+            //}
 
             /* Change the color of links on hover */
-            .topnav a:hover {
-                background-color: #ddd;
-                color: grey;
-            }
+            //.topnav a:hover {
+            //  background-color: #ddd;
+            // color: grey;
+            //}
 
             /* Add a color to the active/current link */
-            .topnav a.active {
-                background-color: #A9A9A9;
-                color: white;
-            }
-
-            /* Right-aligned section inside the top navigation */
-            .topnav-right {
-                float: right;
-            }
-            iv.first {
-                opacity: 0.1;
-                filter: alpha(opacity=10); 
-            }
+            /* .topnav a.active {
+                 background-color: #A9A9A9;
+                 color: white;
+             }
+ 
+             /* Right-aligned section inside the top navigation */
+            /* .topnav-right {
+                 float: right;
+             }
+             iv.first {
+                 opacity: 0.1;
+                 filter: alpha(opacity=10); 
+             }*/
         </style>
     </head>
     <body>
@@ -84,99 +86,108 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a href="logout.php">Log Out</a>
                 </div>
             </div>
-            <div class="container-fluid">
-                <div class ="row">
-                    <div class="col-xs-12 col-sm-12 col-lg-12 col-xs-12 " style="border-style: solid;border-color: silver;background-color:transparent; opacity: 0.0;">
-                    </div> 
-                </div>
-            </div>
-            <div class ="row">
-                <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
-                    <p> " "</p>
-                </div>
-                <div class="col-xs-6 col-sm-4" style="border-style: solid;border-color:silver;background-color:whitesmoke; opacity: 1;">
-                    <?php
-                    $sql = "SELECT * FROM user_profile where id =" . $matching_user_id . ";";
-                    $mibio = "";
-                    $picture = "";
-                    $first_name = "";
-                    $surname = "";
-                    if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                $mybio = $row['my_bio'];
-                                if (strlen($row['picture']) > 0) {
-                                    $picture = base64_encode($row['picture']);
-                                } else {
-                                    
+            <div class="col-md-10 col-md-offset-2" >
+                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
+                    <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
+                        <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">View Your Selected Match</legend>
+                        <div class="container-fluid">
+                            <div class ="row">
+                                <div class="col-xs-12 col-sm-12 col-lg-12 col-xs-12 " style="border-style: solid;border-color: silver;background-color:transparent; opacity: 0.0;">
+                                </div> 
+                            </div>
+                        </div>
+                        <div class ="row">
+                            <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
+                                <p> " "</p>
+                            </div>
+                            <div class="col-xs-6 col-sm-4" style="border-style:solid; border-color: silver; background-color:white; opacity: 1;">
+                                <?php
+                                $sql = "SELECT * FROM user_profile where id =" . $matching_user_id . ";";
+                                $mibio = "";
+                                $picture = "";
+                                $first_name = "";
+                                $surname = "";
+                                if ($result = mysqli_query($db_connection, $sql)) {
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            $mybio = $row['my_bio'];
+                                            if (strlen($row['picture']) > 0) {
+                                                $picture = base64_encode($row['picture']);
+                                            } else {
+                                                
+                                            }
+                                            $first_name = $row['first_name'];
+                                            $surname = $row['surname'];
+                                        }
+                                    }
                                 }
-                                $first_name = $row['first_name'];
-                                $surname = $row['surname'];
-                            }
-                        }
-                    }
-                    ?>
-                    <h4><?php echo $first_name . " " . $surname ?> </h4>
-                    <!-- Display Image -->
-                    <?php
-                    if (strlen($picture) > 0) {
-                        echo '<img class="portrait"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
-                    } else {
-                        echo ("<img class='portrait' src='camera-photo-7.png'/><i></i>'");
-                    }
-                    ?>
-                </div>
-                <div class="col-xs-6 col-sm-6" style="background-color:lavender; opacity: 0.9;">
-                    <h3><?php echo $first_name ?>'s bio</h3>
-                    <h4><?php echo $mybio ?></h4>
+                                ?>
+                                <h4><?php echo $first_name . " " . $surname ?> </h4>
+                                <!-- Display Image -->
+                                <?php
+                                if (strlen($picture) > 0) {
+                                    echo '<img class="portrait"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
+                                } else {
+                                    echo ("<img class='portrait' src='camera-photo-7.png'/><i></i>'");
+                                }
+                                ?>
+                            </div>
+                            <div class="col-xs-6 col-sm-6" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
+                                <h3><?php echo $first_name ?>'s bio</h3>
+                                <h4><?php echo $mybio ?></h4>
 
-                </div>
-            </div>
-            <div class ="row">
-                <div class="col-sm-12" style="background-color:transparent; opacity: 0.0;">
+                            </div>
+                        </div>
+                        <div class ="row">
+                            <div class="col-sm-12" style="background-color:transparent; opacity: 0.0;">
 
-                </div>
-            </div>
+                            </div>
+                        </div>
 
-            <div class ="row">
-                <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
-                    <p> " "/p>
-                </div>
-                <div class ="col-xs-4 col-sm-4"style="background-color:lavender; opacity: 0.9;">
-                    <?php
-                    echo "<h3> $first_name's Interests </h3> ";
-                    $sql = "SELECT description
+                        <div class ="row">
+                            <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
+                                <p>     </p>
+                                <p>     </p>    
+                            </div>
+                            <div class ="col-xs-4 col-sm-4"style="border-style:solid; border-color: silver;background-color:white;; opacity: 0.9;">
+                                <?php
+                                echo "<h3> $first_name's Interests </h3> ";
+                                $sql = "SELECT description
                        FROM interests
                        LEFT JOIN user_interests ON interest_id = interests.id
                        where user_id = " . $matching_user_id . ";";
-                    $interest = "";
-                    if ($result = mysqli_query($db_connection, $sql)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                $description = $row['description'];
-                                echo("<h4>. $description ");
-                            }
-                        }
-                    }
-                    ?>
-                </div>
-                <div class="col-xs-6 col-sm-6"style="background-color:whitesmoke; opacity: 0.9;text-align:right">
+                                $interest = "";
+                                if ($result = mysqli_query($db_connection, $sql)) {
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            $description = $row['description'];
+                                            echo("<h4>. $description ");
+                                        }
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <div class="col-xs-6 col-sm-6"style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;text-align:right">
 
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
-                    <button name="btnAction" class="btn btn-info" type="submit" value="View">View</button>
-                    <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
-                    <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
-                    <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
-                </div>
 
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
+                                <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
+                                <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
+                                <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-8 col-sm-8 col-lg-12"style="background-color:lavender; opacity: 0.8;text-align:right">
+
+
+
+                        </div>
+
+                    </fieldset>
 
 
             </div>

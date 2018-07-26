@@ -18,6 +18,9 @@ $preferred_gender_name = "";
 $message = "";
 $email = "";
 $relationship_type = "";
+$description = "";
+$from_age="";
+$to_age="";
 
 
 
@@ -25,58 +28,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $preferred_gender_name = $_POST['preferredGenderInput'];
     $city = $_POST['selectedCity'];
     $relationship_type = $_POST['selectedRelationship'];
+    $description = $_POST['selectedHobby'];
+    $from_age = $_POST['fromAge'];
+    $to_age = $_POST['toAge'];
     // check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "Cancel") { // cancel the update
         echo "Cancel pressed";
         header("Location: meetingspace.php");
         exit();
     }
-}else {
-$sql = "SELECT up.*, c.city, r.relationship_type, g1.gender_name, g2.gender_name as preferred_gender_name "
-        . " FROM user_profile up   "
-        . "LEFT JOIN city c ON c.id = up.city_id   "
-        . "LEFT JOIN city r ON r.id = up.relationship_type_id   "
-        . "LEFT JOIN gender g1 ON g1.id = up.gender_preference_id  "
-        . "left join gender g2 on g2.id = up.gender_id "
-        . "where up.id = '" . $user_id . "'";
-echo $sql;
+} else {
+    $sql = "SELECT up.*, c.city, r.relationship_type, g1.gender_name, g2.gender_name as preferred_gender_name "
+            . " FROM user_profile up   "
+            . "LEFT JOIN city c ON c.id = up.city_id   "
+            . "LEFT JOIN city r ON r.id = up.relationship_type_id   "
+            . "LEFT JOIN gender g1 ON g1.id = up.gender_preference_id  "
+            . "left join gender g2 on g2.id = up.gender_id "
+            . "left join user_interests ui on ui.user_id = up.id "
+            . "left join interest i on i.id = ui_interests.id"
+            . "where up.id = '" . $user_id . "'";
+//echo $sql;
 // 
-if ($result = mysqli_query($db_connection, $sql)) {
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_array($result)) {
-            $city = $row['city'];
-            $first_name = $row['first_name'];
-            $surname = $row['surname'];
-            $gender_name = $row['gender_name'];
-            $preferred_gender_name = $row['preferred_gender_name'];
-            echo "city " . $city;
-            //echo "pref " . $preferred_gender_name;
-            $email = $row['email'];
-            $relationshipTypeId = $row['relationship_type_id'];
-            $relationship_type = $row['relationship_type'];
-            echo "relationship " . $relationship_type;
-
-            //if ($relationshipTypeId == 1) {
-               // $relationshipTypeLove = true;
-            //}
-            //if ($relationshipTypeId == 2) {
-                //$relationshipTypeCasual = true;
-            //}
-            //if ($relationshipTypeId == 3) {
-               // $relationshipTypeFriendship = true;
-            //}
-            //if ($relationshipTypeId == 4) {
-               // $relationshipTypeRelationship = true;
-            //}//
+    if ($result = mysqli_query($db_connection, $sql)) {
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_array($result)) {
+                $city = $row['city'];
+                $first_name = $row['first_name'];
+                $surname = $row['surname'];
+                $gender_name = $row['gender_name'];
+                $preferred_gender_name = $row['preferred_gender_name'];
+                echo "city " . $city;
+                //echo "pref " . $preferred_gender_name;
+                $email = $row['email'];
+                $relationshipTypeId = $row['relationship_type_id'];
+                $relationship_type = $row['relationship_type'];
+                $description = $row['description'];
+                $from_age = $row['from_age'];
+                $to_age = $row['to_age'];
+                
+                
+               // echo "relationship " . $relationship_type;
+                //echo "hobby " . $description;
+            }
+        } else {
+            $message = "Cannot find user profile";
         }
-    } else {
-        $message = "Cannot find user profile";
     }
-}
 //echo "I Am here" . $preferred_gender_name . " " . $city ;
-
-
-
 }
 ?>
 <!DOCTYPE html>
@@ -296,7 +294,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
                                     Gender Preference <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
-
+                                        <option ></option>";
                                         <?php
                                         $sql = "select gender_name  from gender order by gender_name";
                                         if ($result = mysqli_query($db_connection, $sql)) {
@@ -319,9 +317,10 @@ if ($result = mysqli_query($db_connection, $sql)) {
                                     Preferred Location <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select name ="selectedCity" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                                        <option ></option>";
                                         <?php
-                                        // get the user_profile record here
-                                        // 
+// get the user_profile record here
+// 
 
                                         $sql = "select city from city";
                                         if ($result = mysqli_query($db_connection, $sql)) {
@@ -336,201 +335,203 @@ if ($result = mysqli_query($db_connection, $sql)) {
                                             }
                                         }
                                         ?>
-                                        
+
                                     </select>
                                 </div>
                             </div>
-
+                            <!--Relationship Type drop down-->
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
                                     Relationship Type <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select name= "selectedRelationship"class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                                        <option ></option>";
                                         <?php
                                         $sql = "select relationship_type from relationship_type";
                                         if ($result = mysqli_query($db_connection, $sql)) {
                                             if (mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_array($result)) {
-                                                     if ($relationship_type == $row['relationship_type'])
+                                                    if ($relationship_type == $row['relationship_type'])
                                                         echo "<option selected='selected'>" . $row['relationship_type'] . "</option>";
                                                     else
                                                         echo "<option>" . $row['relationship_type'] . "</option>";
                                                 }
                                             }
                                         }
-                                        
-                                        
                                         ?>
 
                                     </select>
                                 </div>
                             </div>
+                            <!--Hobby Drop Down-->
 
-
-                            <div class="form-group">
-                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                                <div class="col-sm-3 col-md-3 col-lg-4 col-xs-8 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
-                                    Interests <span style="color: red">*</span> :</div>
-
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-10 mobileLabel"></div>
-                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                                <div class="col-sm-11 col-md-11 col-lg-11 col-xs-9 mobileLabel">
-                                    <div class="checkbox" style=" font-size: 15pt;width: auto;">
-
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 1">Music
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 2">Sport
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 3">Traveling
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 4">Sailing
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 5">Food
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 6">Work
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 7">Family
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 8">Cooking
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" v<input name="check_list[]" value="value 9">Gym
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" <input name="check_list[]" value="value 10">Reading
-                                        </label>
-
-
-                                    </div>
-
-                                </div>
-                            </div>
-                            <?php
-                            if (!empty($_POST['check_list'])) {
-                                foreach ($_POST['check_list'] as $check) {
-                                    echo $check;
-                                    //echoes the value set in the HTML form for each checked checkbox.
-                                    //so, if I were to check 1, 3, and 5 it would echo value 1, value 3, value 5.
-                                    //in your case, it would echo whatever $row['Report ID'] is equivalent to.
-                                }
-                            }
-                            ?>
-
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
-
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
-                                    Seeking Age Profile <span style="color: red">*</span> :</div>
+                                    Interests <span style="color: red">*</span> :</div>
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
-                                    <input type="range" min="18" max="100" value="18" step="2" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
-                                    <datalist id="tickmarks">
-                                        <option value="18 to 100">18</option>
-                                        <option>20</option>
-                                        <option>40</option>
-                                        <option>60</option>
-                                        <option>80</option>
-                                        <option>100</option>
-                                    </datalist>
-                                    <output id="output" for="rangeInput">18</output> <!-- Just to display selected Age -->
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
-
-
-
-
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
-                            <div class="form-group">
-                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                                <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
-                                    <button class="btn btn-primary" id="valuser" type="submit" name="btnAction" name="btnAction" value="Submit" class="btn btn-success">
-                                        Submit</button>
-                                </div>
-
-                                <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                            </div>
-                            <div class="form-group" style="text-align:center;font-weight:bold">
-
-                        
-                <div class="row">
-                    <div class="col-md-12 col-md-offset-0.5" >
-                                                        <?php
-                                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                                    // check the button selected (these are at the end of this form
-                                    if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
-                                      // Sql to pull data from other users and match selected gender selectedcity and relationshiptyoe
-                                                             
-                                            $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city, r.relationship_type FROM user_profile up"
-                                                    . " join gender g1 on g1.id = up.gender_id "
-                                                    . " join gender g2 on g2.id = up.gender_preference_id  "
-                                                    . " join city c on c.id = up.city_id "
-                                                    . " join relationship_type r on r.id=up.relationship_type_id"
-                                                    . " where"
-                                                    . " gender_id in (select id from gender where gender_name = '" . $preferred_gender_name . "')"
-                                                    . " And"
-                                                   . " city_id in (select id from city where city = '" . $city . "')"
-                                                   . " And "
-                                                   . " relationship_type_id in (select id from relationship_type where relationship_type = '" . $relationship_type . "')";
-                                                    
-                                            //echo $sql;
-                                            
-                                            //echo $sql; 
-                                            // need to add other columns here
-                                            //            . "where id = " . $user_id . ";";
-                                            $pictureIndex = 0;
-                                            $result = execute_sql_query($db_connection, $sql);
-                                            if ($result == null) {
-                                                echo "<br><p>No matches found</p>";
-                                            } else {
+                                    <select name= "selectedHobby"class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                                        <option ></option>";
+                                        <?php
+                                        $sql = "select description from interests";
+                                        if ($result = mysqli_query($db_connection, $sql)) {
+                                            if (mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_array($result)) {
-                                                    $pictureIndex++;
-                                                    //echo ("<li>");
-                                                    // echo "<div class='container>";
-                                                    echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['id'] . "'/>";
-                                                    echo "        <label for='radio" . $pictureIndex . "'>";
-                                                    echo "        <label >" . $row['first_name'] . " " . $row['surname'] . "</label>";
-                                                    echo "<br>";
-                                                    if (strlen($row['picture']) > 0)
-                                                        echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
+                                                    if ($description == $row['description'])
+                                                        echo "<option selected='selected'>" . $row['rdescrition'] . "</option>";
                                                     else
-                                                        echo ("<img class='selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
-                                                    echo "</label>";
+                                                        echo "<option>" . $row['description'] . "</option>";
                                                 }
                                             }
+                                        }
+                                        ?> 
+                                    </select>
+                                </div>
 
-
-                                            if ($result == null) {
-                                                $message = "ERROR: Cannot match entry " . $user_id;
-                                            } else {
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    echo $row['first_name'] . " " . $row['city'] . " " . $row['gender_name'] . " " . $row['preferred_gender_name'] . "<br>";
-                                                    if (strlen($row['picture']) > 0)
-                                                        echo "<img class='rounded-circle'  height='32' width='32' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
-                                                    else
-                                                        echo ("<img height='32' width='32' src='../images/camera-photo-7.png'/><i></i>'");
-                                                }
-                                            }
-                                        
+                                <?php
+                                if (!empty($_POST['check_list'])) {
+                                    foreach ($_POST['check_list'] as $check) {
+                                        echo $check;
+                                        //echoes the value set in the HTML form for each checked checkbox.
+                                        //so, if I were to check 1, 3, and 5 it would echo value 1, value 3, value 5.
+                                        //in your case, it would echo whatever $row['Report ID'] is equivalent to.
                                     }
                                 }
                                 ?>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div<!-- and up.id in (select user_id from user_interests where interest_id 
-                        //in (select id from interests where description in ('Music','Sport','Traveling')));-->
-            </div>
 
-    </body>
-</html>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+                                <div class="form-group">
+                                    <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                                    <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
+                                        Seeking Age Profile <span style="color: red">*</span> :</div>
+                                    <div class="col-sm-2 col-md-2 col-lg-2 col-xs-8 mobileLabel">
+                                        <input name= "fromAge" type="range" min="18" max="100" value="18" step="2" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
+                                        <datalist id="tickmarks">
+                                            <option value="18 to 100">18</option>
+                                            <option>20</option>
+                                            <option>40</option>
+                                            <option>60</option>
+                                            <option>80</option>
+                                            <option>100</option>
+                                        </datalist>
+                                        <output id="output" for="rangeInput"> Min Age : 18</output> <!-- Just to display selected Age -->
+                                    </div>
+                                    <div class="col-sm-2 col-md-2 col-lg-2 col-xs-8 mobileLabel">
+                                        <input name= "toAge" type="range" min="18" max="100" value="100" step="2" list="tickmarks" id="rangeInput2" oninput="output2.value = rangeInput2.value">
+                                        <datalist id="tickmarks">
+                                            <option value="18 to 100">100</option>
+                                            <option>20</option>
+                                            <option>40</option>
+                                            <option>60</option>
+                                            <option>80</option>
+                                            <option>100</option>
+                                        </datalist>
+                                        <output id="output2" for="rangeInput2"> Max Age : 100</output> <!-- Just to display selected Age -->
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+
+
+
+
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+                                <div class="form-group">
+                                    <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                                    <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
+                                        <button class="btn btn-primary" id="valuser" type="submit" name="btnAction" name="btnAction" value="Submit" class="btn btn-success">
+                                            Submit</button>
+                                    </div>
+
+                                    <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                                </div>
+                                <div class="form-group" style="text-align:center;font-weight:bold">
+
+
+                                    <div class="row">
+                                        <div class="col-md-12 col-md-offset-0.5" >
+                                            <?php
+                                            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                                                // check the button selected (these are at the end of this form
+                                                if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
+                                                    // Sql to pull data from other users and match selected gender selectedcity and relationshiptyoe
+                                                    $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city, i.description, r.relationship_type FROM user_profile up"
+                                                            . " left join gender g1 on g1.id = up.gender_id "
+                                                            . " left join gender g2 on g2.id = up.gender_preference_id  "
+                                                            . " left join city c on c.id = up.city_id "
+                                                            . " left join relationship_type r on r.id=up.relationship_type_id"
+                                                            . " left join user_interests ui on ui.user_id = up.id "
+                                                            . " left join interests i on i.id = ui.interest_id"
+                                                            . " where is_administrator = FALSE AND black_listed_user = false ";
+                                                    if (strlen($preferred_gender_name) > 0)
+                                                        $sql = $sql . " and gender_id in (select id from gender where gender_name = '" . $preferred_gender_name . "')"
+                                                                . " ";
+                                                    if (strlen($city) > 0)
+                                                        $sql = $sql . " And city_id in (select id from city where city = '" . $city . "')";
+
+                                                    if (strlen($relationship_type) > 0)
+                                                        $sql = $sql . " and relationship_type_id in (select id from relationship_type where relationship_type = '" . $relationship_type . "')";
+                                                    if (strlen($description) > 0)
+                                                        $sql = $sql . " And ui.interest_id = (select id from interests where description = '" . $description . "')";
+                                                    if (strlen($from_age) > 0)
+                                                        $sql = $sql . " And up.id in (select id from user_profile where from_age > '" . $from_age . "')";
+                                                    if (strlen($to_age) > 0)
+                                                        $sql = $sql . " And up.id in (select id from user_profile where to_age < '" . $to_age . "')";
+                                                    
+                                                    
+
+                                                    //echo $sql;
+
+                                                    //echo $sql; 
+                                                    // need to add other columns here
+                                                    //            . "where id = " . $user_id . ";";
+                                                    $pictureIndex = 0;
+                                                    $result = execute_sql_query($db_connection, $sql);
+                                                    if ($result == null) {
+                                                        echo "<br><p>No matches found</p>";
+                                                    } else {
+                                                        while ($row = mysqli_fetch_array($result)) {
+                                                            $pictureIndex++;
+                                                            //echo ("<li>");
+                                                            // echo "<div class='container>";
+                                                            echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['id'] . "'/>";
+                                                            echo "        <label for='radio" . $pictureIndex . "'>";
+                                                            echo "        <label >" . $row['first_name'] . " " . $row['surname'] . "</label>";
+                                                            echo "<br>";
+                                                            if (strlen($row['picture']) > 0)
+                                                                echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
+                                                            else
+                                                                echo ("<img class='selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>");
+                                                            echo "</label>";
+                                                        }
+                                                    }
+
+
+                                                    if ($result == null) {
+                                                        $message = "ERROR: Cannot match entry " . $user_id;
+                                                    } else {
+                                                        while ($row = mysqli_fetch_array($result)) {
+                                                            echo $row['first_name'] . " " . $row['city'] . " " . $row['gender_name'] . " " . $row['preferred_gender_name'] . "<br>";
+                                                            if (strlen($row['picture']) > 0)
+                                                                echo "<img class='rounded-circle'  height='32' width='32' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
+                                                            else
+                                                                echo ("<img height='32' width='32' src='../images/camera-photo-7.png'/><i></i>");
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                            </fieldset>
+                                            </form>
+                                        </div>
+                                    </div<!-- and up.id in (select user_id from user_interests where interest_id 
+                                            //in (select id from interests where description in ('Music','Sport','Traveling')));-->
+                                </div>
+
+                                </body>
+                                </html>

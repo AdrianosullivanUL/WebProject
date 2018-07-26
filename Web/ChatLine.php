@@ -6,37 +6,97 @@ if ($_SESSION['user_logged_in'] == 0) {
 }
 require_once 'database_config.php';
 include 'group05_library.php';
+$message = "";
+$msg = "";
 $user_id = $_SESSION['user_id'];
 $match_id = $_SESSION['match_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
-$lastCommunicationId = 0;
-//echo "session user " . $user_id;
 
+$lastCommunicationId = 0;
+$first_name = "";
+$surname = "";
+$sql = "SELECT first_name, surname FROM user_profile where id = " . $user_id . ";";
+//echo $sql;
+$result = execute_sql_query($db_connection, $sql);
+if ($result == null) {
+    echo "ERROR: Cannot find profile for user id " . $user_id;
+} else {
+    while ($row = mysqli_fetch_array($result)) {
+        $first_name = $row['first_name'];
+        $surname = $row['surname'];
+    }
+}
+$ChattingWith = "";
+$sql = "SELECT first_name, surname FROM user_profile where id = " . $matching_user_id . ";";
+//echo $sql;
+$result = execute_sql_query($db_connection, $sql);
+if ($result == null) {
+    echo "ERROR: Cannot find profile for user id " . $user_id;
+} else {
+    while ($row = mysqli_fetch_array($result)) {
+        $ChattingWith = $row['first_name'] . " " . $row['surname'];
+    }
+}
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    echo "I am a post";
+    if ($_POST['btnAction'] == "Send") { // 
+        $last_communication_id = $_SESSION['last_communication_id'];
+        $match_id = $_SESSION['match_id'];
+
+        $msg = $_POST['msg'];
+
+        $valid = true;
+        if (strlen($msg) > 140) {
+            $valid = false;
+            $message = "You cannot post a message longer than 140 characters";
+        }
+        if (strlen($msg) == 0) {
+            $valid = false;
+            $message = "You must enter a message";
+        }
+        if ($valid = true) {
+
+            $sql = "insert into user_communication(from_user_id, to_user_id, message, status_id, replying_to_communication_id, communication_datetime)"
+                    . " values('$user_id', '$matching_user_id', '$msg', '11', " . $last_communication_id . ", now())";
+            // echo $sql . "<br>";
+            $result = execute_sql_update($db_connection, $sql);
+
+            if ($last_communication_id == 0) {
+                $sql = "select max(id) maxid from communication_table";
+
+                if ($result = mysqli_query($db_connection, $sql)) {
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_array($result)) {
+                            $last_communication_id = $row['maxid'];
+                        }
+                    }
+                }
+                $sql = "update match_table set communication_id = " . $last_communication_id . " where id = " . $match_id;
+                //echo $sql . "<br>";
+                $result = execute_sql_update($db_connection, $sql);
+            }
+        }
+        //   echo $result;
+        //   header("Location: ChatLine.php");
+    }
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title>chatline</title>
+
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
+        <link rel="stylesheet" href="StyleSheet.css">
+
+
 
 
         <style>
-
-            body{color:#444;font:100%/1.4 sans-serif;}
-            body {
-                background-image:    url(backlit-bonding-casual-708392.jpg);
-                background-size:     cover;                      /* <------ */
-                background-repeat:   no-repeat;
-                background-position: center center;              /* optional, center the image */
-            }
             #main{
                 height: 455px;
                 background-color: white;
@@ -70,10 +130,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     </head>
     <body>
+        <div class="topnav">
+            <a class="active">CHAT LINE</a>
+            <a href="MeetingSpace.php" title="Meeting Space">
+                <?php echo $first_name . " " . $surname ?>
 
-
-        <div  class="col-sm-6 container border border-primary rounded bg-light text-dark" >
-            <h1>Chat Line</h1>
+            </a>
+            <div class="topnav-right">
+                <a href="UpdateProfile.php" title="Edit your User Profile"><img height="16" width="16"  src='/images/Edit.png'/>Edit Profile</a>
+                <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='/images/Find.png'/>Match Finder</a>
+                <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Remove Profile</a>
+                <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
+            </div>
         </div>
 
         <div col-sm-6 container border border-primary rounded bg-light text-dark>
@@ -90,53 +158,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo ("No matches found");
             }
             ?>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-3" >
+                        <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .15em .625em .15em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: .5em;background-color:lavender; opacity: .8;">
+                            <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Chatting With <?php echo $ChattingWith ?></legend>
+                            <div class="form-group"></div>
+                            <?php
+                            $result = get_communications_thread($db_connection, $user_id, $matching_user_id);
+                            if ($result == null)
+                                echo "no thread found";
+                            else {
+                                while ($row = mysqli_fetch_array($result)) {
+                                    //echo $row['from_user_id'] ." " . $user_id;
+                                    if ($row['from_user_id'] == $user_id)
+                                        echo "<div class='float-sm-left col-sm-6 container border border-primary rounded text-dark bg-success'>";
+                                    else
+                                        echo "<div class='float-sm-right col-sm-6 container border border-primary rounded text-dark bg-info'>";
+                                    echo  $row['communication_datetime'] . " ". $row['message'] . "<br>";
+                                    echo "</div>";
+                                    echo "<br>";
+                                    $lastCommunicationId = $row['id'];
+                                }
+                            }
+                            $_SESSION['last_communication_id'] = $lastCommunicationId;
+                            ?>
+                        </fieldset> 
+                        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-group" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >        
+                            <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
+                                <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Send Message</legend>                                
+                                <textarea name = "msg" placeholder = "Type to send message...."
+                                          class = "form-control"><?php echo $msg; ?></textarea><br>
+                                          <?php
+                                          if (strlen($message) > 0) {
+                                              echo "<div class='alert alert-danger'>";
+                                              echo "<p>" . $message . "</p>";
+                                              echo "</div>";
+                                          }
+                                          ?>                                          
+                                <button name="btnAction" class="btn btn-success" type="submit" value="Send"><img height="24" width="24"  title="Chat" src='/images/Send.png'/>Send</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
 
-
-
-
-            <h1 style=" background-color: #6495ed;color: white;"><?php echo $name ?>-online</h1>
-            <div class="output col-sm-6 container border border-primary rounded bg-light text-dark">
-
-                <?php
-                // force user id's just for testing:
-                // $user_id = 24;
-                // $matching_user_id = 15;
-                $result = get_communications_thread($db_connection, $user_id, $matching_user_id);
-                if ($result == null)
-                    echo "no thread found";
-                else {
-                    while ($row = mysqli_fetch_array($result)) {
-                        if ($row['from_user_id'] == $user_id)
-                            echo "<div class='float-sm-left col-sm-6 container border border-primary rounded text-dark bg-success'>";
-                        else
-                            echo "<div class='float-sm-right col-sm-6 container border border-primary rounded text-dark bg-info'>";
-
-                        echo $row['message'] . "<br>";
-                        echo "</div>";
-                        echo "<br>";
-                        $lastCommunicationId = $row['id'];
-                    }
-                }
-                $_SESSION['last_communication_id'] = $lastCommunicationId;
-                ?>
-
-
-            </div>
-            <div class="output col-sm-6 container border border-primary rounded bg-light text-dark">
-                <br>
-                <form method="post" action="Send.php">
-                    <textarea name="msg" placeholder="Type to send message...."
-                              class="form-control"></textarea><br>
-                    <input type="submit" value="Send">
-                </form>
-                <br>
-                <form action="Logout.php">
-
-                    <input stype="width: 100%;background-color: #6495ed;color:
-                           white;font-size: 20px;" type="submit" value="Logout">
-                </form>
-            </div>
+            </div>            
         </div>
-
     </body>
 </html> 
