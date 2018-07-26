@@ -19,12 +19,101 @@ $message = "";
 $email = "";
 $relationship_type = "";
 $description = "";
-$from_age="";
-$to_age="";
+$from_age = "";
+$to_age = "";
 
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    if ($_POST['btnAction'] == "Like" || $_POST['btnAction'] == "Maybe" || $_POST['btnAction'] == "Goodbye" || $_POST['btnAction'] == "Report" || $_POST['btnAction'] == "View") { // Get Match view row for subsequent buttons
+        $_SESSION['user_id'] = $user_id;
+        if (isset($_POST['selected_user']))
+            $matchId = $_POST['selected_user'];
+        else
+            $matchId = 0;
+        $sql = 'select * from matches_view where match_id = ' . $matchId . ";";
+        $result = execute_sql_query($db_connection, $sql);
+        if ($result == null) {
+            echo "ERROR: Cannot find match entry to update status with, id =" . $matchId;
+        } else {
+            while ($row = mysqli_fetch_array($result)) {
+                if ($row['match_user_id_1'] == $user_id)
+                    $_SESSION['matching_user_id'] = $row['match_user_id_2'];
+                else
+                    $_SESSION['matching_user_id'] = $row['match_user_id_1'];
+                $matchId = $row['match_id'];
+                if ($_POST['btnAction'] == "View") { // View Profile
+                    header("Location: ViewMatchProfile.php");
+                    exit();
+                }
+                // Like Button
+                // -----------
+                if ($_POST['btnAction'] == "Like") { // Update Status
+                    $newStatus = "";
+                    if ($row['match_user_id_1'] == $user_id) {
+                        $updateUser1or2 = 1;
+                        echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
+                        if ($row['user_profile_2_match_status'] == 'Like') {
+                            // both users must like each other before chatting
+                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
+                            $newStatus = "Chatting";
+                        } else
+                            $newStatus = "Like";
+                    } else {
+                        $updateUser1or2 = 2;
+                        echo "user_profile_1_match_status" . $row['user_profile_2_match_status'];
+                        if ($row['user_profile_1_match_status'] == 'Like') {
+                            
+                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 1);
+// both users must like each other before chatting
+                            $newStatus = "Chatting";
+                        } else
+                            $newStatus = "Like";
+                    }
+                    $updateResult = update_match_status($db_connection, $matchId, $newStatus, $updateUser1or2);
+                    // $updateResult = update_match_status($db_connection, $matchId, $newStatus, 2);
+                    //echo "Update result " . $updateResult;
+                    //  $message = "Failed to update user status for match id " . $matchId; 
+                }
+                // Maybe Button
+                // -----------
+                if ($_POST['btnAction'] == "Maybe") { // Update Status
+                    if ($row['match_user_id_1'] == $user_id)
+                        $updateUser1or2 = 1;
+                    else
+                        $updateUser1or2 = 2;
+                    $updateResult = update_match_status($db_connection, $matchId, 'Maybe', $updateUser1or2);
+                    //echo "Update result " . $updateResult;
+                }
+                // Goodbye Button
+                // --------------
+                if ($_POST['btnAction'] == "Goodbye") { // Update Status
+                    if ($row['match_user_id_1'] == $user_id)
+                        $updateUser1or2 = 1;
+                    else
+                        $updateUser1or2 = 2;
+                    $updateResult = update_match_status($db_connection, $matchId, 'Goodbye', $updateUser1or2);
+                }
+                // Report Button
+                // -------------
+                if ($_POST['btnAction'] == "Report") { // Update Status
+                    if ($row['match_user_id_1'] == $user_id)
+                        $updateUser1or2 = 1;
+                    else
+                        $updateUser1or2 = 2;
+                    $updateResult = update_match_status($db_connection, $matchId, 'Report', $updateUser1or2);
+                }
+            }
+        }
+//   if ($_POST['btnAction'] == "Goodbye") { // Update Status
+//       $matchId =    }
+    } else {
+        
+    }    
+    
+    
+    // Get the user profile informatio
     $preferred_gender_name = $_POST['preferredGenderInput'];
     $city = $_POST['selectedCity'];
     $relationship_type = $_POST['selectedRelationship'];
@@ -65,9 +154,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $description = $row['description'];
                 $from_age = $row['from_age'];
                 $to_age = $row['to_age'];
-                
-                
-               // echo "relationship " . $relationship_type;
+
+
+                // echo "relationship " . $relationship_type;
                 //echo "hobby " . $description;
             }
         } else {
@@ -432,8 +521,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <output id="output2" for="rangeInput2"> Max Age : 100</output> <!-- Just to display selected Age -->
                                     </div>
                                 </div>
-                                 <div class="form-group">
-                                    
+                                <div class="form-group">
+
                                 </div>
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
 
@@ -482,11 +571,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         $sql = $sql . " And up.id in (select id from user_profile where from_age > '" . $from_age . "')";
                                                     if (strlen($to_age) > 0)
                                                         $sql = $sql . " And up.id in (select id from user_profile where to_age < '" . $to_age . "')";
-                                                    
-                                                    
+
+
 
                                                     //echo $sql;
-
                                                     //echo $sql; 
                                                     // need to add other columns here
                                                     //            . "where id = " . $user_id . ";";
@@ -524,7 +612,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         }
                                                     }
                                                 }
-                                            }
+                                                echo '<div>';
+                                                echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="/images/Like.png"/>Like</button>';
+                                                echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="/images/View.png"/>View</button>';
+                                                echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="/images/Maybe.png"/>Maybe</button>';
+                                                echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="/images/Goodbye.png"/>Goodbye</button>';
+                                                echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="/images/Report.png"/>Report</button>';
+                                            }echo '</div>';
                                             ?>
                                             </fieldset>
                                             </form>

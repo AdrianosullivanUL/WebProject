@@ -5,6 +5,7 @@ if ($_SESSION['user_logged_in'] == 0) {
     header("Location: Logon.php");
 }
 require_once 'database_config.php';
+include 'group05_library.php';
 
 
 $user_id = $_SESSION['user_id'];
@@ -13,11 +14,95 @@ $matching_user_id = $_SESSION['matching_user_id'];
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    require_once 'database_config.php';
 
-    session_start();
     $user_id = $_SESSION['user_id'];
     $matching_user_id = $_SESSION['matching_user_id'];
+    
+        if ($_POST['btnAction'] == "Like" || $_POST['btnAction'] == "Maybe" || $_POST['btnAction'] == "Goodbye" || $_POST['btnAction'] == "Report" || $_POST['btnAction'] == "View") { // Get Match view row for subsequent buttons
+        $_SESSION['user_id'] = $user_id;
+        if (isset($_POST['selected_user']))
+            $matchId = $_POST['selected_user'];
+        else
+            $matchId = 0;
+        $sql = 'select * from matches_view where match_id = ' . $matchId . ";";
+        $result = execute_sql_query($db_connection, $sql);
+        if ($result == null) {
+            echo "ERROR: Cannot find match entry to update status with, id =" . $matchId;
+        } else {
+            while ($row = mysqli_fetch_array($result)) {
+                if ($row['match_user_id_1'] == $user_id)
+                    $_SESSION['matching_user_id'] = $row['match_user_id_2'];
+                else
+                    $_SESSION['matching_user_id'] = $row['match_user_id_1'];
+                $matchId = $row['match_id'];
+                if ($_POST['btnAction'] == "View") { // View Profile
+                    header("Location: ViewMatchProfile.php");
+                    exit();
+                }
+                // Like Button
+                // -----------
+                if ($_POST['btnAction'] == "Like") { // Update Status
+                    $newStatus = "";
+                    if ($row['match_user_id_1'] == $user_id) {
+                        $updateUser1or2 = 1;
+                        echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
+                        if ($row['user_profile_2_match_status'] == 'Like') {
+                            // both users must like each other before chatting
+                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
+                            $newStatus = "Chatting";
+                        } else
+                            $newStatus = "Like";
+                    } else {
+                        $updateUser1or2 = 2;
+                        echo "user_profile_1_match_status" . $row['user_profile_2_match_status'];
+                        if ($row['user_profile_1_match_status'] == 'Like') {
+                            
+                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 1);
+// both users must like each other before chatting
+                            $newStatus = "Chatting";
+                        } else
+                            $newStatus = "Like";
+                    }
+                    $updateResult = update_match_status($db_connection, $matchId, $newStatus, $updateUser1or2);
+                    // $updateResult = update_match_status($db_connection, $matchId, $newStatus, 2);
+                    //echo "Update result " . $updateResult;
+                    //  $message = "Failed to update user status for match id " . $matchId; 
+                }
+                // Maybe Button
+                // -----------
+                if ($_POST['btnAction'] == "Maybe") { // Update Status
+                    if ($row['match_user_id_1'] == $user_id)
+                        $updateUser1or2 = 1;
+                    else
+                        $updateUser1or2 = 2;
+                    $updateResult = update_match_status($db_connection, $matchId, 'Maybe', $updateUser1or2);
+                    //echo "Update result " . $updateResult;
+                }
+                // Goodbye Button
+                // --------------
+                if ($_POST['btnAction'] == "Goodbye") { // Update Status
+                    if ($row['match_user_id_1'] == $user_id)
+                        $updateUser1or2 = 1;
+                    else
+                        $updateUser1or2 = 2;
+                    $updateResult = update_match_status($db_connection, $matchId, 'Goodbye', $updateUser1or2);
+                }
+                // Report Button
+                // -------------
+                if ($_POST['btnAction'] == "Report") { // Update Status
+                    if ($row['match_user_id_1'] == $user_id)
+                        $updateUser1or2 = 1;
+                    else
+                        $updateUser1or2 = 2;
+                    $updateResult = update_match_status($db_connection, $matchId, 'Report', $updateUser1or2);
+                }
+            }
+        }
+//   if ($_POST['btnAction'] == "Goodbye") { // Update Status
+//       $matchId =    }
+    } else {
+        
+    }
 }
 ?>
 <html lang="en">
@@ -30,51 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
         <link rel="stylesheet" href="StyleSheet.css">
-        <style>
 
-            //body {
-            //  background-image:    url(backlit-bonding-casual-708392.jpg);
-            //background-size:     cover;                      /* <------ */
-            //background-repeat:   no-repeat;
-            //background-position: center center;              /* optional, center the image */
-            //}
-            ///* Add a black background color to the top navigation */
-            //.topnav {
-            //  background-color: #333;
-            //overflow: hidden;
-            //}
-
-            /* Style the links inside the navigation bar */
-            //.topnav a {
-            //  float: left;
-            // color: #F0F8FF;
-            // text-align: center;
-            // padding: 14px 16px;
-            // text-decoration: none;
-            //font-size: 17px;
-            //}
-
-            /* Change the color of links on hover */
-            //.topnav a:hover {
-            //  background-color: #ddd;
-            // color: grey;
-            //}
-
-            /* Add a color to the active/current link */
-            /* .topnav a.active {
-                 background-color: #A9A9A9;
-                 color: white;
-             }
- 
-             /* Right-aligned section inside the top navigation */
-            /* .topnav-right {
-                 float: right;
-             }
-             iv.first {
-                 opacity: 0.1;
-                 filter: alpha(opacity=10); 
-             }*/
-        </style>
     </head>
     <body>
         <form action="/ViewMatchProfile.php" method="Post">
