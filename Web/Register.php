@@ -97,6 +97,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <head>
         <title>Register</title>
         <meta charset="utf-8">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -109,35 +112,80 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="topnav">
         <a class="active">REGISTER</a>
-    </div> 
+    </div>
+
     <div class="container">
-        <div class="row">
-            <div class="col-md-9 col-md-offset-3" >
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
 
-                <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
-                    <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
-                        <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Registration Details</legend>
-                        <div class="form-group">
-                            <label for="email">email</label>
-                            <input type="text" class="form-control" name="email" value="">
-                            <label for="password">Password</label>
-                            <input type="Password" class="form-control" name="password">
-                            <label for="confirmPassword">Password</label>
-                            <input type="password" class="form-control" name="confirmPassword">
-                            <?php
-                            if (strlen($message) > 0) {
-                                echo "<div class='alert alert-danger'>";
-                                echo "<p>" . $message . "</p>";
-                                echo "</div>";
-                            }
-                            ?>
+            <form method="post" name="challenge"  class="form-horizontal" role="form" action="#" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
+                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em;margin:0 2px;border: 2px solid silver;margin-bottom: 10em;background-color:lavender; opacity: .9;">
+                    <legend style="border-bottom: none;width: inherit;;padding:inherit;" class="legend">Registration</legend>
+
+                    <div class="form-group">
+                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        <div class="col-sm-3 col-md-3 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold;padding-top: 10px; text-align: left;">
+                            Your Email <span style="color: red">*</span> :</div>
+                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style="font-weight:800;">
+                            <input style="border-radius: 4px" type="email"  class="form-control" name="yourEmail" id="yourEmail">                   
                         </div>
-                        <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
-                        <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
-                        <br>
+                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        <div class="col-sm-3 col-md-3 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: left;">
+                            Password <span style="color: red">*</span> :</div>
+                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style="font-weight: bold;">
+                            <input style="border-radius: 4px" type="password"  class="form-control" name="password" id="yourEmail">                   
+                        </div>
+                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        <div class="col-sm-3 col-md-3 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: left;">
+                            Confirm Your Password  <span style="color: red">*</span> :</div>
+                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style=""font-weight: bold;">
+                             <input style="border-radius: 4px" type="password"  class="form-control" name="confirmPassword" id="yourEmail">                   
+                        </div>
+                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                    </div>
 
-                        <div class="col-sm-11 container border border-primary rounded bg-light text-dark">
-                            
+
+                    <?php
+                    if (strlen($message) > 0) {
+                        echo "<div class='alert alert-danger'>";
+                        echo "<p>" . $message . "</p>";
+                        echo "</div>";
+                    }
+                    ?>
+
+                    <br>
+                    <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: right;">
+                        <div class="col-sm-1 col-md-1 col-lg-2 col-xs-1" style="text-align: left;"></div>
+                     <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2" style="text-align: left;">
+                                    <span style="color: red">*</span> <span style="font-size: 6pt;">mandatory fields</span>
+                                </div>   
+                    <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
+                    <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="col-sm-1 col-md-2 col-lg-2 col-xs-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        <div class="col-sm-8 col-md-8 col-lg-10 col-xs-6" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
+
                             <h1>How does it work?</h1>
                             <p>Our process is simple and easy to use, we don't focus on asking you a million questions or doing psychological tests! We ask you a few simple questions and ask you to post a recent picture of yourself. After that we do the following for you:</p>
                             <ul>
@@ -155,13 +203,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             &nbsp;
                             <p>Note: Distance willing to travel is used to calculate the distance from your town to your potential match, this is done using "as the crow flies", please bear this in mind when contacting people.</p>
                         </div>
+                    </div>
+                </fieldset> 
 
-                    </fieldset> 
-
-                </form>
-            </div>
-            &nbsp;
+            </form>
         </div>
-    </div> 
+        &nbsp;
+    </div>
+</div> 
 </body>
 </html> 
