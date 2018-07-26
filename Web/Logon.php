@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <input type="password" class="form-control" name="password" placeholder="">
                             <?php
                             if (strlen($message) > 0) {
-                                echo "<div class='alert alert-danger'>";
+                                echo "<div class='alert alert-info'>";
                                 echo "<p>" . $message . "</p>";
                                 echo "</div>";
                             }
