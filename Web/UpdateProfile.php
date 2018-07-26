@@ -366,7 +366,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <?php
                                 if (strlen($message) > 0) {
                                     echo "<div class='alert alert-danger'>";
-                                    echo "<p >" . $message . "></p>";
+                                    echo "<p>" . $message . "</p>";
                                     echo "</div>";
                                 }
                                 ?>
