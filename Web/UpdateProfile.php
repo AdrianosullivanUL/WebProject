@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $dob = $_POST['dateOfBirthInput'];
         $gender = $_POST['genderInput'];
         $city = $_POST['cityInput'];
-        if (isset($_POST['preferredGenderInput']))
+        if (isset($_POST['genderInput']))
             $preferredGender = $_POST['preferredGenderInput'];
         else
             $preferredGender = "";
@@ -208,79 +208,99 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
+        
         <title>Personal Details</title>
-
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script>
-            $(function () {
-                $("#slider-range").slider({
-                    echo "first part of slider"
-                            range: true,
-                    min: 18,
-                    max: 65,
-                    values: [18, 65],
-                    slide: function (event, ui) {
-                        $("#age").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
-                    }
-                });
-                $("#age").val($("#slider-range").slider("values", 0) +
-                        " - " + $("#slider-range").slider("values", 1));
-            });
-        </script>
-
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="StyleSheet.css">
 
     </head>
     <body>
-        <div class="container">
-            <div class="topnav">
-                <a class="active">UPDATE PROFILE</a>
-                <a href="MeetingSpace.php" title="Meeting Space">
-                    <?php echo $firstname . " " . $surname ?>
+        <div class="topnav">
+            <a class="active">UPDATE PROFILE</a>
+            <a href="MeetingSpace.php" title="Meeting Space">
+                <?php echo $firstname . " " . $surname ?>
 
-                </a>
-                <div class="topnav-right">
-                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Delete Profile</a>
-                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
-                </div>
+            </a>
+            <div class="topnav-right">
+                <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Delete Profile</a>
+                <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
             </div>
-            <div class="row">
-                <div class="col-md-6 col-md-offset-3" >
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3" >
+                <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" AUTOCOMPLETE = "off" >
+                    <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: 0.95;">
+                        <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Edit Profile</legend>
 
-                    <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" AUTOCOMPLETE = "off" >
-                        <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
-
-                            <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Profile</legend>
-
-                            <div class="form-group">
-                                <label for="emailInput">Email</label>
-                                <input type="text" class="form-control" name="emailInput" value="<?php echo $email; ?>">
-
-                            </div>
-                            <div class="form-group">
-                                <label for="firstnameInput">First Name</label>
-                                <input type="text" class="form-control" name="firstnameInput" value="<?php echo $firstname; ?>">
-
-                            </div>                    
-                            <div class="form-group">
-                                <label for="surnameInput">Surname</label>
-                                <input type="text" class="form-control" name="surnameInput" value="<?php echo trim($surname); ?>">
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Email <span style="color: red">*</span> :</div>   
+                            <!--<label for="emailInput">Email</label>-->
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                <input style="border-radius: 4px" type="text"  class="form-control" name="emailInput" value= "<?php echo $email; ?>">
 
                             </div>
-                            <div class="form-group">
-                                <label for="dateOfBirthInput">Date of Birth</label>
-                                <input type="date" class="form-control" name="dateOfBirthInput" value="<?php echo $dob; ?>" min="1900-01-01" max="<?php echo (new \DateTime())->format('Y-m-d'); ?>" />
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                First Name <span style="color: red">*</span> :</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                <input style="border-radius: 4px" type="text"  class="form-control" name="firstnameInput" value= "<?php echo $firstname; ?>">
                             </div>
-                            <div class="form-group">
-                                <label for="city Label">Nearest City/Town</label>
-                                <select name="cityInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Surname <span style="color: red">*</span> :</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                <input style="border-radius: 4px" type="text"  class="form-control" name="surnameInput" value= "<?php echo ($surname); ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Surname <span style="color: red">*</span> :</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                <input style="border-radius: 4px" type="date"  class="form-control" name="dateOfBirthInput" value= "<?php echo $dob; ?>" min="1900-01-01" max="<?php echo (new \DateTime())->format('Y-m-d'); ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Nearest City/Town <span style="color: red">*</span> :</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                <select name="cityInput" class="selectpicker form-control"style=" font-size:10pt;height: 40px;">
                                     <?php
                                     $sql = "select city  from city";
                                     if ($result = mysqli_query($db_connection, $sql)) {
@@ -297,10 +317,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ?>
                                 </select>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="genderLabel">Gender</label>
-                                <select name="genderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Gender <span style="color: red">*</span> :</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                <select name="genderInput" class="selectpicker form-control"style=" font-size:10pt;height: 40px;">
                                     <?php
                                     $sql = "select gender_name from gender order by gender_name";
                                     if ($result = mysqli_query($db_connection, $sql)) {
@@ -317,9 +344,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ?>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="genderInput">Preferred Gender</label>
-                                <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Preferred Gender <span style="color: red">*</span> :</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:10pt;height: 40px;">
                                     <?php
                                     $sql = "select gender_name  from gender order by gender_name";
                                     if ($result = mysqli_query($db_connection, $sql)) {
@@ -336,53 +371,118 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ?>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label for="seekingAgeSelection">Seeking Age Profile</label>
-                                    <!-- TODO add a single slider later -->
-                                    <!-- MM
-                                    <label for="seekingAgeSelection">From</label>
-                                            <input type="range" min="18" max="120" value="<?php echo $ageSelectionFrom; ?>" class="slider" data-show-value="true" name="seekingAgeFromSelection">
-                                            <label for="seekingAgeSelection">To</label>
-                                            <input type="range" min="18" max="120" value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
-                                    -->
-                                    <label for="seekingAgeSelection">From</label>
-                                    <input type="range" min="18" max="65" value="<?php echo $ageSelectionFrom; ?>" class="slider" name="seekingAgeFromSelection">
-                                    <label for="seekingAgeSelection">To</label>
-                                    <input type="range" min="18" max="120" value="35"
-                                           value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
-                                </div>                       
+                        </div>
 
-                                <div class="form-group">
-                                    <label for="travelDistanceSelection">Distance I will travel</label>
-                                    <input type="range" min="0" max="500" value="<?php echo $travelDistance; ?>" class="slider" name="travelDistanceSelection">
-                                </div>
-                                <label for="relationshipType">Relationship Type</label>
-                                <br>
-                                <input type="radio" value="Love" <?php if ($relationshipType == "love") echo 'checked'; ?> name="relationshipTypeInput">Love</input>&nbsp;
-                                <input type="radio" value="Casual" <?php if ($relationshipType == "casual") echo 'checked'; ?> name="relationshipTypeInput">Casual</input>&nbsp;
-                                <input type="radio" value="Friendship" <?php if ($relationshipType == "friendship") echo 'checked'; ?> name="relationshipTypeInput">Friendship</input>&nbsp;
-                                <input type="radio" value="Relationship" <?php if ($relationshipType == "relationship") echo 'checked'; ?> name="relationshipTypeInput">Relationship</input>
-                                <?php
-                                if (strlen($message) > 0) {
-                                    echo "<div class='alert alert-danger'>";
-                                    echo "<p>" . $message . "</p>";
-                                    echo "</div>";
-                                }
-                                ?>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt;padding-top: 7px; text-align: left;">
+                                Seeking Age Profile <span style="color: red">*</span> :</div>
+                            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-8 mobileLabel">
+                                        <input name= "seekingAgeToSelection" type="range" min="18" max="100" value="18" step="2" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
+                                        <datalist id="tickmarks">
+                                            <option value="18 to 100">18</option>
+                                            <option>18</option>
+                                            <option>40</option>
+                                            <option>60</option>
+                                            <option>80</option>
+                                            <option>100</option>
+                                        </datalist>
+                                        <output id="output" for="rangeInput"> Min Age : 18</output> <!-- Just to display selected Age -->
+                                    </div>
+                                    <div class="col-sm-2 col-md-2 col-lg-2 col-xs-8 mobileLabel">
+                                        <input name= "seekingAgeToSelection" type="range" min="18" max="100" value="100" step="2" list="tickmarks" id="rangeInput2" oninput="output2.value = rangeInput2.value">
+                                        <datalist id="tickmarks">
+                                            <option value="18 to 100">100</option>
+                                            <option>20</option>
+                                            <option>40</option>
+                                            <option>60</option>
+                                            <option>80</option>
+                                            <option>100</option>
+                                        </datalist>
+                                        <output id="output2" for="rangeInput2"> Max Age : 100</output> <!-- Just to display selected Age -->
+                                    </div>
+                        </div>
+
+                        
+                        
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt;padding-top: 7px; text-align: left;">
+                                Distance I Will Travel <span style="color: red">*</span> :</div>
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
+                                <input name= "travelDistanceSelection" type="range" min="0" max="500" value="0" step="50" list="tickmarks" id="rangeInput3" oninput="output3.value = rangeInput3.value">
+                                   <datalist id="tickmarks">
+                                    <option value="0 to 500">0</option>
+                                    <option>0</option>
+                                    <option>50</option>
+                                    <option>100</option>
+                                    <option>150</option>
+                                    <option>200</option>
+                                    <option>250</option>
+                                    <option>300</option>
+                                    <option>350</option>
+                                    <option>400</option>
+                                    <option>450</option>
+                                    <option>500</option>
+                                   </datalist>
+                                <output id="output3" for="rangeInput3"> Distance : 0</output> <!-- Just to display selected Age -->
+                            </div>
+                        </div>
+
+
+
+
+                        <!-- ******************************************************************
+                         <div class="form-group">
+                             <div class="form-group">
+                                 <label for="seekingAgeSelection">Seeking Age Profile</label>
+                        <!-- TODO add a single slider later -->
+                        <!-- MM
+                        <label for="seekingAgeSelection">From</label>
+                                <input type="range" min="18" max="120" value="<?php echo $ageSelectionFrom; ?>" class="slider" data-show-value="true" name="seekingAgeFromSelection">
+                                <label for="seekingAgeSelection">To</label>
+                                <input type="range" min="18" max="120" value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">
+                        -->
+                        <!--<label for="seekingAgeSelection">From</label>
+                        <input type="range" min="18" max="65" value="<?php echo $ageSelectionFrom; ?>" class="slider" name="seekingAgeFromSelection">
+                        <label for="seekingAgeSelection">To</label>
+                        <input type="range" min="18" max="120" value="35"
+                               value="<?php echo $ageSelectionTo; ?>" class="slider" data-show-value="true" name="seekingAgeToSelection">-->
+
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt;padding-top: 7px; text-align: left;">
+                                Relationship Type <span style="color: red">*</span> :</div>
+
+                        <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
+                        <input type="radio" value="Love" <?php if ($relationshipType == "love") echo 'checked'; ?> name="relationshipTypeInput">Love</input>&nbsp;
+                        <input type="radio" value="Casual" <?php if ($relationshipType == "casual") echo 'checked'; ?> name="relationshipTypeInput">Casual</input>&nbsp;
+                        <input type="radio" value="Friendship" <?php if ($relationshipType == "friendship") echo 'checked'; ?> name="relationshipTypeInput">Friendship</input>&nbsp;
+                        <input type="radio" value="Relationship" <?php if ($relationshipType == "relationship") echo 'checked'; ?> name="relationshipTypeInput">Relationship</input>
+                        <?php
+                        if (strlen($message) > 0) {
+                            echo "<div class='alert alert-danger'>";
+                            echo "<p>" . $message . "</p>";
+                            echo "</div>";
+                        }
+                        ?>
+                        </div>
                             </div>
 
-                            <p align="middle">
-                                <button class="btn btn-primary" name="btnAction" type="submit" value="Next">Next</button>
-                                <button class="btn btn-warning" name="btnAction" type="submit" value="Cancel">Cancel</button>
-                            </p>
+                        <p align="middle">
+                            <button class="btn btn-primary" name="btnAction" type="submit" value="Next">Next</button>
+                            <button class="btn btn-warning" name="btnAction" type="submit" value="Cancel">Cancel</button>
+                        </p>
 
-                        </fieldset> 
+                    </fieldset> 
 
-                    </form>
-                </div>
+                </form>
             </div>
-        </div>      
-    </body>
+        </div>
+    </div>      
+</body>
 
 </html>
