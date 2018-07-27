@@ -341,15 +341,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 <div class="row">
                                     <!-- 
-                                    System Matches Section 
+                                    Possible Matches Section 
                                     ------------------------  -->
                                     <div class="col-xs-12 col-sm-8 col-lg-8" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
-                                        <h3>System Matches</h3>
+                                        <h3>Possible Matches</h3>
                                         <?php
                                         $systemMatchesFound = true;
                                         $sql = "SELECT * FROM matches_view where system_generated_match = true"
-                                                . " and (match_user_id_1 =" . $user_id . " and user_profile_1_match_status = 'Matched' and user_profile_2_match_status not in ('Like','Report', 'Goodbye')) "
-                                                . " or  (match_user_id_2 =" . $user_id . " and user_profile_2_match_status = 'Matched' and user_profile_1_match_status not in ('Like','Report', 'Goodbye'));";
+                                                . " and (match_user_id_1 =" . $user_id . " and user_profile_1_match_status in ('Matched','Maybe') and user_profile_2_match_status not in ('Like','Report', 'Goodbye')) "
+                                                . " or  (match_user_id_2 =" . $user_id . " and user_profile_2_match_status in ('Matched','Maybe') and user_profile_1_match_status not in ('Like','Report', 'Goodbye'));";
 
                                          //echo $sql;
                                         $result = execute_sql_query($db_connection, $sql);
