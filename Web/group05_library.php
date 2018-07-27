@@ -93,7 +93,7 @@ function get_bad_words_in_text($db_connection, $checkText) {
     while ($row = mysqli_fetch_array($result)) {
         foreach ($words as &$word) {
             if (md5($word) == $row['word']) {
-                $badWords[] = $word;
+                $badWords[$row['id']] = $word;
                 break;
             }
         }

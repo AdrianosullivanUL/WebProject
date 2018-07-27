@@ -57,9 +57,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "You must enter a message";
         }
         if ($valid = true) {
+            $blackListed = 0;
+            $blackListedDate = null;
+            $badWordsResult = get_bad_words_in_text($db_connection, $msg);
+            $blackListedWordId = 0;
+            if ($badWordsResult != null) {
+                foreach ($badWordsResult as $key => $word) {
+                    $blackListed = 1;
+                    $blackListedWordId = $key;
+                    $blackListedDate = date("Y-m-d h:i:sa");
+                    $msg = str_replace($badWordsResult, '<b>' . $word . '</b>', $msg);
+                    $message = "We have recorded an instance of offensive language in your post, the word in question is <b>" . $word . "</b>. Please note the following <br>"
+                            . "1) This message will not be transmitted to the receiving person"
+                            . "<br>2) If we record more than 5 instances then we will suspend your account for 1 week";
+                }
+            }
 
-            $sql = "insert into user_communication(from_user_id, to_user_id, message, status_id, replying_to_communication_id, communication_datetime)"
-                    . " values('$user_id', '$matching_user_id', '$msg', '11', " . $last_communication_id . ", now())";
+            if ($blackListed == 1)
+                $sql = "insert into user_communication(from_user_id, to_user_id, message, status_id, replying_to_communication_id, communication_datetime,"
+                        . " black_listed, black_listed_date, black_listed_word_id)"
+                        . " values('$user_id', '$matching_user_id', '$msg', '11', " . $last_communication_id . ", now(),1,now()," . $blackListedWordId . ")";
+            else
+                $sql = "insert into user_communication(from_user_id, to_user_id, message, status_id, replying_to_communication_id, communication_datetime)"
+                        . " values('$user_id', '$matching_user_id', '$msg', '11', " . $last_communication_id . ", now())";
+
             // echo $sql . "<br>";
             $result = execute_sql_update($db_connection, $sql);
 
@@ -173,12 +194,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 echo "no thread found";
                             else {
                                 while ($row = mysqli_fetch_array($result)) {
-                                    //echo $row['from_user_id'] ." " . $user_id;
+                                    if ($row['from_user_id'] != $user_id && $row['black_listed'] == 1)
+                                        $showMessage = "<b>Message black listed, offensive language detected</b>";
+                                    else
+                                        $showMessage = $row['message'];
                                     if ($row['from_user_id'] == $user_id)
                                         echo "<div class='float-sm-left col-sm-6 container border border-primary rounded text-dark bg-success'>";
                                     else
                                         echo "<div class='float-sm-right col-sm-6 container border border-primary rounded text-dark bg-info'>";
-                                    echo  $row['communication_datetime'] . "<br><b>". $row['message'] . "</b><br>";
+                                    echo "<i>" . $row['communication_datetime'] . "</i><br>" . $showMessage . "<br>";
                                     echo "</div>";
                                     echo "<br>";
                                     $lastCommunicationId = $row['id'];
