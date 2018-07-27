@@ -2,7 +2,6 @@
 require_once 'database_config.php';
 include 'group05_library.php';
 session_start();
-$_SESSION['user_logged_in'] = 0;
 $_SESSION['is_administrator'] = 0;
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -12,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: PasswordReset.php");
         exit();
     }
-        if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
+    if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
         header("Location: index.php");
         exit();
     }
@@ -21,20 +20,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
         $password = $_POST['password'];
         $isAdmin = 0;
+        $logon = 0;
         $sql = "select * from user_profile where LOWER(trim(email)) = trim('" . strtolower($email) . "') and password_hash = sha2('" . $password . "',256);";
         //echo $sql;
         if ($result = mysqli_query($db_connection, $sql)) {
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_array($result)) {
-                    $logon = 1;
+
+                    // Assign a newly encrypted session identifier when the log on, store this on their user_profile. If not matching on other screens then logon is rejected
+                    $session_hash = hash('sha256', get_GUID());
+                    echo "$session_hash " . $session_hash;
+                    $sql = "update user_profile set session_hash = '" . $session_hash . "' where id = " . $row['id'];
+                    execute_sql_update($db_connection, $sql);
+                    $_SESSION['session_hash'] = $session_hash;
                     $_SESSION['user_id'] = $row['id'];
+                    $logon = 1;
                     if ($row['is_administrator'] == 1) {
                         $isAdmin = 1;
                     }
                 }
             }
             if ($logon == 1) {
-                echo "is admin" . $isAdmin;
                 if ($isAdmin == 1) {
                     $_SESSION['user_logged_in'] = 1;
                     $_SESSION['is_administrator'] = $isAdmin;

@@ -2,7 +2,6 @@
 require_once 'database_config.php';
 include 'group05_library.php';
 session_start();
-$_SESSION['user_logged_in'] = 0;
 $_SESSION['is_administrator'] = 0;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $emailfound = 0;

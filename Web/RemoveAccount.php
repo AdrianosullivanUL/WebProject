@@ -2,11 +2,14 @@
 session_start();
 require_once 'database_config.php';
 include 'group05_library.php';
-if ($_SESSION['user_logged_in'] == 0) {
+$user_id = $_SESSION['user_id'];
+$session_hash = $_SESSION['session_hash'];
+if (validate_logon($db_connection, $user_id, $session_hash) == false) {
+    // User is not correctly logged on, route to Logon screen
     header("Location: Logon.php");
 }
+
 $message = '';
-$user_id = $_SESSION['user_id'];
 // Check and see if a post has been requested (this does not happen when screen initially opens
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // check the button selected (these are at the end of this form

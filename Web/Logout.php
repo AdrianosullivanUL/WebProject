@@ -1,15 +1,14 @@
 <?php
 session_start();
 // redirect to the logon screen if the user is not logged in
-if ($_SESSION['user_logged_in'] == 0) {
+require_once 'database_config.php';
+include 'group05_library.php';
+$user_id = $_SESSION['user_id'];
+$session_hash = $_SESSION['session_hash'];
+if (validate_logon($db_connection, $user_id, $session_hash) == false) {
+    // User is not correctly logged on, route to Logon screen
     header("Location: Logon.php");
 }
-require_once 'database_config.php';
-
-
-$user_id = $_SESSION['user_id'];
-$matching_user_id = $_SESSION['matching_user_id'];
-//echo "session user " . $user_id;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['user_id'] = 0;

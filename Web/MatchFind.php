@@ -1,14 +1,16 @@
 <?php
 session_start();
 // redirect to the logon screen if the user is not logged in
-if ($_SESSION['user_logged_in'] == 0) {
-    header("Location: Logon.php");
-}
-// Get a database connection
 require_once 'database_config.php';
 include 'group05_library.php';
-// Get the standard session parameters
 $user_id = $_SESSION['user_id'];
+$session_hash = $_SESSION['session_hash'];
+if (validate_logon($db_connection, $user_id, $session_hash) == false) {
+    // User is not correctly logged on, route to Logon screen
+    header("Location: Logon.php");
+}
+
+
 //echo "session user " . $user_id;
 $city = "";
 $first_name = "";
@@ -186,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $relationshipTypeId = $row['relationship_type_id'];
                 $relationship_type = $row['relationship_type'];
                 $description = $row['description'];
-                $from_age = $row['From_age'];
+                $from_age = $row['from_age'];
                 $to_age = $row['to_age'];
 
                 $_SESSION['user_name'] = $first_name . " " . $surname;

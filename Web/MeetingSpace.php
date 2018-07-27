@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <?php
 session_start();
-if ($_SESSION['user_logged_in'] == 0) {
-    header("Location: Logon.php");
-}
 require_once 'database_config.php';
 include 'group05_library.php';
 $user_id = $_SESSION['user_id'];
+$session_hash = $_SESSION['session_hash'];
+if (validate_logon($db_connection, $user_id, $session_hash) == false) {
+    // User is not correctly logged on, route to Logon screen
+    header("Location: Logon.php");
+}
+
 if (isset($_SESSION['matching_user_id']))
     $matching_user_id = $_SESSION['matching_user_id'];
 else
@@ -100,36 +103,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($_POST['btnAction'] == "Like") { // Update Status
                     // Check and see current status
                     $valid = true;
-                    if ($user_profile_1_match_status == 'Chatting' || $user_profile_2_match_status == 'Chatting')
-                    {
+                    if ($user_profile_1_match_status == 'Chatting' || $user_profile_2_match_status == 'Chatting') {
                         $valid = false;
                         $message = "You are already chatting with this person";
                     }
-                    
-                    if ($valid == true) {
-                    $newStatus = "";
-                    if ($row['match_user_id_1'] == $user_id) {
-                        $updateUser1or2 = 1;
-                        echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
-                        if ($row['user_profile_2_match_status'] == 'Like') {
-                            // both users must like each other before chatting
-                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
-                            $newStatus = "Chatting";
-                        } else
-                            $newStatus = "Like";
-                    } else {
-                        $updateUser1or2 = 2;
-                        echo "user_profile_1_match_status" . $row['user_profile_2_match_status'];
-                        if ($row['user_profile_1_match_status'] == 'Like') {
 
-                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 1);
+                    if ($valid == true) {
+                        $newStatus = "";
+                        if ($row['match_user_id_1'] == $user_id) {
+                            $updateUser1or2 = 1;
+                            echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
+                            if ($row['user_profile_2_match_status'] == 'Like') {
+                                // both users must like each other before chatting
+                                $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
+                                $newStatus = "Chatting";
+                            } else
+                                $newStatus = "Like";
+                        } else {
+                            $updateUser1or2 = 2;
+                            echo "user_profile_1_match_status" . $row['user_profile_2_match_status'];
+                            if ($row['user_profile_1_match_status'] == 'Like') {
+
+                                $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 1);
 // both users must like each other before chatting
-                            $newStatus = "Chatting";
-                        } else
-                            $newStatus = "Like";
+                                $newStatus = "Chatting";
+                            } else
+                                $newStatus = "Like";
+                        }
+                        $updateResult = update_match_status($db_connection, $matchId, $newStatus, $updateUser1or2);
                     }
-                    $updateResult = update_match_status($db_connection, $matchId, $newStatus, $updateUser1or2);
-                }
                 }
                 // Maybe Button
                 // -----------
@@ -161,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         }
-    } 
+    }
 }
 ?>
 
@@ -351,7 +353,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 . " and (match_user_id_1 =" . $user_id . " and user_profile_1_match_status in ('Matched','Maybe') and user_profile_2_match_status not in ('Like','Report', 'Goodbye')) "
                                                 . " or  (match_user_id_2 =" . $user_id . " and user_profile_2_match_status in ('Matched','Maybe') and user_profile_1_match_status not in ('Like','Report', 'Goodbye'));";
 
-                                         //echo $sql;
+                                        //echo $sql;
                                         $result = execute_sql_query($db_connection, $sql);
                                         if ($result == null) {
                                             echo "<br><p>No matches found</p>";

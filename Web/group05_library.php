@@ -101,3 +101,33 @@ function get_bad_words_in_text($db_connection, $checkText) {
     return $badWords;
 }
 
+function get_GUID() {
+    if (function_exists('com_create_guid')) {
+        return com_create_guid();
+    } else {
+        mt_srand((double) microtime() * 10000); //optional for php 4.2.0 and up.
+        $charid = strtoupper(md5(uniqid(rand(), true)));
+        $hyphen = chr(45); // "-"
+        $uuid = chr(123)// "{"
+                . substr($charid, 0, 8) . $hyphen
+                . substr($charid, 8, 4) . $hyphen
+                . substr($charid, 12, 4) . $hyphen
+                . substr($charid, 16, 4) . $hyphen
+                . substr($charid, 20, 12)
+                . chr(125); // "}"
+        return $uuid;
+    }
+}
+
+function validate_logon($db_connection, $user_id, $session_hash) {
+    $sql = "select count(*) cnt from user_profile where id = " . $user_id . " and session_hash = '" . $session_hash . "';";
+    //echo $sql;
+    $result = execute_sql_query($db_connection, $sql);
+    if ($result != null) {
+        while ($row = mysqli_fetch_array($result)) {
+            if ($row['cnt'] == 1)
+                return true;
+        }
+    }
+    return false;
+}

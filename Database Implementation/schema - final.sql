@@ -90,10 +90,10 @@ CREATE TABLE user_profile (
   date_of_birth date DEFAULT NULL,
   gender_id int(11) DEFAULT NULL,
   gender_preference_id int(11) DEFAULT NULL,
-  From_age int(11) DEFAULT NULL,
+  from_age int(11) DEFAULT NULL,
   to_age int(11) DEFAULT NULL,
   city_id int(11) DEFAULT NULL,
-  Travel_distance int(11) DEFAULT NULL,
+  travel_distance int(11) DEFAULT NULL,
   relationship_type_id int(11) DEFAULT NULL,
   picture mediumblob,
   my_bio varchar(1000) DEFAULT NULL,
@@ -102,6 +102,7 @@ CREATE TABLE user_profile (
   black_listed_date date DEFAULT NULL,
   user_status_id int NOT NULL,
   is_administrator boolean NOT NULL,
+  session_hash varchar(250),
    PRIMARY KEY(id),
    FOREIGN KEY (gender_id) REFERENCES gender(id),
    FOREIGN KEY (gender_preference_id) REFERENCES gender(id),
@@ -111,7 +112,7 @@ CREATE TABLE user_profile (
    UNIQUE KEY(email)
 );
 
--- user_communication
+-- user_communicationFunctions
 -- ------------------------------------------------
 
 create table user_communication(
