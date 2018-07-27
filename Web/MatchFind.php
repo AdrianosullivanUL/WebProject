@@ -500,7 +500,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <input name= "fromAge" type="range" min="18" max="100" value="18" step="2" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
                                         <datalist id="tickmarks">
                                             <option value="18 to 100">18</option>
-                                            <option>20</option>
+                                            <option>18</option>
                                             <option>40</option>
                                             <option>60</option>
                                             <option>80</option>
