@@ -26,65 +26,99 @@ $to_age = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    if ($_POST['btnAction'] == "Like" || $_POST['btnAction'] == "Maybe" || $_POST['btnAction'] == "Goodbye" || $_POST['btnAction'] == "Report" || $_POST['btnAction'] == "View") { // Get Match view row for subsequent buttons
-        $_SESSION['user_id'] = $user_id;
-        if (isset($_POST['selected_user']))
-            $matchId = $_POST['selected_user'];
+    if ($_POST['btnAction'] == "View") { // View Profile
+        $matching_user_id = $_POST['selected_user_id'];
+        if ($matching_user_id == 0)
+            $message = "Please click on a profile picture before clicking on these buttons";
+        else {
+            $_SESSION['matching_user_id'] = $matching_user_id;
+            header("Location: ViewMatchProfile.php");
+            exit();
+        }
+    }
+    if ($_POST['btnAction'] == "Like" || $_POST['btnAction'] == "Maybe" || $_POST['btnAction'] == "Goodbye" || $_POST['btnAction'] == "Report") { // Get Match view row for subsequent buttons
+        if (isset($_POST['selected_user_id']))
+            $matching_user_id = $_POST['selected_user_id'];
         else
-            $matchId = 0;
-        $sql = 'select * from matches_view where match_id = ' . $matchId . ";";
-        $result = execute_sql_query($db_connection, $sql);
-        if ($result == null) {
-            echo "ERROR: Cannot find match entry to update status with, id =" . $matchId;
-        } else {
+            $matching_user_id = 0;
+        if ($matching_user_id == 0)
+            $message = "Please click on a profile picture before clicking on these buttons";
+        else {
+            $sql = 'select * from matches_view '
+                    . " where (match_user_id_1 = " . $user_id . " and match_user_id_2 = " . $matching_user_id . ")"
+                    . " or (match_user_id_1 = " . $matching_user_id . " and match_user_id_2 = " . $user_id . ");";
+
+            //echo $sql;
+            $result = execute_sql_query($db_connection, $sql);
+            if ($result == null) {
+                // No entry found so create a new match entry
+                $updatesql = "INSERT INTO match_table "
+                        . " (match_user_id_1,match_user_id_2,match_date,user_1_match_status_id,user_1_match_status_date,user_2_match_status_id,user_2_match_status_date,system_generated_match)"
+                        . " VALUES (" . $user_id . "," . $matching_user_id
+                        . ",now(),(select id from status_master where is_match_table_status = true and status_description = 'Like')"
+                        . ",now(),(select id from status_master where is_match_table_status = true and status_description = 'Like'),now(),0); ";
+                $updateResult = execute_sql_update($db_connection, $updatesql);
+// get the new entry 
+                $result = execute_sql_query($db_connection, $sql);
+            }
             while ($row = mysqli_fetch_array($result)) {
-                if ($row['match_user_id_1'] == $user_id)
-                    $_SESSION['matching_user_id'] = $row['match_user_id_2'];
-                else
-                    $_SESSION['matching_user_id'] = $row['match_user_id_1'];
                 $matchId = $row['match_id'];
-                if ($_POST['btnAction'] == "View") { // View Profile
-                    header("Location: ViewMatchProfile.php");
-                    exit();
-                }
                 // Like Button
                 // -----------
                 if ($_POST['btnAction'] == "Like") { // Update Status
-                    $newStatus = "";
-                    if ($row['match_user_id_1'] == $user_id) {
-                        $updateUser1or2 = 1;
-                        echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
-                        if ($row['user_profile_2_match_status'] == 'Like') {
-                            // both users must like each other before chatting
-                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
-                            $newStatus = "Chatting";
-                        } else
-                            $newStatus = "Like";
-                    } else {
-                        $updateUser1or2 = 2;
-                        echo "user_profile_1_match_status" . $row['user_profile_2_match_status'];
-                        if ($row['user_profile_1_match_status'] == 'Like') {
-                            
-                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 1);
-// both users must like each other before chatting
-                            $newStatus = "Chatting";
-                        } else
-                            $newStatus = "Like";
+                    $valid = true;
+                    if ($row['user_profile_1_match_status'] == 'Chatting' || $row['user_profile_2_match_status'] == 'Chatting') {
+                        $message = "You are already chatting with this person";
+                        $valid = false;
                     }
-                    $updateResult = update_match_status($db_connection, $matchId, $newStatus, $updateUser1or2);
-                    // $updateResult = update_match_status($db_connection, $matchId, $newStatus, 2);
-                    //echo "Update result " . $updateResult;
-                    //  $message = "Failed to update user status for match id " . $matchId; 
+                    if ($valid == true) {
+                        $newStatus = "";
+                        if ($row['match_user_id_1'] == $user_id) {
+                            $updateUser1or2 = 1;
+                            //   echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
+                            if ($row['user_profile_2_match_status'] == 'Like') {
+// both users must like each other before chatting
+                                $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
+                                $newStatus = "Chatting";
+                            } else
+                                $newStatus = "Like";
+                        } else {
+                            $updateUser1or2 = 2;
+                            //  echo "user_profile_1_match_status" . $row['user_profile_2_match_status'];
+                            if ($row['user_profile_1_match_status'] == 'Like') {
+
+                                $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 1);
+// both users must like each other before chatting
+                                $newStatus = "Chatting";
+                            } else
+                                $newStatus = "Like";
+                        }
+                        $updateResult = update_match_status($db_connection, $matchId, $newStatus, $updateUser1or2);
+// Return to meeting space
+                        header("Location: MeetingSpace.php");
+                        exit();
+                    }
                 }
                 // Maybe Button
                 // -----------
                 if ($_POST['btnAction'] == "Maybe") { // Update Status
-                    if ($row['match_user_id_1'] == $user_id)
-                        $updateUser1or2 = 1;
-                    else
-                        $updateUser1or2 = 2;
-                    $updateResult = update_match_status($db_connection, $matchId, 'Maybe', $updateUser1or2);
-                    //echo "Update result " . $updateResult;
+                    $valid = true;
+                    if ($row['user_profile_1_match_status'] == 'Matched' || $row['user_profile_2_match_status'] == 'Matched') {
+                        $valid = true;
+                    } else {
+                        $message = "You cannot set the profile to Maybe";
+                        $valid = false;
+                    }
+                    if ($valid == true) {
+                        if ($row['match_user_id_1'] == $user_id)
+                            $updateUser1or2 = 1;
+                        else
+                            $updateUser1or2 = 2;
+                        $updateResult = update_match_status($db_connection, $matchId, 'Maybe', $updateUser1or2);
+// Return to meeting space
+                        header("Location: MeetingSpace.php");
+                        exit();
+                    }
                 }
                 // Goodbye Button
                 // --------------
@@ -94,6 +128,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     else
                         $updateUser1or2 = 2;
                     $updateResult = update_match_status($db_connection, $matchId, 'Goodbye', $updateUser1or2);
+// Return to meeting space
+                    header("Location: MeetingSpace.php");
+                    exit();
                 }
                 // Report Button
                 // -------------
@@ -103,16 +140,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     else
                         $updateUser1or2 = 2;
                     $updateResult = update_match_status($db_connection, $matchId, 'Report', $updateUser1or2);
+// Return to meeting space
+                    header("Location: MeetingSpace.php");
+                    exit();
                 }
             }
         }
-//   if ($_POST['btnAction'] == "Goodbye") { // Update Status
-//       $matchId =    }
-    } else {
-        
-    }    
-    
-    
+    }
     // Get the user profile informatio
     $preferred_gender_name = $_POST['preferredGenderInput'];
     $city = $_POST['selectedCity'];
@@ -122,21 +156,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $to_age = $_POST['toAge'];
     // check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "Cancel") { // cancel the update
-        echo "Cancel pressed";
+        // echo "Cancel pressed";
         header("Location: meetingspace.php");
         exit();
     }
 } else {
-    $sql = "SELECT up.*, c.city, r.relationship_type, g1.gender_name, g2.gender_name as preferred_gender_name "
+    $sql = "SELECT up.*, c.city, r.relationship_type, g1.gender_name, g2.gender_name as preferred_gender_name, description "
             . " FROM user_profile up   "
-            . "LEFT JOIN city c ON c.id = up.city_id   "
-            . "LEFT JOIN city r ON r.id = up.relationship_type_id   "
-            . "LEFT JOIN gender g1 ON g1.id = up.gender_preference_id  "
-            . "left join gender g2 on g2.id = up.gender_id "
-            . "left join user_interests ui on ui.user_id = up.id "
-            . "left join interest i on i.id = ui_interests.id"
-            . "where up.id = '" . $user_id . "'";
-//echo $sql;
+            . " LEFT JOIN city c ON c.id = up.city_id   "
+            . " LEFT JOIN relationship_type r ON r.id = up.relationship_type_id   "
+            . " LEFT JOIN gender g1 ON g1.id = up.gender_preference_id  "
+            . " left join gender g2 on g2.id = up.gender_id "
+            . " left join user_interests ui on ui.user_id = up.id "
+            . " left join interests i on i.id = ui.interest_id"
+            . " where up.id = '" . $user_id . "'";
+    // echo $sql;
 // 
     if ($result = mysqli_query($db_connection, $sql)) {
         if (mysqli_num_rows($result) > 0) {
@@ -146,16 +180,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $surname = $row['surname'];
                 $gender_name = $row['gender_name'];
                 $preferred_gender_name = $row['preferred_gender_name'];
-                echo "city " . $city;
+                //  echo "city " . $city;
                 //echo "pref " . $preferred_gender_name;
                 $email = $row['email'];
                 $relationshipTypeId = $row['relationship_type_id'];
                 $relationship_type = $row['relationship_type'];
                 $description = $row['description'];
-                $from_age = $row['from_age'];
+                $from_age = $row['From_age'];
                 $to_age = $row['to_age'];
 
-
+                $_SESSION['user_name'] = $first_name . " " . $surname;
                 // echo "relationship " . $relationship_type;
                 //echo "hobby " . $description;
             }
@@ -163,8 +197,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "Cannot find user profile";
         }
     }
-//echo "I Am here" . $preferred_gender_name . " " . $city ;
 }
+if (isset($_SESSION['user_name']))
+    $user_name = $_SESSION['user_name'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -183,176 +218,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="StyleSheet.css">
-        <!--<style>
-            body {
-                background-image:    url(images/backlit-bonding-casual-708392.jpg);
-                background-size:     cover;                      /* <------ */
-                background-repeat:   no-repeat;
-                background-position: center center;              /* optional, center the image */
-            }
-            /* Add a black background color to the top navigation */
-            .topnav {
-                background-color: #333;
-                overflow: hidden;
-            }
-
-            /* Style the links inside the navigation bar */
-            .topnav a {
-                float: left;
-                color: #F0F8FF;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                font-size: 17px;
-            }
-
-            /* Change the color of links on hover */
-            .topnav a:hover {
-                background-color: #ddd;
-                color: grey;
-            }
-
-            /* Add a color to the active/current link */
-            .topnav a.active {
-                background-color: #A9A9A9;
-                color: white;
-            }
-
-            /* Right-aligned section inside the top navigation */
-            .topnav-right {
-                float: right;
-            }
-            iv.first {
-                opacity: 0.1;
-                filter: alpha(opacity=10);
-            }
-            input[type='range'] {
-                box-sizing: border-box;
-                border: 0px solid transparent;
-                padding: 0px;
-                margin: 0px;
-                width: 210px;
-                height: 50px;
-                cursor: pointer;
-                background: -webkit-repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
-                background: -moz-repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
-                background: repeating-linear-gradient(90deg, #777, #777 1px, transparent 1px, transparent 40px) no-repeat 50% 50%;
-                background-size: 122px 25px;
-                font-size: 16px;
-            }
-            input[type='range'],
-            input[type='range']::-webkit-slider-runnable-track,
-            input[type='range']::-webkit-slider-thumb {
-                -webkit-appearance: none;
-            }
-            input[type='range']::-webkit-slider-runnable-track {
-                box-sizing: border-box;
-                width: 200px;
-                height: 5px;
-                border-radius: 2px;
-                background: #777;
-            }
-            input[type='range']::-moz-range-track {
-                box-sizing: border-box;
-                width: 200px;
-                height: 5px;
-                border-radius: 2px;
-                padding: 0px;
-                background: #777;
-            }
-            input[type='range']::-moz-range-thumb {
-                box-sizing: border-box;
-                padding: 0px;
-                height: 20px;
-                width: 10px;
-                border-radius: 2px;
-                border: 1px solid;
-                background: #EEE;
-            }
-            input[type='range']::-ms-track {
-                box-sizing: border-box;
-                width: 210px;
-                height: 5px;
-                border-radius: 2px;
-                padding: 0px;
-                background: #777;
-                color: #777;
-            }
-            input[type='range']::-webkit-slider-thumb {
-                box-sizing: border-box;
-                padding: 0px;
-                height: 20px;
-                width: 10px;
-                border-radius: 2px;
-                border: 1px solid;
-                margin-top: -8px;
-                background: #EEE;
-            }
-            input[type='range']::-ms-thumb {
-                box-sizing: border-box;
-                padding: 0px;
-                height: 20px;
-                width: 10px;
-                border-radius: 2px;
-                border: 1px solid;
-                background: #EEE;
-            }
-            input[type="range"]::-ms-fill-lower {
-                background: transparent;
-            }
-            input[type='range']:focus {
-                outline: none;
-            }
-            /*input[type='range']:after{
-              position: absolute;
-              content: '20 40 60 80';
-              padding: 25px 4035px;
-              word-spacing: 20px;
-              left: 0px;
-              top: 0px;
-            }*/
-
-            .container:after {
-                position: absolute;
-                color: #777;
-                content: '20 40 60 80';
-                padding: 40px;
-                word-spacing: 20px;
-                left: 0px;
-                top: 0px;
-                z-index: -1;
-            }
-            .container {
-                padding: 0px;
-                position: relative;
-            }
-
-            /* Just for demo */
-
-            output{
-                display: block;
-                margin-top: 10px;
-                color: #777;
-            }
-            output:before{
-                content:"Selected Age: ";
-                font-weight: bold;
-            }
-            body {
-                font-family:Arial;
-            }
-
-
-            .stackem div {
-                width: 100%;
-            }
-        </style>-->
     </head>
     <body>
-
         <div class="topnav">
             <a class="active">FIND YOUR MATCH</a>
-            <a href="MeetingSpace.php">Home</a>
+            <a href="MeetingSpace.php" title="Meeting Space"><?php echo $user_name ?></a>
             <div class="topnav-right">
                 <a href="index.php">About</a>
                 <a href="logout.php">Log Out</a>
@@ -453,8 +323,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </select>
                                 </div>
                             </div>
-                            <!--Hobby Drop Down-->
-
                             <div class="form-group">
                                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                 <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
@@ -488,9 +356,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     }
                                 }
                                 ?>
-
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
-
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
                                 <div class="form-group">
                                     <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
@@ -533,6 +399,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="form-group">
                                     <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                     <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
+                                        <?php
+                                        if (strlen($message) > 0) {
+                                            echo "<div class='alert alert-danger'>";
+                                            echo "<p>" . $message . "</p>";
+                                            echo "</div>";
+                                        }
+                                        ?>
                                         <button class="btn btn-primary" id="valuser" type="submit" name="btnAction" name="btnAction" value="Submit" class="btn btn-success">
                                             Submit</button>
                                     </div>
@@ -549,14 +422,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 // check the button selected (these are at the end of this form
                                                 if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
                                                     // Sql to pull data from other users and match selected gender selectedcity and relationshiptyoe
-                                                    $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city, i.description, r.relationship_type FROM user_profile up"
+                                                    $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city, i.description, r.relationship_type "
+                                                            . "FROM user_profile up"
                                                             . " left join gender g1 on g1.id = up.gender_id "
                                                             . " left join gender g2 on g2.id = up.gender_preference_id  "
                                                             . " left join city c on c.id = up.city_id "
                                                             . " left join relationship_type r on r.id=up.relationship_type_id"
                                                             . " left join user_interests ui on ui.user_id = up.id "
                                                             . " left join interests i on i.id = ui.interest_id"
-                                                            . " where is_administrator = FALSE AND black_listed_user = false ";
+                                                            . " where is_administrator = FALSE AND black_listed_user = false "
+                                                            . " and up.id != " . $user_id;
+
                                                     if (strlen($preferred_gender_name) > 0)
                                                         $sql = $sql . " and gender_id in (select id from gender where gender_name = '" . $preferred_gender_name . "')"
                                                                 . " ";
@@ -571,23 +447,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         $sql = $sql . " And up.id in (select id from user_profile where from_age > '" . $from_age . "')";
                                                     if (strlen($to_age) > 0)
                                                         $sql = $sql . " And up.id in (select id from user_profile where to_age < '" . $to_age . "')";
-
-
-
                                                     //echo $sql;
-                                                    //echo $sql; 
-                                                    // need to add other columns here
-                                                    //            . "where id = " . $user_id . ";";
+
                                                     $pictureIndex = 0;
+                                                    $matchesFound = true;
                                                     $result = execute_sql_query($db_connection, $sql);
                                                     if ($result == null) {
-                                                        echo "<br><p>No matches found</p>";
+                                                        echo "<div class='alert alert-info col-md-12'>";
+                                                        echo "No matches found";
+                                                        echo "</div>";
+                                                        $matchesFound = false;
                                                     } else {
                                                         while ($row = mysqli_fetch_array($result)) {
                                                             $pictureIndex++;
                                                             //echo ("<li>");
                                                             // echo "<div class='container>";
-                                                            echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['id'] . "'/>";
+                                                            echo "        <input type='radio' class='hideinput' name='selected_user_id' id='radio" . $pictureIndex . "' value='" . $row['id'] . "'/>";
                                                             echo "        <label for='radio" . $pictureIndex . "'>";
                                                             echo "        <label >" . $row['first_name'] . " " . $row['surname'] . "</label>";
                                                             echo "<br>";
@@ -611,21 +486,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                                 echo ("<img height='32' width='32' src='../images/camera-photo-7.png'/><i></i>");
                                                         }
                                                     }
+                                                    if ($matchesFound == true) {
+                                                        echo '<div>';
+                                                        echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="/images/Like.png"/>Like</button>';
+                                                        echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="/images/View.png"/>View</button>';
+                                                        echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="/images/Maybe.png"/>Maybe</button>';
+                                                        echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="/images/Goodbye.png"/>Goodbye</button>';
+                                                        echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="/images/Report.png"/>Report</button>';
+                                                        echo '</div>';
+                                                    }
                                                 }
-                                                echo '<div>';
-                                                echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="/images/Like.png"/>Like</button>';
-                                                echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="/images/View.png"/>View</button>';
-                                                echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="/images/Maybe.png"/>Maybe</button>';
-                                                echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="/images/Goodbye.png"/>Goodbye</button>';
-                                                echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="/images/Report.png"/>Report</button>';
-                                            }echo '</div>';
+                                            }
                                             ?>
-                                            </fieldset>
-                                            </form>
                                         </div>
-                                    </div<!-- and up.id in (select user_id from user_interests where interest_id 
-                                            //in (select id from interests where description in ('Music','Sport','Traveling')));-->
-                                </div>
+                                    </div>
 
-                                </body>
-                                </html>
+
+                                </div>
+                            </div<!-- and up.id in (select user_id from user_interests where interest_id 
+                                    //in (select id from interests where description in ('Music','Sport','Traveling')));-->
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+    </body>
+</html>

@@ -175,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo "<div class='float-sm-left col-sm-6 container border border-primary rounded text-dark bg-success'>";
                                     else
                                         echo "<div class='float-sm-right col-sm-6 container border border-primary rounded text-dark bg-info'>";
-                                    echo  $row['communication_datetime'] . " ". $row['message'] . "<br>";
+                                    echo  $row['communication_datetime'] . "<br><b>". $row['message'] . "</b><br>";
                                     echo "</div>";
                                     echo "<br>";
                                     $lastCommunicationId = $row['id'];
@@ -197,6 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                           }
                                           ?>                                          
                                 <button name="btnAction" class="btn btn-success" type="submit" value="Send"><img height="24" width="24"  title="Chat" src='/images/Send.png'/>Send</button>
+                                <button name="btnAction" class="btn btn-info" type="submit" value="Refresh"><img height="24" width="24"  title="Refresh" src='/images/refresh.png'/>Refresh</button>
                             </fieldset>
                         </form>
                     </div>

@@ -41,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     // CHAT
     if ($_POST['btnAction'] == "Chat") { // Call RemoveAccount
-        if (isset($_POST['selected_user'])) {
-            $matchId = $_POST['selected_user'];
+        if (isset($_POST['selected_match'])) {
+            $matchId = $_POST['selected_match'];
             $sql = "SELECT * FROM matches_view where match_id = " . $matchId . ";";
             // echo $sql;
             $result = execute_sql_query($db_connection, $sql);
@@ -74,8 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Process User Profile specific buttons
     if ($_POST['btnAction'] == "Like" || $_POST['btnAction'] == "Maybe" || $_POST['btnAction'] == "Goodbye" || $_POST['btnAction'] == "Report" || $_POST['btnAction'] == "View") { // Get Match view row for subsequent buttons
         $_SESSION['user_id'] = $user_id;
-        if (isset($_POST['selected_user']))
-            $matchId = $_POST['selected_user'];
+        if (isset($_POST['selected_match']))
+            $matchId = $_POST['selected_match'];
         else
             $matchId = 0;
         $sql = 'select * from matches_view where match_id = ' . $matchId . ";";
@@ -93,9 +93,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     header("Location: ViewMatchProfile.php");
                     exit();
                 }
+                $user_profile_1_match_status = $row['user_profile_1_match_status'];
+                $user_profile_2_match_status = $row['user_profile_2_match_status'];
                 // Like Button
                 // -----------
                 if ($_POST['btnAction'] == "Like") { // Update Status
+                    // Check and see current status
+                    $valid = true;
+                    if ($user_profile_1_match_status == 'Chatting' || $user_profile_2_match_status == 'Chatting')
+                    {
+                        $valid = false;
+                        $message = "You are already chatting with this person";
+                    }
+                    
+                    if ($valid == true) {
                     $newStatus = "";
                     if ($row['match_user_id_1'] == $user_id) {
                         $updateUser1or2 = 1;
@@ -118,9 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $newStatus = "Like";
                     }
                     $updateResult = update_match_status($db_connection, $matchId, $newStatus, $updateUser1or2);
-                    // $updateResult = update_match_status($db_connection, $matchId, $newStatus, 2);
-                    //echo "Update result " . $updateResult;
-                    //  $message = "Failed to update user status for match id " . $matchId; 
+                }
                 }
                 // Maybe Button
                 // -----------
@@ -152,11 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         }
-//   if ($_POST['btnAction'] == "Goodbye") { // Update Status
-//       $matchId =    }
-    } else {
-        
-    }
+    } 
 }
 ?>
 
@@ -240,7 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     //echo ("<li>");
                                                     if ($row['match_user_id_1'] == $user_id) {
                                                         // echo "<div class='container>";
-                                                        echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                        echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                         echo "        <label for='radio" . $pictureIndex . "'>";
                                                         echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                                         echo "<br>";
@@ -250,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                             echo ("<img class='selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>");
                                                         echo "</label>";
                                                     } else {
-                                                        echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                        echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                         echo "        <label for='radio" . $pictureIndex . "'>";
                                                         echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                                         echo "<br>";
@@ -299,7 +304,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 $pictureIndex++;
                                                 echo ("<li>");
                                                 if ($row['match_user_id_1'] == $user_id) {
-                                                    echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                    echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                     echo "        <label for='radio" . $pictureIndex . "'>";
                                                     echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                                     echo "<br>";
@@ -309,7 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         echo ("<img class='rounded-circle selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                     echo "</label>";
                                                 } else {
-                                                    echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                    echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                     echo "        <label for='radio" . $pictureIndex . "'>";
                                                     echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                                     echo "<br>";
@@ -336,17 +341,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 <div class="row">
                                     <!-- 
-                                    System Matches Section 
+                                    Possible Matches Section 
                                     ------------------------  -->
                                     <div class="col-xs-12 col-sm-8 col-lg-8" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
-                                        <h3>System Matches</h3>
+                                        <h3>Possible Matches</h3>
                                         <?php
                                         $systemMatchesFound = true;
                                         $sql = "SELECT * FROM matches_view where system_generated_match = true"
-                                                . " and (match_user_id_2 =" . $user_id . " and user_profile_2_match_status = 'Matched' and user_profile_1_match_status not in ('Report', 'Goodbye')) "
-                                                . " or (match_user_id_1 =" . $user_id . " and user_profile_1_match_status = 'Matched' and user_profile_2_match_status not in ('Report', 'Goodbye'));";
+                                                . " and (match_user_id_1 =" . $user_id . " and user_profile_1_match_status in ('Matched','Maybe') and user_profile_2_match_status not in ('Like','Report', 'Goodbye')) "
+                                                . " or  (match_user_id_2 =" . $user_id . " and user_profile_2_match_status in ('Matched','Maybe') and user_profile_1_match_status not in ('Like','Report', 'Goodbye'));";
 
-                                        // echo $sql;
+                                         //echo $sql;
                                         $result = execute_sql_query($db_connection, $sql);
                                         if ($result == null) {
                                             echo "<br><p>No matches found</p>";
@@ -356,7 +361,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 $pictureIndex++;
                                                 if ($row['match_user_id_1'] == $user_id) {
                                                     //   echo "<div class='col-sm-1'>";
-                                                    echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                    echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                     echo "        <label for='radio" . $pictureIndex . "'>";
                                                     echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                                     echo "<br>";
@@ -380,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     }
                                                     echo "</label>";
                                                 } else {
-                                                    echo "        <input type='radio' name='selected_user'  class='hideinput' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                    echo "        <input type='radio' name='selected_match'  class='hideinput' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                     echo "        <label for='radio" . $pictureIndex . "'>";
                                                     echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                                     echo "<br>";
@@ -437,7 +442,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 $pictureIndex++;
                                                 echo ("<li>");
                                                 if ($row['match_user_id_1'] == $user_id) {
-                                                    echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                    echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                     echo "        <label for='radio" . $pictureIndex . "'>";
                                                     echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                                     echo "<br>";
@@ -447,7 +452,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         echo ("<img class='rounded-circle selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                     echo "</label>";
                                                 } else {
-                                                    echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                    echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                     echo "        <label for='radio" . $pictureIndex . "'>";
                                                     echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                                     echo "<br>";

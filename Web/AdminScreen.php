@@ -12,34 +12,40 @@ include 'group05_library.php';
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
 //echo "session user " . $user_id;
-echo " here";
+//echo " here";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-echo " here1";    
+//echo " here1";
         $_SESSION['user_id'] = $user_id;
         if (isset($_POST['selected_user']))
             $matchId = $_POST['selected_user'];
         else
             $matchId = 0;
-        
-        echo $matchId;
-        $sql = 'select * from matches_view where match_id = ' . $matchId . ";";
-        $result = execute_sql_query($db_connection, $sql);
-        if ($result == null) {
-            echo "ERROR: Cannot find match entry to update status with, id =" . $matchId;
-        } else {
-            while ($row = mysqli_fetch_array($result)) {
-                if ($row['match_user_id_1'] == $user_id)
-                    $_SESSION['matching_user_id'] = $row['match_user_id_2'];
-                else
-                    $_SESSION['matching_user_id'] = $row['match_user_id_1'];
-                $matchId = $row['match_id'];
-                if ($_POST['btnAction'] == "View") { // View Profile
-                    header("Location: ViewMatchProfile.php");
-                    exit();
-                }
 
-            }
+        if ($matchId == 0) {
+          $message = "No users are reported.";
+          //header("Location: Logout.php");
         }
+        else {
+          echo $matchId;
+          $sql = 'select * from matches_view where match_id = ' . $matchId . ";";
+          $result = execute_sql_query($db_connection, $sql);
+          if ($result == null) {
+              echo "ERROR: Cannot find match entry to update status with, id =" . $matchId;
+          } else {
+              while ($row = mysqli_fetch_array($result)) {
+                  if ($row['match_user_id_1'] == $user_id)
+                      $_SESSION['matching_user_id'] = $row['match_user_id_2'];
+                  else
+                      $_SESSION['matching_user_id'] = $row['match_user_id_1'];
+                  $matchId = $row['match_id'];
+                  if ($_POST['btnAction'] == "View") { // View Profile
+                      header("Location: ViewMatchProfile.php");
+                      exit();
+                  }
+
+              }
+          }
+      }
 }
 ?>
 <!DOCTYPE html>
@@ -59,7 +65,7 @@ echo " here1";
         <div class="container">
             <h1>Admin Screen</h1>
         </div>
- <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-group" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >        
+ <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-group" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
 
         <div class="col-xs-12 col-sm-12 col-lg-4" style="border-style:solid; border-color: silver;background-color:white; opacity: 1;">
                                         <h3>Reported</h3>
@@ -105,8 +111,9 @@ echo " here1";
                                         <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src='/images/View.png'/>View</button>
                                         <button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Suspend" src='/images/Maybe.png'/>Suspend (1 Month)</button>
                                         <button name="btnAction" class="btn btn-warning" type="submit" value="Bar"><img height="16" width="16" title="Bar" src='/images/Goodbye.png'/>Bar</button>
-                                      
+                                        <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
+
                                     </div>
- </form> 
+ </form>
  </body>
-</html> 
+</html>

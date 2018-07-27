@@ -10,6 +10,7 @@ include 'group05_library.php';
 
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
+$message = "";
 // echo " matching_user_id " . $matching_user_id;
 
 
@@ -20,24 +21,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     if ($_POST['btnAction'] == "Like" || $_POST['btnAction'] == "Maybe" || $_POST['btnAction'] == "Goodbye" || $_POST['btnAction'] == "Report" || $_POST['btnAction'] == "View") { // Get Match view row for subsequent buttons
-        // Get the match entry for both users
+// Get the match entry for both users
         $sql = 'select * from matches_view '
                 . " where (match_user_id_1 = " . $user_id . " and match_user_id_2 = " . $matching_user_id . ")"
-                . " or (match_user_id_1 = " . $matching_user_id . " and match_user_id_2) = " . $user_id;
+                . " or (match_user_id_1 = " . $matching_user_id . " and match_user_id_2 = " . $user_id . ");";
+        //echo $sql;
         $result = execute_sql_query($db_connection, $sql);
         if ($result == null) {
-            // No entry found so create a new match entry
+// No entry found so create a new match entry
             $updatesql = "INSERT INTO match_table "
                     . " (match_user_id_1,match_user_id_2,match_date,user_1_match_status_id,user_1_match_status_date,user_2_match_status_id,user_2_match_status_date,system_generated_match)"
                     . " VALUES (" . $user_id . "," . $matching_user_id
                     . ",now(),(select id from status_master where is_match_table_status = true and status_description = 'Like')"
                     . ",now(),(select id from status_master where is_match_table_status = true and status_description = 'Like'),now(),0); ";
             $updateResult = execute_sql_update($db_connection, $updatesql);
-            // get the new entry 
+// get the new entry 
             $result = execute_sql_query($db_connection, $sql);
-           }
+        }
         while ($row = mysqli_fetch_array($result)) {
-            $matchId = $row['id'];
+
+
+            $matchId = $row['match_id'];
             if ($row['match_user_id_1'] == $user_id)
                 $_SESSION['matching_user_id'] = $row['match_user_id_2'];
             else
@@ -47,68 +51,84 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 header("Location: ViewMatchProfile.php");
                 exit();
             }
-            // Like Button
-            // -----------
+// Like Button
+// -----------
             if ($_POST['btnAction'] == "Like") { // Update Status
-                $newStatus = "";
-                if ($row['match_user_id_1'] == $user_id) {
-                    $updateUser1or2 = 1;
-                    echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
-                    if ($row['user_profile_2_match_status'] == 'Like') {
-                        // both users must like each other before chatting
-                        $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
-                        $newStatus = "Chatting";
-                    } else
-                        $newStatus = "Like";
-                } else {
-                    $updateUser1or2 = 2;
-                    echo "user_profile_1_match_status" . $row['user_profile_2_match_status'];
-                    if ($row['user_profile_1_match_status'] == 'Like') {
-
-                        $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 1);
-                        // both users must like each other before chatting
-                        $newStatus = "Chatting";
-                    } else
-                        $newStatus = "Like";
+                $valid = true;
+                if ($row['user_profile_1_match_status'] == 'Chatting' || $row['user_profile_2_match_status'] == 'Chatting') {
+                    $message = "You are already chatting with this person";
+                    $valid = false;
                 }
-                $updateResult = update_match_status($db_connection, $matchId, $newStatus, $updateUser1or2);
-                // Return to meeting space
-                header("Location: MeetingSpace.php");
-                exit();
+                if ($valid == true) {
+                    $newStatus = "";
+                    if ($row['match_user_id_1'] == $user_id) {
+                        $updateUser1or2 = 1;
+                        echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
+                        if ($row['user_profile_2_match_status'] == 'Like') {
+// both users must like each other before chatting
+                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
+                            $newStatus = "Chatting";
+                        } else
+                            $newStatus = "Like";
+                    } else {
+                        $updateUser1or2 = 2;
+                        echo "user_profile_1_match_status" . $row['user_profile_2_match_status'];
+                        if ($row['user_profile_1_match_status'] == 'Like') {
+
+                            $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 1);
+// both users must like each other before chatting
+                            $newStatus = "Chatting";
+                        } else
+                            $newStatus = "Like";
+                    }
+                    $updateResult = update_match_status($db_connection, $matchId, $newStatus, $updateUser1or2);
+// Return to meeting space
+                    header("Location: MeetingSpace.php");
+                    exit();
+                }
             }
-            // Maybe Button
-            // -----------
+// Maybe Button
+// -----------
             if ($_POST['btnAction'] == "Maybe") { // Update Status
-                if ($row['match_user_id_1'] == $user_id)
-                    $updateUser1or2 = 1;
-                else
-                    $updateUser1or2 = 2;
-                $updateResult = update_match_status($db_connection, $matchId, 'Maybe', $updateUser1or2);
-                // Return to meeting space
-                header("Location: MeetingSpace.php");
-                exit();
+                $valid = true;
+                if ($row['user_profile_1_match_status'] == 'Matched' || $row['user_profile_2_match_status'] == 'Matched') {
+                    
+                } else {
+                    $message = "You cannot set the profile to Maybe";
+                    $valid = false;
+                }
+                if ($valid == true) {
+                    if ($row['match_user_id_1'] == $user_id)
+                        $updateUser1or2 = 1;
+                    else
+                        $updateUser1or2 = 2;
+                    $updateResult = update_match_status($db_connection, $matchId, 'Maybe', $updateUser1or2);
+// Return to meeting space
+                    header("Location: MeetingSpace.php");
+                    exit();
+                }
             }
-            // Goodbye Button
-            // --------------
+// Goodbye Button
+// --------------
             if ($_POST['btnAction'] == "Goodbye") { // Update Status
                 if ($row['match_user_id_1'] == $user_id)
                     $updateUser1or2 = 1;
                 else
                     $updateUser1or2 = 2;
                 $updateResult = update_match_status($db_connection, $matchId, 'Goodbye', $updateUser1or2);
-                // Return to meeting space
+// Return to meeting space
                 header("Location: MeetingSpace.php");
                 exit();
             }
-            // Report Button
-            // -------------
+// Report Button
+// -------------
             if ($_POST['btnAction'] == "Report") { // Update Status
                 if ($row['match_user_id_1'] == $user_id)
                     $updateUser1or2 = 1;
                 else
                     $updateUser1or2 = 2;
                 $updateResult = update_match_status($db_connection, $matchId, 'Report', $updateUser1or2);
-                // Return to meeting space
+// Return to meeting space
                 header("Location: MeetingSpace.php");
                 exit();
             }
@@ -132,8 +152,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form action="/ViewMatchProfile.php" method="Post">
             <div class="topnav">
                 <a class="active">MATCHED PROFILE</a>
-                <a href="MeetingSpace.php">Home</a>
+                <a href="MeetingSpace.php" title="Meeting Space">
+                    <?php
+                    $sql = "select first_name, surname from user_profile where id = " . $user_id;
+                    //echo $sql;
+                    $result = execute_sql_query($db_connection, $sql);
+                    if ($result != null) {
+                        while ($row = mysqli_fetch_array($result)) {
+                            echo $row['first_name'] . " " . $row['surname'];
+                        }
+                    }
+                    ?>
+
+
+                </a>
                 <div class="topnav-right">
+                    <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='/images/Find.png'/>Match Finder</a>
                     <a href="UpdateProfile.php">Update Profile</a>
                     <a href="logout.php">Log Out</a>
                 </div>
@@ -153,27 +187,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <p> " "</p>
                             </div>
                             <div class="col-xs-6 col-sm-4" style="border-style:solid; border-color: silver; background-color:white; opacity: 1;">
-<?php
-$sql = "SELECT * FROM user_profile where id =" . $matching_user_id . ";";
-$mibio = "";
-$picture = "";
-$first_name = "";
-$surname = "";
-if ($result = mysqli_query($db_connection, $sql)) {
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_array($result)) {
-            $mybio = $row['my_bio'];
-            if (strlen($row['picture']) > 0) {
-                $picture = base64_encode($row['picture']);
-            } else {
-                
-            }
-            $first_name = $row['first_name'];
-            $surname = $row['surname'];
-        }
-    }
-}
-?>
+                                <?php
+                                $sql = "SELECT * FROM user_profile where id =" . $matching_user_id . ";";
+                                $mibio = "";
+                                $picture = "";
+                                $first_name = "";
+                                $surname = "";
+                                if ($result = mysqli_query($db_connection, $sql)) {
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            $mybio = $row['my_bio'];
+                                            if (strlen($row['picture']) > 0) {
+                                                $picture = base64_encode($row['picture']);
+                                            } else {
+                                                
+                                            }
+                                            $first_name = $row['first_name'];
+                                            $surname = $row['surname'];
+                                        }
+                                    }
+                                }
+                                ?>
                                 <h4><?php echo $first_name . " " . $surname ?> </h4>
                                 <!-- Display Image -->
                                 <?php
@@ -202,30 +236,32 @@ if ($result = mysqli_query($db_connection, $sql)) {
                                 <p>     </p>    
                             </div>
                             <div class ="col-xs-4 col-sm-4"style="border-style:solid; border-color: silver;background-color:white;; opacity: 0.9;">
-<?php
-echo "<h3> $first_name's Interests </h3> ";
-$sql = "SELECT description
+                                <?php
+                                echo "<h3> $first_name's Interests </h3> ";
+                                $sql = "SELECT description
                        FROM interests
                        LEFT JOIN user_interests ON interest_id = interests.id
                        where user_id = " . $matching_user_id . ";";
-$interest = "";
-if ($result = mysqli_query($db_connection, $sql)) {
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_array($result)) {
-            $description = $row['description'];
-            echo("<h4>. $description ");
-        }
-    }
-}
-?>
+                                $interest = "";
+                                if ($result = mysqli_query($db_connection, $sql)) {
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            $description = $row['description'];
+                                            echo("<h4>. $description ");
+                                        }
+                                    }
+                                }
+                                ?>
                             </div>
                             <div class="col-xs-6 col-sm-6"style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;text-align:right">
+                                <?php
+                                if (strlen($message) > 0) {
+                                    echo "<div class='alert alert-danger'>";
+                                    echo "<p>" . $message . "</p>";
+                                    echo "</div>";
+                                }
+                                ?>
 
-
-                                <br>
-                                <br>
-                                <br>
-                                <br>
                                 <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
                                 <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
                                 <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
