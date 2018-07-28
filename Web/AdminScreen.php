@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     if (strlen($row['user_profile_2_picture']) > 0)
                                                         echo "<img class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                                     else
-                                                        echo ("<img class='rounded-circle selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                        echo ("<img class='rounded-circle selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>'");
                                                     echo "</label>";
                                                 } else {
                                                     echo "        <input type='radio' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     if (strlen($row['user_profile_1_picture']) > 0)
                                                         echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                                     else
-                                                        echo ("<img class='selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>'");
+                                                        echo ("<img class='selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>'");
                                                     echo "</label>";
                                                 }
                                                 echo "    </li>";
@@ -108,10 +108,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         }
                                         ?>
                                         <p><b>Click on Photograph and do one of the following:</b></p>
-                                        <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src='/images/View.png'/>View</button>
-                                        <button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Suspend" src='/images/Maybe.png'/>Suspend (1 Month)</button>
-                                        <button name="btnAction" class="btn btn-warning" type="submit" value="Bar"><img height="16" width="16" title="Bar" src='/images/Goodbye.png'/>Bar</button>
-                                        <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
+                                        <button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src='http://hive.csis.ul.ie/4065/group05/images/View.png'/>View</button>
+                                        <button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Suspend" src='http://hive.csis.ul.ie/4065/group05/images/Maybe.png'/>Suspend (1 Month)</button>
+                                        <button name="btnAction" class="btn btn-warning" type="submit" value="Bar"><img height="16" width="16" title="Bar" src='http://hive.csis.ul.ie/4065/group05/images/Goodbye.png'/>Bar</button>
+                                        <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Logoff.png'/>Logoff</a>
 
                                     </div>
  </form>
