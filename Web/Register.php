@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
         } else {
             $valid = 0;
+            echo $email;
             $message = 'Invalid email address';
         }
 
@@ -131,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="col-sm-3 col-md-3 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold;padding-top: 10px; text-align: left;">
                             Your Email <span style="color: red">*</span> :</div>
                         <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style="font-weight:800;">
-                            <input style="border-radius: 4px" type="email"  class="form-control" name="yourEmail" id="yourEmail">                   
+                            <input style="border-radius: 4px" type="email"  class="form-control" name="email" id="yourEmail">                   
                         </div>
                         <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                     </div>
