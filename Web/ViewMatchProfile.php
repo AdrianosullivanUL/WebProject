@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="topnav-right">
                     <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='http://hive.csis.ul.ie/4065/group05/images/Find.png'/>Match Finder</a>
                     <a href="UpdateProfile.php">Update Profile</a>
-                    <a href="logout.php">Log Out</a>
+                    <a href="Logout.php">Log Out</a>
                 </div>
             </div>
             <div class="col-md-10 col-md-offset-2" >
