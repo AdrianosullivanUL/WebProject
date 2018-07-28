@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                      <div class="col-sm-3 col-md-3 col-lg-3 col-xs-10" style="text-align: right;">
                                     <span style="color: red">*</span> <span style="font-size: 6pt;">mandatory fields</span>
                                 </div> 
-                    <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10" style="text-align: ;">   
+                    <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10" style="text-align: left;">   
                     <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
                     <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
                     </div>
