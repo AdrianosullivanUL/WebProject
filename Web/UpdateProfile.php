@@ -289,7 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="form-group">
                             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                             <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
-                                Surname <span style="color: red">*</span> :</div>  
+                                Date of Birth <span style="color: red">*</span> :</div>  
                             <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                 <input style="border-radius: 4px" type="date"  class="form-control" name="dateOfBirthInput" value= "<?php echo $dob; ?>" min="1900-01-01" max="<?php echo (new \DateTime())->format('Y-m-d'); ?>">
                             </div>

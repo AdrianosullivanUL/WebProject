@@ -155,8 +155,8 @@ if ($result = mysqli_query($db_connection, $sql)) {
 
                 </a>
                 <div class="topnav-right">
-                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/images/Delete.png'/>Delete Profile</a>
-                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/images/Logoff.png'/>Logoff</a>
+                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Delete.png'/>Delete Profile</a>
+                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Logoff.png'/>Logoff</a>
                 </div>
             </div>
 
