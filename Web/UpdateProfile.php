@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($ageSelectionFrom > $ageSelectionTo) {
             $valid = false;
-            $message = "Age Profile From cannot be greater than Age Profile To";
+            $message = "Age Profile from cannot be greater than Age Profile To";
         }
         // Relationship Type
         if (strlen($relationshipType) == 0) {
@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $dob = "";
 
     $sql = "SELECT up.*, DATE_FORMAT(up.date_of_birth,'%d/%m/%Y') as formatted_dob, g1.gender_name, g2.gender_name as preferred_gender_name, rt.relationship_type, c.city "
-            . " FROM user_profile up "
+            . " fROM user_profile up "
             . " left join gender g1 on g1.id = up.gender_id "
             . " left join gender g2 on g2.id = up.gender_preference_id "
             . " left join relationship_type rt on rt.id = up.relationship_type_id "
@@ -194,9 +194,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $preferredGender = $row['preferred_gender_name'];
                 $dob = $row['date_of_birth'];
                 $relationshipType = $row['relationship_type'];
-                $ageSelectionFrom = $row['From_age'];
+                $ageSelectionFrom = $row['from_age'];
                 $ageSelectionTo = $row['to_age'];
-                $travelDistance = $row['Travel_distance'];
+                $travelDistance = $row['travel_distance'];
                 $city = $row['city'];
             }
         } else {
