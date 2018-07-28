@@ -98,14 +98,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <head>
         <title>Register</title>
         <meta charset="utf-8">
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="StyleSheet.css">
     </head>
 
@@ -113,6 +116,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="topnav">
         <a class="active">REGISTER</a>
+        <div class="topnav-right">
+                   <a href="Logon.php" title="Log In"><img height="16" width="16"  src='/images/Logoff.png'/>Log In</a>
+            </div>
     </div>
 
     <div class="container">
@@ -126,12 +132,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="form-group">
                         <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                        <div class="col-sm-3 col-md-3 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold;padding-top: 10px; text-align: left;">
+                        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold;padding-top: 10px; text-align: left;">
                             Your Email <span style="color: red">*</span> :</div>
-                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style="font-weight:800;">
+                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 input-group mobilePad" style="font-weight:800;">
                             <input style="border-radius: 4px" type="email"  class="form-control" name="email" id="yourEmail">                   
                         </div>
                         <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
@@ -141,9 +144,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="form-group">
                         <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                        <div class="col-sm-3 col-md-3 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: left;">
+                        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: left;">
                             Password <span style="color: red">*</span> :</div>
-                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style="font-weight: bold;">
+                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 input-group mobilePad" style="font-weight: bold;">
                             <input style="border-radius: 4px" type="password"  class="form-control" name="password" id="yourEmail">                   
                         </div>
                         <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
@@ -153,9 +156,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="form-group">
                         <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                        <div class="col-sm-3 col-md-3 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: left;">
+                        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: left;">
                             Confirm Your Password  <span style="color: red">*</span> :</div>
-                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-9 input-group mobilePad" style=""font-weight: bold;">
+                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 input-group mobilePad" style=""font-weight: bold;">
                              <input style="border-radius: 4px" type="password"  class="form-control" name="confirmPassword" id="yourEmail">                   
                         </div>
                         <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
@@ -172,23 +175,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <br>
                     <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: right;">
-                        <div class="col-sm-1 col-md-1 col-lg-2 col-xs-1" style="text-align: left;"></div>
-                     <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2" style="text-align: left;">
+                        
+                     <div class="col-sm-3 col-md-3 col-lg-3 col-xs-10" style="text-align: right;">
                                     <span style="color: red">*</span> <span style="font-size: 6pt;">mandatory fields</span>
-                                </div>   
+                                </div> 
+                    <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10" style="text-align: ;">   
                     <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
                     <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
                     </div>
+                        </div>
                     
                     <div class="form-group">
                         <div class="col-sm-1 col-md-2 col-lg-2 col-xs-1"></div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                        <div class="col-sm-8 col-md-8 col-lg-10 col-xs-6" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
+                        <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
 
-                            <h1>How does it work?</h1>
-                            <p>Our process is simple and easy to use, we don't focus on asking you a million questions or doing psychological tests! We ask you a few simple questions and ask you to post a recent picture of yourself. After that we do the following for you:</p>
+                            <h3>How does it work?</h3>
+                            <p>Our process is simple and easy to use, we don't ask you a million questions or need you to do a psychological tests! Just answer a few simple questions and upload a recent picture. Leave the rest to us :</p>
                             <ul>
                                 <li>Based on the criteria you have entered, we will find people who match your preferences and present these in the Meeting Space under the System Matches heading</li>
                                 <li>From here you can view all of the people matched to you and do the following</li>
