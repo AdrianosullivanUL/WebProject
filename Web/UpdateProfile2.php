@@ -8,7 +8,7 @@ $session_hash = $_SESSION['session_hash'];
 if (validate_logon($db_connection, $user_id, $session_hash) == false) {
     // User is not correctly logged on, route to Logon screen
     Echo "Logon issue " . $session_hash;
-  //  header("Location: Logon.php");
+    //  header("Location: Logon.php");
 }
 
 $user_id = $_SESSION['user_id'];
@@ -28,33 +28,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Get the form inputs
         // -------------------
         $myBio = trim($_POST['myBioInput']);
-
+        $valid = true;
         // Get the uploaded picture
         if (isset($_FILES["fileToUpload"]["tmp_name"])) {
             $sizeInBytes = filesize($_FILES["fileToUpload"]["tmp_name"]);
             $maxImageSize = 204800;
-
-            $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-            $imageType = $check['mime'];
-            if ($check !== false) {
-
+            if (strlen($_FILES["fileToUpload"]["tmp_name"]) > 0) {
+                $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+                $imageType = $check['mime'];
                 if ($sizeInBytes > $maxImageSize) {
                     $message = "File must be smaller than 200kb";
                     $valid = false;
                 } else {
-                    $uploadOk = 1;
                     $picture = addslashes(file_get_contents($_FILES['fileToUpload']['tmp_name']));
+                    $sql = "UPDATE user_profile SET picture = '" . $picture . "', my_bio = '" . $myBio . "' "
+                            . " where id = " . $user_id;
+                    $result = execute_sql_update($db_connection, $sql);
                 }
-            } else {
-                $message = "File is not an image";
-                $valid = false;
-                $uploadOk = 0;
             }
         }
         // Validate text inputs 
         // --------------------
-        $valid = true;
-        if (strlen($myBio) == 0) {
+         if (strlen($myBio) == 0) {
             $message = "Please provide a short bio for your profile";
             $valid = false;
         }
@@ -62,16 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Do Update to User Profile
         // ---------
         if ($valid == true) {
-            if ($picture == "") {
-                $sql = "UPDATE user_profile SET my_bio = '" . $myBio . "' "
-                        . " where id = " . $user_id;
-            } else {
-
-                $sql = "UPDATE user_profile SET picture = '" . $picture . "', my_bio = '" . $myBio . "' "
-                        . " where id = " . $user_id;
+            try {
+                $stmt = $db_connection->prepare("UPDATE user_profile SET my_bio = ? where id = ?;");
+                $stmt->bind_param("si", $myBio, $user_id);
+                $stmt->execute();
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
             }
-            //echo $sql;
-            $result = execute_sql_update($db_connection, $sql);
         }
         // Remove all user Interests first
         $sql = "delete from user_interests where user_id = " . $user_id . ";";
@@ -80,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // mysql_free_result($result);
         if (isset($_POST['check_list'])) {
             foreach ($_POST['check_list'] as $key => $value) {
-
                 $sql = "select count(1) cnt from user_interests where user_id = " . $user_id . " and interest_id = " . $key . ";";
                 //echo $sql . "<br>";
                 $result = execute_sql_query($db_connection, $sql);
@@ -102,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($valid == true) {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['matching_user_id'] = $matching_user_id;
-            header("Location: MeetingSpace.php");
-            exit();
+            //   header("Location: MeetingSpace.php");
+            //  exit();
         }
     }
     if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
