@@ -471,7 +471,7 @@ if (isset($_SESSION['user_name']))
                                                             if (strlen($row['picture']) > 0)
                                                                 echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
                                                             else
-                                                                echo ("<img class='selectimg' height='100' width='100' src='../images/camera-photo-7.png'/><i></i>");
+                                                                echo ("<img class='selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
                                                             echo "</label>";
                                                         }
                                                     }
@@ -485,7 +485,7 @@ if (isset($_SESSION['user_name']))
                                                             if (strlen($row['picture']) > 0)
                                                                 echo "<img class='rounded-circle'  height='32' width='32' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
                                                             else
-                                                                echo ("<img height='32' width='32' src='../images/camera-photo-7.png'/><i></i>");
+                                                                echo ("<img height='32' width='32' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
                                                         }
                                                     }
                                                     if ($matchesFound == true) {

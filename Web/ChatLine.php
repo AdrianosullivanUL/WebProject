@@ -161,10 +161,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             </a>
             <div class="topnav-right">
-                <a href="UpdateProfile.php" title="Edit your User Profile"><img height="16" width="16"  src='/images/Edit.png'/>Edit Profile</a>
-                <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='/images/Find.png'/>Match Finder</a>
-                <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Remove Profile</a>
-                <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
+                <a href="UpdateProfile.php" title="Edit your User Profile"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Edit.png'/>Edit Profile</a>
+                <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='http://hive.csis.ul.ie/4065/group05/images/Find.png'/>Match Finder</a>
+                <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Delete.png'/>Remove Profile</a>
+                <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Logoff.png'/>Logoff</a>
             </div>
         </div>
 
@@ -223,8 +223,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                               echo "</div>";
                                           }
                                           ?>                                          
-                                <button name="btnAction" class="btn btn-success" type="submit" value="Send"><img height="24" width="24"  title="Chat" src='/images/Send.png'/>Send</button>
-                                <button name="btnAction" class="btn btn-info" type="submit" value="Refresh"><img height="24" width="24"  title="Refresh" src='/images/refresh.png'/>Refresh</button>
+                                <button name="btnAction" class="btn btn-success" type="submit" value="Send"><img height="24" width="24"  title="Chat" src='http://hive.csis.ul.ie/4065/group05/images/Send.png'/>Send</button>
+                                <button name="btnAction" class="btn btn-info" type="submit" value="Refresh"><img height="24" width="24"  title="Refresh" src='http://hive.csis.ul.ie/4065/group05/images/refresh.png'/>Refresh</button>
                             </fieldset>
                         </form>
                     </div>
