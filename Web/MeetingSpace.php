@@ -229,48 +229,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         }
                                         ?>
                                         <h3>You are Chatting with</h3>
-                                        <div class="container col-xs-12 col-sm-4 col-lg-4" style="background-color:white; opacity: 0.9;">
-
-                                            <?php
-                                            $ChatMatchesFound = true;
-                                            $sql = "SELECT * FROM matches_view "
-                                                    . " where (match_user_id_2 =" . $user_id . " and user_profile_1_match_status = 'Chatting' and user_profile_2_match_status not in ('Report', 'Goodbye')) "
-                                                    . " or (match_user_id_1 =" . $user_id . " and user_profile_2_match_status = 'Chatting' and user_profile_1_match_status not in ('Report', 'Goodbye'));";
-                                            //echo $sql;
-                                            $result = execute_sql_query($db_connection, $sql);
-                                            if ($result == null) {
-                                                echo "<br><p>No matches found</p>";
-                                                $ChatMatchesFound = false;
-                                            } else {
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    $pictureIndex++;
-                                                    //echo ("<li>");
-                                                    if ($row['match_user_id_1'] == $user_id) {
-                                                        // echo "<div class='container>";
-                                                        echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
-                                                        echo "        <label for='radio" . $pictureIndex . "'>";
-                                                        echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
-                                                        echo "<br>";
-                                                        if (strlen($row['user_profile_2_picture']) > 0)
-                                                            echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
-                                                        else
-                                                            echo ("<img class='selectimg' height='100' width='100' src='src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
-                                                        echo "</label>";
-                                                    } else {
-                                                        echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
-                                                        echo "        <label for='radio" . $pictureIndex . "'>";
-                                                        echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
-                                                        echo "<br>";
-                                                        if (strlen($row['user_profile_1_picture']) > 0)
-                                                            echo "<img  class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
-                                                        else
-                                                            echo ("<img class='selectimg' height='100' width='100' src='src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
-                                                        echo "</label>";
-                                                    }
+                                        <?php
+                                        $ChatMatchesFound = true;
+                                        $sql = "SELECT * FROM matches_view "
+                                                . " where (match_user_id_2 =" . $user_id . " and user_profile_1_match_status = 'Chatting' and user_profile_2_match_status not in ('Report', 'Goodbye')) "
+                                                . " or (match_user_id_1 =" . $user_id . " and user_profile_2_match_status = 'Chatting' and user_profile_1_match_status not in ('Report', 'Goodbye'));";
+                                        //echo $sql;
+                                        $result = execute_sql_query($db_connection, $sql);
+                                        if ($result == null) {
+                                            echo "<br><p>No matches found</p>";
+                                            $ChatMatchesFound = false;
+                                        } else {
+                                            while ($row = mysqli_fetch_array($result)) {
+                                                $pictureIndex++;
+                                                //echo ("<li>");
+                                                if ($row['match_user_id_1'] == $user_id) {
+                                                    // echo "<div class='container>";
+                                                    echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                    echo "        <label for='radio" . $pictureIndex . "'>";
+                                                    echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
+                                                    echo "<br>";
+                                                    if (strlen($row['user_profile_2_picture']) > 0)
+                                                        echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
+                                                    else
+                                                        echo ("<img class='selectimg' height='100' width='100' src='src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                                                    echo "</label>";
+                                                } else {
+                                                    echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
+                                                    echo "        <label for='radio" . $pictureIndex . "'>";
+                                                    echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
+                                                    echo "<br>";
+                                                    if (strlen($row['user_profile_1_picture']) > 0)
+                                                        echo "<img  class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
+                                                    else
+                                                        echo ("<img class='selectimg' height='100' width='100' src='src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                                                    echo "</label>";
                                                 }
                                             }
-                                            ?>
-                                        </div>
+                                        }
+                                        ?>
                                         <?php
                                         if ($ChatMatchesFound == true) {
                                             echo '<p><b>Click on Photograph and do one of the following:</b></p>';
@@ -323,7 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     if (strlen($row['user_profile_1_picture']) > 0)
                                                         echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                                     else
-                                                        echo ("<img class='selectimg' height='100' width='100' src='src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                                                        echo ("<img class='selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
                                                     echo "</label>";
                                                 }
                                                 echo "    </li>";
@@ -332,11 +329,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         }
                                         if ($peopleWhoLikeMeFound == true) {
                                             echo '<p><b>Click on Photograph and do one of the following:</b></p>';
-                                            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="/images/Like.png"/>Like</button>';
-                                            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="/images/View.png"/>View</button>';
-                                            echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="/images/Maybe.png"/>Maybe</button>';
-                                            echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="/images/Goodbye.png"/>Goodbye</button>';
-                                            echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="/images/Report.png"/>Report</button>';
+                                            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like</button>';
+                                            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
+                                            echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe</button>';
+                                            echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye</button>';
+                                            echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
                                         }
                                         ?>
                                     </div>
@@ -394,7 +391,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     if (strlen($row['user_profile_1_picture']) > 0)
                                                         echo "<img class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                                     else
-                                                        echo ("<img class='selectimg' height='100' class='selectimg' width='100' src=http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>'");
+                                                        echo ("<img class='selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/>");
                                                     switch ($row['user_profile_2_match_status']) {
                                                         case 'Like':
                                                             echo ("<div class=''><img height='32' width='32' tiitle='Liked' src='http://hive.csis.ul.ie/4065/group05/images/Like.png'/></div>");
@@ -415,11 +412,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         }
                                         if ($systemMatchesFound == true) {
                                             echo '<p><b>Click on Photograph and do one of the following:</b></p>';
-                                            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="/images/Like.png"/>Like</button>';
-                                            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16"  title="View" src="/images/View.png"/>View</button>';
-                                            echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16"  title="Maybe" src="/images/Maybe.png"/>Maybe</button>';
-                                            echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16"  title="Goodbye" src="/images/Goodbye.png"/>Goodbye</button>';
-                                            echo '<button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="16" width="16"  title="Report" src="/images/Report.png"/>Report!</button>';
+                                            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like</button>';
+                                            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16"  title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
+                                            echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16"  title="Maybe" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe</button>';
+                                            echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16"  title="Goodbye" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye</button>';
+                                            echo '<button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="16" width="16"  title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report!</button>';
                                         }
                                         ?>
                                     </div>
@@ -470,22 +467,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         }
                                         if ($iLikeFound == true) {
                                             echo '<p><b>Click on Photograph and do one of the following:</b></p>';
-                                            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="/images/Like.png"/>Like</button>';
-                                            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="/images/View.png"/>View</button>';
-                                            echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="/images/Maybe.png"/>Maybe</button>';
-                                            echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="/images/Goodbye.png"/>Goodbye</button>';
-                                            echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="/images/Report.png"/>Report</button>';
+                                            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like</button>';
+                                            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
+                                            echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe</button>';
+                                            echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye</button>';
+                                            echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
                                         }
                                         ?>
                                     </div>
                                 </div>
                             </div>
+                                    <div class="form-group">
+            <div class="col-sm-5 col-md-5 col-lg-6 col-xs-1"></div>
+            <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 mobilePad"  data-toggle="collapse" data-target="#howItWorks" style="font-weight: bold;font-size: 10pt;padding-left: 0px;color: black;cursor: pointer;text-decoration: underline;"><img height="32" width="32" title="" src="http://hive.csis.ul.ie/4065/group05/images/question.png"/>How it Works
+                <span class="caret"></span>
+            </div>  
+        </div>
+        <div class="form-group" style="margin-bottom: 0px;">
+            <div class="col-sm-4 col-md-4 col-lg-6 col-xs-1"></div>
+            <div id="howItWorks" class="col-sm-8 col-md-8 col-lg-6 col-xs-10 collapse mobilePad" style="padding-right: 17px;">
+                <ul type="disc" style="padding-left: 0px;">
+                    <li>Your Password must have minimum 6 characters.</li>
+                    <li>Your Password must contain at least one number, one uppercase, lowercase & special character.</li>
+                    <li>Your Password must not contain your Username.</li>
+                    <li>Your Password must not contain Character or Number repetition.</li>
+
+                </ul> 
+            </div>
+        </div>   
+
                     </div>
+                    
                     </fieldset>
                 </div>
 
             </div>
         </form>
+
     </body>
 </html>
 
