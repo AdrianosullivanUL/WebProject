@@ -68,15 +68,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($result = mysqli_query($db_connection, $sql)) {
                 // get the new user id
                 $sql = "select id from user_profile where email = '" . $email . "';";
-                //  echo $sql;
+                echo $sql;
                 if ($result = mysqli_query($db_connection, $sql)) {
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_array($result)) {
                             $user_id = $row['id'];
+                            $session_hash = hash('sha256', get_GUID());
+                            echo "$session_hash " . $session_hash;
+                            $sql = "update user_profile set session_hash = '" . $session_hash . "' where id = " . $row['id'];
+                            execute_sql_update($db_connection, $sql);
+                            $_SESSION['session_hash'] = $session_hash;
+
+
+
                             $_SESSION['user_id'] = $user_id;
                             $_SESSION['matching_user_id'] = 0;
+
+
+
                             $_SESSION['user_logged_in'] = 1;
-                            //        echo $_SESSION['user_id'];
+                            echo $_SESSION['user_id'];
                             header("Location: UpdateProfile.php");
                             exit();
                         }
@@ -117,8 +128,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="topnav">
         <a class="active">REGISTER</a>
         <div class="topnav-right">
-                   <a href="Logon.php" title="Log In"><img height="16" width="16"  src='/images/Logoff.png'/>Log In</a>
-            </div>
+            <a href="Logon.php" title="Log In"><img height="16" width="16"  src='/images/Logoff.png'/>Log In</a>
+        </div>
     </div>
 
     <div class="container">
@@ -175,16 +186,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <br>
                     <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: right;">
-                        
-                     <div class="col-sm-3 col-md-3 col-lg-3 col-xs-10" style="text-align: right;">
-                                    <span style="color: red">*</span> <span style="font-size: 6pt;">mandatory fields</span>
-                                </div> 
-                    <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10" style="text-align: left;">   
-                    <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
-                    <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
-                    </div>
+
+                        <div class="col-sm-3 col-md-3 col-lg-3 col-xs-10" style="text-align: right;">
+                            <span style="color: red">*</span> <span style="font-size: 6pt;">mandatory fields</span>
+                        </div> 
+                        <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10" style="text-align: left;">   
+                            <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
+                            <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
                         </div>
-                    
+                    </div>
+
                     <div class="form-group">
                         <div class="col-sm-1 col-md-2 col-lg-2 col-xs-1"></div>
                     </div>
