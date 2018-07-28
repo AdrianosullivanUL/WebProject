@@ -116,6 +116,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="topnav">
         <a class="active">REGISTER</a>
+        <div class="topnav-right">
+                   <a href="Logon.php" title="Log In"><img height="16" width="16"  src='/images/Logoff.png'/>Log In</a>
+            </div>
     </div>
 
     <div class="container">
