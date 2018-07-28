@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     if ($_POST['btnAction'] == "Cancel") { // cancel the update
         echo "Cancel pressed";
-        header("Location: Meetingspace.php");
+        header("Location: MeetingSpace.php");
         exit();
     }
 } else {
