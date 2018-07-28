@@ -134,8 +134,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // ---------------------
         if ($valid == true) {
 
-            // Update database
-            // ---------------
+            // Update database - Use parameterised sql to prevent SQL Injection (only required for insert/update where user as free format input
+            // ---------------------------------------------------------------------------------------------------------------------------------
+            $stmt = $db_connection->prepare(
             $sql = "update user_profile set first_name = '" . $firstname . "', "
                     . " surname = '" . $surname . "',"
                     . " date_of_birth = '" . $dob . "',"
@@ -147,9 +148,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     . " relationship_type_id  = (select id from relationship_type where relationship_type ='" . $relationshipType . "'),"
                     . " email = '" . $email . "', "
                     . " city_id = (select id from city where city = '" . $city . "')"
-                    . " where id = " . $user_id . ";";
-            //echo $sql;
-            $result = execute_sql_update($db_connection, $sql);
+                    . " where id = " . $user_id . ";");
+            
+            
+                        
+            $stmt->bind_param("sssssiiisssi", $firstname,$surname,$dob,$gender,$preferredGender,$ageSelectionFrom,$ageSelectionTo,$travelDistance,$relationshipType,$email,$city,$user_id);
+            $stmt->execute();
+           
 
             // Generate new matches based on updates to this users profile
             // Note: This closes matches older than 1 month that are stale

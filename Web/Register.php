@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['btnAction'] == "Next") { // Call Edit Profile
         // Validate the inputs
         $valid = 1;
-        $email = $_POST['email'];
+        $email = strtolower($_POST['email']);
         $password = $_POST['password'];
         $confirmPassword = $_POST['confirmPassword'];
         if ($password != $confirmPassword) {
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // already on file
         $email_found = 0;
-        $sql = "SELECT * FROM user_profile where email ='" . $email . "';";
+        $sql = "SELECT * FROM user_profile where lower(email) ='" . $email . "';";
         //   echo $sql;
         if ($result = mysqli_query($db_connection, $sql)) {
             if (mysqli_num_rows($result) > 0) {
@@ -63,7 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Create user
         if ($valid == 1) {
             // insert into database
-            $sql = "insert into user_profile (email, password_hash, first_name, surname, black_listed_reason, user_status_id, is_administrator) values ('" . $email . "', sha2('" . $password . "',256), '','','',1,0); ";
+            $stmt = $db_connection->prepare("insert into user_profile (email, password_hash, first_name, surname, black_listed_reason, user_status_id, is_administrator) values (?, sha2(?,256), '','','',1,0); ");
+            $stmt->bind_param("ss", $email, $password);
+            $stmt->execute();
             //  echo $sql;
             if ($result = mysqli_query($db_connection, $sql)) {
                 // get the new user id

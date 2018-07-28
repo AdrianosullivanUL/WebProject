@@ -22,7 +22,7 @@ if (isset($_GET['ResetKey'])) {
         if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
 // Validate the inputs
             $valid = 1;
-            $email = $_POST['email'];
+            $email = strtolower($_POST['email']);
             $password = $_POST['password'];
             $confirmPassword = $_POST['confirmPassword'];
             if ($password != $confirmPassword) {
@@ -47,7 +47,7 @@ if (isset($_GET['ResetKey'])) {
 
 // already on file
             $email_found = 0;
-            $sql = "SELECT * FROM user_profile where email ='" . $email . "' and session_hash = '" . $resetKey . "';";
+            $sql = "SELECT * FROM user_profile where lower(email) ='" . $email . "' and session_hash = '" . $resetKey . "';";
    echo $sql;
             if ($result = mysqli_query($db_connection, $sql)) {
                 if (mysqli_num_rows($result) > 0) {
