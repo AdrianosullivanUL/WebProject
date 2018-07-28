@@ -379,7 +379,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt;padding-top: 7px; text-align: left;">
                                 Seeking Age Profile <span style="color: red">*</span> :</div>
                             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-8 mobileLabel">
-                                        <input name= "seekingAgeToSelection" type="range" min="18" max="100" value="18" step="2" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
+                                        <input name= "seekingAgeToSelection" type="range" min="18" max="100" value="<?php echo $ageSelectionFrom; ?>" step="2" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
                                         <datalist id="tickmarks">
                                             <option value="18 to 100">18</option>
                                             <option>18</option>
@@ -388,10 +388,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <option>80</option>
                                             <option>100</option>
                                         </datalist>
-                                        <output id="output" for="rangeInput"> Min Age : 18</output> <!-- Just to display selected Age -->
+                                        <output id="output" for="rangeInput"> Min Age: <?php echo $ageSelectionFrom; ?></output> <!-- Just to display selected Age -->
                                     </div>
                                     <div class="col-sm-2 col-md-2 col-lg-2 col-xs-8 mobileLabel">
-                                        <input name= "seekingAgeToSelection" type="range" min="18" max="100" value="100" step="2" list="tickmarks" id="rangeInput2" oninput="output2.value = rangeInput2.value">
+                                        <input name= "seekingAgeToSelection" type="range" min="18" max="100" value="<?php echo $ageSelectionTo; ?>" step="2" list="tickmarks" id="rangeInput2" oninput="output2.value = rangeInput2.value">
                                         <datalist id="tickmarks">
                                             <option value="18 to 100">100</option>
                                             <option>20</option>
@@ -400,7 +400,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <option>80</option>
                                             <option>100</option>
                                         </datalist>
-                                        <output id="output2" for="rangeInput2"> Max Age : 100</output> <!-- Just to display selected Age -->
+                                        <output id="output2" for="rangeInput2"> Max Age: <?php echo $ageSelectionTo; ?></output> <!-- Just to display selected Age -->
                                     </div>
                         </div>
 
