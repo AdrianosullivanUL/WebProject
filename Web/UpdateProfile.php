@@ -412,7 +412,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt;padding-top: 7px; text-align: left;">
                                 Distance I Will Travel <span style="color: red">*</span> :</div>
                             <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
-                                <input name= "travelDistanceSelection" type="range" min="0" max="500" value="0" step="50" list="tickmarks" id="rangeInput3" oninput="output3.value = rangeInput3.value">
+                                <input name= "travelDistanceSelection" type="range" min="0" max="500" value="<?php echo $travelDistance; ?>" step="50" list="tickmarks" id="rangeInput3" oninput="output3.value = rangeInput3.value">
                                    <datalist id="tickmarks">
                                     <option value="0 to 500">0</option>
                                     <option>0</option>
@@ -427,7 +427,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <option>450</option>
                                     <option>500</option>
                                    </datalist>
-                                <output id="output3" for="rangeInput3"> Distance : 0</output> <!-- Just to display selected Age -->
+                                <output id="output3" for="rangeInput3"> Distance: <?php echo $travelDistance; ?></output> <!-- Just to display selected Age -->
                             </div>
                         </div>
 
