@@ -202,10 +202,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 </a>
                 <div class="topnav-right">
-                    <a href="UpdateProfile.php" title="Edit your User Profile"><img height="16" width="16"  src='/images/Edit.png'/>Edit Profile</a>
-                    <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='/images/Find.png'/>Match Finder</a>
-                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Remove Profile</a>
-                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
+                    <a href="UpdateProfile.php" title="Edit your User Profile"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Edit.png'/>Edit Profile</a>
+                    <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='http://hive.csis.ul.ie/4065/group05/images/Find.png'/>Match Finder</a>
+                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Delete.png'/>Remove Profile</a>
+                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Logoff.png'/>Logoff</a>
                 </div>
             </div>
             <div class="container">
@@ -373,16 +373,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         echo ("<img height='100' class='selectimg' width='100' src='../images/camera-photo-7.png'/>");
                                                     switch ($row['user_profile_1_match_status']) {
                                                         case 'Like':
-                                                            echo ("<div class=''><img height='32' width='32' tiitle='Liked' src='/images/Like.png'/></div>");
+                                                            echo ("<div class=''><img height='32' width='32' tiitle='Liked' src='http://hive.csis.ul.ie/4065/group05/images/Like.png'/></div>");
                                                             break;
                                                         case 'Maybe':
-                                                            echo ("<div class=''><img height='32' width='32' tiitle='Maybe interested' src='/images/Maybe.png'/></div>");
+                                                            echo ("<div class=''><img height='32' width='32' tiitle='Maybe interested' src='http://hive.csis.ul.ie/4065/group05/images/Maybe.png'/></div>");
                                                             break;
                                                         case 'Matched':
-                                                            echo ("<div class=''><img height='32' width='32' src='/images/SystemGenerated.png'/></div>");
+                                                            echo ("<div class=''><img height='32' width='32' src='http://hive.csis.ul.ie/4065/group05/images/SystemGenerated.png'/></div>");
                                                             break;
                                                         case 'Report':
-                                                            echo ("<div class='centred'><img height='32' width='32' src='/images/Report.png'/></div>");
+                                                            echo ("<div class='centred'><img height='32' width='32' src='http://hive.csis.ul.ie/4065/group05/images/Report.png'/></div>");
                                                             break;
                                                     }
                                                     echo "</label>";
@@ -397,16 +397,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         echo ("<img class='selectimg' height='100' class='selectimg' width='100' src='../images/camera-photo-7.png'/><i></i>'");
                                                     switch ($row['user_profile_2_match_status']) {
                                                         case 'Like':
-                                                            echo ("<div class=''><img height='32' width='32' tiitle='Liked' src='/images/Like.png'/></div>");
+                                                            echo ("<div class=''><img height='32' width='32' tiitle='Liked' src='http://hive.csis.ul.ie/4065/group05/images/Like.png'/></div>");
                                                             break;
                                                         case 'Maybe':
-                                                            echo ("<div class=''><img height='32' width='32' tiitle='Maybe interested' src='/images/Maybe.png'/></div>");
+                                                            echo ("<div class=''><img height='32' width='32' tiitle='Maybe interested' src='http://hive.csis.ul.ie/4065/group05/images/Maybe.png'/></div>");
                                                             break;
                                                         case 'Matched':
-                                                            echo ("<div class=''><img height='32' width='32' src='/images/SystemGenerated.png'/></div>");
+                                                            echo ("<div class=''><img height='32' width='32' src='http://hive.csis.ul.ie/4065/group05/images/SystemGenerated.png'/></div>");
                                                             break;
                                                         case 'Report':
-                                                            echo ("<div class='centred'><img height='32' width='32' src='/images/Report.png'/></div>");
+                                                            echo ("<div class='centred'><img height='32' width='32' src='http://hive.csis.ul.ie/4065/group05/images/Report.png'/></div>");
                                                             break;
                                                     }
                                                     echo "</label>";
