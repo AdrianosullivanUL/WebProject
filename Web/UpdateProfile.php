@@ -379,7 +379,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt;padding-top: 7px; text-align: left;">
                                 Seeking Age Profile <span style="color: red">*</span> :</div>
                             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-8 mobileLabel">
-                                        <input name= "seekingAgeToSelection" type="range" min="18" max="100" value="<?php echo $ageSelectionFrom; ?>" step="2" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
+                                        <input name= "seekingAgeFromSelection" type="range" min="18" max="100" value="<?php echo $ageSelectionFrom; ?>" step="2" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
                                         <datalist id="tickmarks">
                                             <option value="18 to 100">18</option>
                                             <option>18</option>
@@ -414,7 +414,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
                                 <input name= "travelDistanceSelection" type="range" min="0" max="500" value="<?php echo $travelDistance; ?>" step="50" list="tickmarks" id="rangeInput3" oninput="output3.value = rangeInput3.value">
                                    <datalist id="tickmarks">
-                                    <option value="0 to 500">0</option>
+                                    <option value="0 to 500"><?php echo $travelDistance; ?></option>
                                     <option>0</option>
                                     <option>50</option>
                                     <option>100</option>
