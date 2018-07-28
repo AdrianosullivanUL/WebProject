@@ -1,7 +1,14 @@
 <?php
+session_start();
 require_once 'database_config.php';
 include 'group05_library.php';
-session_start();
+$user_id = $_SESSION['user_id'];
+$session_hash = $_SESSION['session_hash'];
+if (validate_logon($db_connection, $user_id, $session_hash) == false) {
+    // User is not correctly logged on, route to Logon screen
+    header("Location: Logon.php");
+}
+
 $user_id = $_SESSION['user_id'];
 $matching_user_id = $_SESSION['matching_user_id'];
 //echo "session user " . $user_id;
@@ -146,8 +153,8 @@ if ($result = mysqli_query($db_connection, $sql)) {
 
                 </a>
                 <div class="topnav-right">
-                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Delete Profile</a>
-                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
+                    <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/images/Delete.png'/>Delete Profile</a>
+                    <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/images/Logoff.png'/>Logoff</a>
                 </div>
             </div>
 
@@ -173,7 +180,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
                                     echo '<img name = "pictureInput" class="portrait rounded-circle" height="200" width="200" src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
                                 } else {
                                     // echo ("No photo uploaded");
-                                    echo ("<img class='portrait rounded-circle' height='200' width='200' src='camera-photo-7.png'/><i></i>");
+                                    echo ("<img class='portrait rounded-circle' height='200' width='200' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
                                 }
 //        echo ("after photo shoot");
                                 echo ("<figcaption>" . $first_name . " " . $first_name . "</figcaption>");
