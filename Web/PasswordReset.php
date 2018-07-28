@@ -6,49 +6,49 @@ $message = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $emailfound = 0;
-    // check the button selected (these are at the end of this form
+// check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "SendReset") { // Call Edit Profile
         $email = $_POST['email'];
-        $sql = "select * from user_profile where email = '" . $email . "';";
-        //echo $sql;
-        if ($result = mysqli_query($db_connection, $sql)) {
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_array($result)) {
-                    $emailfound = 1;
-                    $user_id = $row['id'];
-                    $_SESSION['user_id'] = $row['id'];
-                    if ($row['is_administrator'] == 1) {
-                        $_SESSION['is_administrator'] = 1;
-                    }
-                }
+
+        $stmt = $db_connection->prepare("select * from user_profile where email = ?;");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        while ($row = mysqli_fetch_array($result)) {
+            $emailfound = 1;
+            $user_id = $row['id'];
+            $_SESSION['user_id'] = $row['id'];
+            if ($row['is_administrator'] == 1) {
+                $_SESSION['is_administrator'] = 1;
             }
             if ($emailfound == 1) {
-                // Reset the session hash for this account
+// Reset the session hash for this account
                 $session_hash = hash('sha256', get_GUID());
                 $sql = "update user_profile set session_hash = '" . $session_hash . "' where id = " . $user_id;
                 execute_sql_update($db_connection, $sql);
                 $_SESSION['session_hash'] = $session_hash;
                 $_SESSION['user_id'] = $row['id'];
 
-                // Send an email link to the emial address with the reset link
-               // $resetLink = "http://hive.csis.ul.ie/4065/group05/ChangePassword.php?ResetKey=" . $session_hash;
+// Send an email link to the emial address with the reset link
+// $resetLink = "http://hive.csis.ul.ie/4065/group05/ChangePassword.php?ResetKey=" . $session_hash;
                 $resetLink = "http://localhost/ChangePassword.php?ResetKey=" . $session_hash;
-                $msg = "Please click <a href='". $resetLink ."'>here</a> to reset your password";
+                $msg = "Please click <a href='" . $resetLink . "'>here</a> to reset your password";
                 $subject = "Password reset request for Chance Dating web site";
 //                $msg = wordwrap($msg, 70);
-                mail($email,$subject , $msg);
-                //echo $email . "<br>" . $subject  . "<br>" . $msg  . "<br>";
+                mail($email, $subject, $msg);
+//echo $email . "<br>" . $subject  . "<br>" . $msg  . "<br>";
                 echo "mail($email,$subject , $msg)";
                 $message = "Please check your email for a password reset email and click on the link provided to complete the process";
 
-                //ini_set("SMTP", "aspmx.l.google.com");
-                //     ini_set("sendmail_from", "donotreply@chance.com");
-                //     $message = "Password reset email setting:\r\nSMTP = aspmx.l.google.com\r\nsmtp_port = 25\r\nsendmail_from = donotreply@chance.com";
-                //     $headers = "From: YOURMAIL@gmail.com";
-                //     mail("Sending@provider.com", "Testing", $message, $headers);
-                //     echo "Check your email now....<BR/>";
-                //     header("Location: MeetingSpace.php");
-                //     exit();
+//ini_set("SMTP", "aspmx.l.google.com");
+//     ini_set("sendmail_from", "donotreply@chance.com");
+//     $message = "Password reset email setting:\r\nSMTP = aspmx.l.google.com\r\nsmtp_port = 25\r\nsendmail_from = donotreply@chance.com";
+//     $headers = "From: YOURMAIL@gmail.com";
+//     mail("Sending@provider.com", "Testing", $message, $headers);
+//     echo "Check your email now....<BR/>";
+//     header("Location: MeetingSpace.php");
+//     exit();
             } else {
                 $message = 'This email address is not registered';
             }
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $message = 'Please input your email address and an email will be sent to you to allow for a password reset';
     }
 } else {
-        $message = 'Please input your email address and an email will be sent to you to allow for a password reset';
+    $message = 'Please input your email address and an email will be sent to you to allow for a password reset';
 }
 ?>
 <!DOCTYPE html>
@@ -95,13 +95,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="text" class="form-control" name="email" placeholder="">
-                        <?php
-                        if (strlen($message) > 0) {
-                            echo "<div class='alert alert-danger'>";
-                            echo "<p>" . $message . "</p>";
-                            echo "</div>";
-                        }
-                        ?>
+<?php
+if (strlen($message) > 0) {
+    echo "<div class='alert alert-danger'>";
+    echo "<p>" . $message . "</p>";
+    echo "</div>";
+}
+?>
                     </div>    
 
                     <button name="btnAction" class="btn btn-primary" type="submit" value="SendReset">Send Password Reset</button>
