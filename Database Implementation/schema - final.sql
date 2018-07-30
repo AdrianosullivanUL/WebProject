@@ -101,6 +101,8 @@ CREATE TABLE user_profile (
   black_listed_reason varchar(100) NOT NULL,
   black_listed_date date DEFAULT NULL,
   user_status_id int NOT NULL,
+  user_status_date datetime,
+  suspended_until_date datetime,
   is_administrator boolean NOT NULL,
   session_hash varchar(250),
    PRIMARY KEY(id),

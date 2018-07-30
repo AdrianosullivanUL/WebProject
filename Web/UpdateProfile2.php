@@ -21,7 +21,6 @@ $picture = "";
 $first_name = "";
 $surname = "";
 $message = "";
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "Save") { //save the detils
@@ -30,8 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $myBio = trim($_POST['myBioInput']);
         $valid = true;
         // Get the uploaded picture
+
         if (isset($_FILES["fileToUpload"]["tmp_name"])) {
             $sizeInBytes = filesize($_FILES["fileToUpload"]["tmp_name"]);
+            //echo " " . $sizeInBytes . "<br>";
             $maxImageSize = 204800;
             if (strlen($_FILES["fileToUpload"]["tmp_name"]) > 0) {
                 $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
@@ -43,9 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $picture = addslashes(file_get_contents($_FILES['fileToUpload']['tmp_name']));
                     $sql = "UPDATE user_profile SET picture = '" . $picture . "', my_bio = '" . $myBio . "' "
                             . " where id = " . $user_id;
+                    //echo $sql;
                     $result = execute_sql_update($db_connection, $sql);
                 }
             }
+        } else {
+            //echo "file not set ";
         }
         // Validate text inputs 
         // --------------------
@@ -67,13 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         // Remove all user Interests first
         $sql = "delete from user_interests where user_id = " . $user_id . ";";
-        // echo $sql;
+        //echo $sql;
         $updateResult = execute_sql_update($db_connection, $sql);
-        // mysql_free_result($result);
+        //echo "check checklist";
         if (isset($_POST['check_list'])) {
             foreach ($_POST['check_list'] as $key => $value) {
                 $sql = "select count(1) cnt from user_interests where user_id = " . $user_id . " and interest_id = " . $key . ";";
-                //echo $sql . "<br>";
+                //  echo $sql . "<br>";
                 $result = execute_sql_query($db_connection, $sql);
                 if ($result == null) {
                     $message = "ERROR: problem updating User Interests, user_id = " . $user_id . " and interest_id = " . $key;
@@ -82,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     while ($row = mysqli_fetch_array($result)) {
                         if ($row['cnt'] == 0) {
                             $sql = "insert into user_interests (user_id, interest_id) values (" . $user_id . ", " . $key . ");";
-                            //echo $sql . "<br>";
+                            //  echo $sql . "<br>";
                             $updateResult = execute_sql_update($db_connection, $sql);
                         }
                         // No action required if count is greater than zero, already set
@@ -93,8 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($valid == true) {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['matching_user_id'] = $matching_user_id;
-            //   header("Location: MeetingSpace.php");
-            //  exit();
+               header("Location: MeetingSpace.php");
+              exit();
         }
     }
     if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
@@ -141,7 +145,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
 
     </head>
     <body>
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-group" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >        
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-group" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" enctype="multipart/form-data" >        
             <div class="topnav">
                 <a class="active">UPDATE PROFILE 2</a>
                 <a href="MeetingSpace.php" title="Meeting Space">
@@ -155,105 +159,114 @@ if ($result = mysqli_query($db_connection, $sql)) {
             <div class="row">
                 <div class ="container">
                     <div class="col-md-10 col-md-offset-1" >
-                        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data">
-                            <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .75em .75em;margin:0 2px;border: 2px solid silver;margin-bottom: 0em;background-color:lavender; opacity: .9;">
-                                <legend style="border-bottom: none;width: inherit;;padding:inherit;" class="legend">Profile Update Part 2</legend>
+                        <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .75em .75em;margin:0 2px;border: 2px solid silver;margin-bottom: 0em;background-color:lavender; opacity: .9;">
+                            <legend style="border-bottom: none;width: inherit;;padding:inherit;" class="legend">Profile Update Part 2</legend>
 
-                                <div class="form-group">
-                                    <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10 mobileLabel" ></div>
-                                </div>
-                                <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel">
-                                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
-                                        <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:whitesmoke; opacity: .9;">
-                                            <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Photo</legend>
-                                            <div class="form-group">
-                                                <?php
-                                                if (strlen($picture) > 0) {
-                                                    //echo ("Current photo");
-                                                    echo '<img name = "pictureInput" class="portrait rounded-circle" height="200" width="200" src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
-                                                } else {
-                                                    // echo ("No photo uploaded");
-                                                    echo ("<img class='portrait rounded-circle' height='200' width='200' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
-                                                }
-//        echo ("after photo shoot");
-                                                echo ("<figcaption>" . $first_name . " " . $first_name . "</figcaption>");
-                                                ?>
-
-                                            </div>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-
-                                            <div class="form-group">
-                                <label class="header">Profile Photo:</label>
-                                <input type="file" name="fileToUpload" id="fileToUpload">
+                            <div class="form-group">
+                                <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10 mobileLabel" ></div>
                             </div>
-                                        </fieldset>
-                                </div>
-                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" >
-                                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
-                                        <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .75em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:whitesmoke; opacity: .9;">
-                                            <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Profile Bio</legend>
-                                            <div class="form-group">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-10 mobileLabel">
-                                                    <textarea rows="18" cols="30" class="form-control" name="myBioInput"><?php echo $myBio; ?></textarea>
-                                                    <br>
-                                                    <br>
-                                                </div>
-                                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel">
 
-                                        </fieldset>
-                                    </form>    
-                                </div>
-                                <!--// Get user Interests   -->
-
-                                <div class="col-sm-3 col-md-3 col-lg-3 col-xs-10 mobileLabel">
-                                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
-                                        <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .75em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:whitesmoke; opacity: .9;">
-                                            <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Interests</legend>
-                                            <?php
-                                            $sql = "  SELECT ud1.id, ud1.description , ui1.user_id FROM interests ud1 "
-                                                    . " left join (select * from user_interests where user_id = " . $user_id . ") ui1 on ui1.interest_id = ud1.id ";
-
-                                            $result = execute_sql_query($db_connection, $sql);
-                                            if ($result == null) {
-                                                $message = "ERROR: No interests found " . $user_id;
-                                            } else {
-                                                $checkBoxNumber = 0;
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    if ($row['user_id'] != null)
-                                                        $isChecked = "checked";
-                                                    else
-                                                        $isChecked = "";
-                                                    echo "<div class='checkbox'>";
-                                                    echo "    <p align='middle>'";
-                                                    echo "        <label><input type='checkbox' name='check_list[" . $row['id'] . "]' " . $isChecked . "  value=''>" . $row['description'] . "</label>";
-                                                    echo "</div>";
-                                                }
-                                            }
-                                            ?>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                        </fieldset>
-                                    </form>   
-                                </div>
-
-                                <div class="col-sm-10 col-md-10 col-lg-12 col-xs-10" style = "text-align: right">
+                                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:whitesmoke; opacity: .9;">
+                                    <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Photo</legend>
                                     <div class="form-group">
-                                        <button class="btn btn-primary" name="btnAction" type="submit" value="Save">Save</button> 
-                                        <button class="btn btn-warning" name="btnAction" type="submit" value="Cancel">Cancel</button>
+                                        <?php
+                                        if (strlen($picture) > 0) {
+                                            //echo ("Current photo");
+                                            echo '<img name = "pictureInput" class="portrait rounded-circle" height="200" width="200" src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
+                                        } else {
+                                            // echo ("No photo uploaded");
+                                            echo ("<img class='portrait rounded-circle' height='200' width='200' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                                        }
+//        echo ("after photo shoot");
+                                        echo ("<figcaption>" . $first_name . " " . $first_name . "</figcaption>");
+                                        ?>
+
                                     </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div class="form-group">
+                                        <label class="header">Profile Photo:</label>
+                                        <input type="file" name="fileToUpload" id="fileToUpload">
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" >
+                                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .75em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:whitesmoke; opacity: .9;">
+                                    <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Profile Bio</legend>
+                                    <div class="form-group">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xs-10 mobileLabel">
+                                            <textarea rows="18" cols="30" class="form-control" name="myBioInput"><?php echo $myBio; ?></textarea>
+                                            <br>
+                                            <br>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+
+                            </div>
+                            <!--// Get user Interests   -->
+
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-10 mobileLabel">
+
+                                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .75em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:whitesmoke; opacity: .9;">
+                                    <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Interests</legend>
+                                    <?php
+                                    $sql = "  SELECT ud1.id, ud1.description , ui1.user_id FROM interests ud1 "
+                                            . " left join (select * from user_interests where user_id = " . $user_id . ") ui1 on ui1.interest_id = ud1.id ";
+                                    //echo $sql;
+                                    $result = execute_sql_query($db_connection, $sql);
+                                    if ($result == null) {
+                                        $message = "ERROR: No interests found " . $user_id;
+                                    } else {
+                                        $checkBoxNumber = 0;
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            if ($row['user_id'] != null)
+                                                $isChecked = "checked";
+                                            else
+                                                $isChecked = "";
+                                            echo "<div class='checkbox'>";
+                                            echo "    <p align='middle>'";
+                                            echo "        <label><input type='checkbox' name='check_list[" . $row['id'] . "]' " . $isChecked . "  value=''>" . $row['description'] . "</label>";
+                                            echo "</div>";
+                                        }
+                                    }
+                                    ?>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                </fieldset>
+
+                            </div>
+
+                            <div class="col-sm-10 col-md-10 col-lg-12 col-xs-10" style = "text-align: right">
+                                <?php
+                                if (strlen($message) > 0) {
+                                    echo "<div class='alert alert-danger'>";
+                                    echo "<p>" . $message . "</p>";
+                                    echo "</div>";
+                                }
+                                ?>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" name="btnAction" type="submit" value="Save">Save</button> 
+                                    <button class="btn btn-warning" name="btnAction" type="submit" value="Cancel">Cancel</button>
                                 </div>
-                            </fieldset>
+                            </div>
+                        </fieldset>
                     </div>
                 </div>
             </div>
+        </form> 
     </body>
-
 </html>

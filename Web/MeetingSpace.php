@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php
         $first_name = "";
         $surname = "";
-        $sql = "SELECT first_name, surname FROM user_profile where id = " . $user_id . ";";
+        $sql = "SELECT first_name, surname, picture FROM user_profile where id = " . $user_id . ";";
 //echo $sql;
         $result = execute_sql_query($db_connection, $sql);
         if ($result == null) {
@@ -190,6 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             while ($row = mysqli_fetch_array($result)) {
                 $first_name = $row['first_name'];
                 $surname = $row['surname'];
+                $picture = $row['picture'];
             }
         }
         ?>  
@@ -198,7 +199,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="topnav">
                 <a class="active">MEETING SPACE</a>
                 <a href="MeetingSpace.php" title="Meeting Space">
-                    <?php echo $first_name . " " . $surname ?>
+
+                    <?php
+                    if (strlen($picture) > 0)
+                        echo "<img class='rounded-circle selectimg'  height='32' width='32' src='data:image/jpeg;base64," . base64_encode($picture) . "'/>";
+                    else
+                        echo ("<img class='selectimg' height='32' width='32' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                    echo "&nbsp;" . $first_name . " " . $surname
+                    ?>
 
                 </a>
                 <div class="topnav-right">
@@ -310,7 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     if (strlen($row['user_profile_2_picture']) > 0)
                                                         echo "<img class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                                     else
-                                                        echo ("<img class='rounded-circle selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>"); 
+                                                        echo ("<img class='rounded-circle selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
                                                     echo "</label>";
                                                 } else {
                                                     echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
@@ -477,27 +485,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
                                 </div>
                             </div>
-                                    <div class="form-group">
-            <div class="col-sm-5 col-md-5 col-lg-6 col-xs-1"></div>
-            <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 mobilePad"  data-toggle="collapse" data-target="#howItWorks" style="font-weight: bold;font-size: 10pt;padding-left: 0px;color: black;cursor: pointer;text-decoration: underline;"><img height="32" width="32" title="" src="http://hive.csis.ul.ie/4065/group05/images/question.png"/>How it Works
-                <span class="caret"></span>
-            </div>  
-        </div>
-        <div class="form-group" style="margin-bottom: 0px;">
-            <div class="col-sm-4 col-md-4 col-lg-6 col-xs-1"></div>
-            <div id="howItWorks" class="col-sm-8 col-md-8 col-lg-6 col-xs-10 collapse mobilePad" style="padding-right: 17px;">
-                <ul type="disc" style="padding-left: 0px;">
-                    <li>Your Password must have minimum 6 characters.</li>
-                    <li>Your Password must contain at least one number, one uppercase, lowercase & special character.</li>
-                    <li>Your Password must not contain your Username.</li>
-                    <li>Your Password must not contain Character or Number repetition.</li>
+                            <div class="form-group">
+                                <div class="col-sm-5 col-md-5 col-lg-6 col-xs-1"></div>
+                                <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 mobilePad"  data-toggle="collapse" data-target="#howItWorks" style="font-weight: bold;font-size: 10pt;padding-left: 0px;color: black;cursor: pointer;text-decoration: underline;"><img height="32" width="32" title="" src="http://hive.csis.ul.ie/4065/group05/images/question.png"/>How it Works
+                                    <span class="caret"></span>
+                                </div>  
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <div class="col-sm-4 col-md-4 col-lg-6 col-xs-1"></div>
+                                <div id="howItWorks" class="col-sm-8 col-md-8 col-lg-6 col-xs-10 collapse mobilePad" style="padding-right: 17px;">
+                                    <ul type="disc" style="padding-left: 0px;">
+                                        <li>Your Password must have minimum 6 characters.</li>
+                                        <li>Your Password must contain at least one number, one uppercase, lowercase & special character.</li>
+                                        <li>Your Password must not contain your Username.</li>
+                                        <li>Your Password must not contain Character or Number repetition.</li>
 
-                </ul> 
-            </div>
-        </div>   
+                                    </ul> 
+                                </div>
+                            </div>   
 
                     </div>
-                    
+
                     </fieldset>
                 </div>
 

@@ -9,12 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "SendReset") { // Call Edit Profile
         $email = $_POST['email'];
-
+        // user parameterised sql when user inputs being fed to sql
         $stmt = $db_connection->prepare("select * from user_profile where email = ?;");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
-
         while ($row = mysqli_fetch_array($result)) {
             $emailfound = 1;
             $user_id = $row['id'];
@@ -38,7 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //                $msg = wordwrap($msg, 70);
                 mail($email, $subject, $msg);
 //echo $email . "<br>" . $subject  . "<br>" . $msg  . "<br>";
-                echo "mail($email,$subject , $msg)";
+                echo "__________________________________________________________________________<br>" . " mail($email,$subject , $msg)"
+                    . "<br> This is a output is substuting for the email function which is not working"
+                . "<br> Please click on the here link to simulate receiving an email and clicking on the link in it."
+                . "<br>__________________________________________________________________________<br>";
                 $message = "Please check your email for a password reset email and click on the link provided to complete the process";
 
 //ini_set("SMTP", "aspmx.l.google.com");

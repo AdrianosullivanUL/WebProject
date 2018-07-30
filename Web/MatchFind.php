@@ -449,7 +449,7 @@ if (isset($_SESSION['user_name']))
                                                         $sql = $sql . " And up.id in (select id from user_profile where from_age > '" . $from_age . "')";
                                                     if (strlen($to_age) > 0)
                                                         $sql = $sql . " And up.id in (select id from user_profile where to_age < '" . $to_age . "')";
-                                                    //echo $sql;
+                                                    echo $sql;
 
                                                     $pictureIndex = 0;
                                                     $matchesFound = true;

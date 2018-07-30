@@ -15,6 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: index.php");
         exit();
     }
+        if ($_POST['btnAction'] == "Register") { // Call Edit Profile
+        header("Location: Register.php");
+        exit();
+    }
 
     if ($_POST['btnAction'] == "Logon") { // Call Edit Profile
         $email = $_POST['email'];
@@ -26,17 +30,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result = mysqli_query($db_connection, $sql)) {
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_array($result)) {
-
-                    // Assign a newly encrypted session identifier when the log on, store this on their user_profile. If not matching on other screens then logon is rejected
-                    $session_hash = hash('sha256', get_GUID());
-                    echo "$session_hash " . $session_hash;
-                    $sql = "update user_profile set session_hash = '" . $session_hash . "' where id = " . $row['id'];
-                    execute_sql_update($db_connection, $sql);
-                    $_SESSION['session_hash'] = $session_hash;
-                    $_SESSION['user_id'] = $row['id'];
-                    $logon = 1;
-                    if ($row['is_administrator'] == 1) {
-                        $isAdmin = 1;
+                    if ($row['user_status_id'] == 4) {
+                        $message = "You have been bared from this system, your account is disabled.";
+                        $logon = 2;
+                    }
+                    if ($row['user_status_id'] == 3 && $row['suspended_until_date'] < date("Y-m-d H:i:s")) {
+                        $message = "You have been suspended unil " . $row['suspended_until_date'];
+                        $logon = 2;
+                    }
+                    if ($logon != 2) {
+                        // Assign a newly encrypted session identifier when the log on, store this on their user_profile. If not matching on other screens then logon is rejected
+                        $session_hash = hash('sha256', get_GUID());
+                        echo "$session_hash " . $session_hash;
+                        $sql = "update user_profile set session_hash = '" . $session_hash . "' where id = " . $row['id'];
+                        execute_sql_update($db_connection, $sql);
+                        $_SESSION['session_hash'] = $session_hash;
+                        $_SESSION['user_id'] = $row['id'];
+                        $logon = 1;
+                        if ($row['is_administrator'] == 1) {
+                            $isAdmin = 1;
+                        }
                     }
                 }
             }
@@ -52,7 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     exit();
                 }
             } else {
-                $message = 'Logon failed, please ensure you are entering the correct email address and password';
+                if ($logon != 2)
+                    $message = 'Logon failed, please ensure you are entering the correct email address and password';
             }
         }
     }
@@ -81,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="col-md-6 col-md-offset-3" >
 
                     <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
-                        <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
+                        <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">
 
                             <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Log On Details</legend>
 
@@ -101,6 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <button name="btnAction" class="btn btn-primary" type="submit" value="Logon">Log on</button>
                             <button name="btnAction" class="btn btn-danger" type="submit" value="ForgotPassword">Forgot Password?</button>
+                            <button name="btnAction" class="btn btn-info" type="submit" value="Register">Register</button>
                             <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
 
                         </fieldset> 

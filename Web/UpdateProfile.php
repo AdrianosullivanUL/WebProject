@@ -7,7 +7,7 @@ $session_hash = $_SESSION['session_hash'];
 
 if (validate_logon($db_connection, $user_id, $session_hash) == false) {
     // User is not correctly logged on, route to Logon screen
-    Echo "Logon issue " . $session_hash;
+   // Echo "Logon issue " . $session_hash;
   //  header("Location: Logon.php");
 }
 
@@ -42,10 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = trim($_POST['emailInput']);
 
 
-        ECHO " ageSelectionFrom " . $ageSelectionFrom
-        . " ageSelectionTo " . $ageSelectionTo
-        . " travelDistance " . $travelDistance
-        . " relationshipType " . $relationshipType;
+     //   ECHO " ageSelectionFrom " . $ageSelectionFrom
+     //   . " ageSelectionTo " . $ageSelectionTo
+      //  . " travelDistance " . $travelDistance
+      //  . " relationshipType " . $relationshipType;
 
 
 
@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($ageSelectionFrom > $ageSelectionTo) {
             $valid = false;
-            $message = "Age Profile from cannot be greater than Age Profile To";
+            $message = "<b>Age Profile Min</b> cannot be greater than <b>Age Profile Max</b>";
         }
         // Relationship Type
         if (strlen($relationshipType) == 0) {
@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     if ($_POST['btnAction'] == "Cancel") { // cancel the update
-        echo "Cancel pressed";
+     //   echo "Cancel pressed";
         header("Location: MeetingSpace.php");
         exit();
     }
@@ -399,8 +399,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <output id="output" for="rangeInput"> Min Age: <?php echo $ageSelectionFrom; ?></output> <!-- Just to display selected Age -->
                                     </div>
                                     <div class="col-sm-2 col-md-2 col-lg-2 col-xs-8 mobileLabel">
-                                        <input name= "seekingAgeToSelection" type="range" min="18" max="100" value="<?php echo $ageSelectionTo; ?>" step="2" list="tickmarks" id="rangeInput2" oninput="output2.value = rangeInput2.value">
-                                        <datalist id="tickmarks">
+                                        <input name= "seekingAgeToSelection" type="range" min="18" max="100" value="<?php echo $ageSelectionTo; ?>" step="2" list="tickmarks1" id="rangeInput2" oninput="output2.value = rangeInput2.value">
+                                        <datalist id="tickmarks1">
                                             <option value="18 to 100">100</option>
                                             <option>20</option>
                                             <option>40</option>
@@ -411,8 +411,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <output id="output2" for="rangeInput2"> Max Age: <?php echo $ageSelectionTo; ?></output> <!-- Just to display selected Age -->
                                     </div>
                         </div>
-
-                        
                         
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
                         <div class="form-group">
@@ -420,8 +418,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt;padding-top: 7px; text-align: left;">
                                 Distance I Will Travel <span style="color: red">*</span> :</div>
                             <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
-                                <input name= "travelDistanceSelection" type="range" min="0" max="500" value="<?php echo $travelDistance; ?>" step="50" list="tickmarks" id="rangeInput3" oninput="output3.value = rangeInput3.value">
-                                   <datalist id="tickmarks">
+                                <input name= "travelDistanceSelection" type="range" min="0" max="500" value="<?php echo $travelDistance; ?>" step="50" list="tickmarks2" id="rangeInput3" oninput="output3.value = rangeInput3.value">
+                                   <datalist id="tickmarks2">
                                     <option value="0 to 500"><?php echo $travelDistance; ?></option>
                                     <option>0</option>
                                     <option>50</option>
@@ -437,6 +435,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                    </datalist>
                                 <output id="output3" for="rangeInput3"> Distance: <?php echo $travelDistance; ?></output> <!-- Just to display selected Age -->
                             </div>
+                           
                         </div>
 
 
