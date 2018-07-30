@@ -34,9 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $message = "You have been bared from this system, your account is disabled.";
                         $logon = 2;
                     }
+                 
                     if ($row['user_status_id'] == 3 && $row['suspended_until_date'] > date("Y-m-d H:i:s")) {
                         
-                        $message = "You have been suspended until " . $row['suspended_until_date'];
+                        $message = "You have been suspended until " . $row['suspended_until_date'] . "> (".date("Y-m-d H:i:s").")";
                         $logon = 2;
                     }
                     if ($row['user_status_id'] == 3 && $row['suspended_until_date'] < date("Y-m-d H:i:s")) {

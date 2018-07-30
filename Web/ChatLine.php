@@ -71,36 +71,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             . "1) This message will not be transmitted to the receiving person"
                             . "<br>2) If we record more than 5 instances then we will suspend your account for 1 week";
                 }
-            }
+                if ($blackListed == 1)
+                    $sql = "insert into user_communication(from_user_id, to_user_id, message, status_id, replying_to_communication_id, communication_datetime,"
+                            . " black_listed, black_listed_date, black_listed_word_id)"
+                            . " values('$user_id', '$matching_user_id', '$msg', '11', " . $last_communication_id . ", now(),1,now()," . $blackListedWordId . ")";
+                else
+                    $sql = "insert into user_communication(from_user_id, to_user_id, message, status_id, replying_to_communication_id, communication_datetime)"
+                            . " values('$user_id', '$matching_user_id', '$msg', '11', " . $last_communication_id . ", now())";
 
-            if ($blackListed == 1)
-                $sql = "insert into user_communication(from_user_id, to_user_id, message, status_id, replying_to_communication_id, communication_datetime,"
-                        . " black_listed, black_listed_date, black_listed_word_id)"
-                        . " values('$user_id', '$matching_user_id', '$msg', '11', " . $last_communication_id . ", now(),1,now()," . $blackListedWordId . ")";
-            else
-                $sql = "insert into user_communication(from_user_id, to_user_id, message, status_id, replying_to_communication_id, communication_datetime)"
-                        . " values('$user_id', '$matching_user_id', '$msg', '11', " . $last_communication_id . ", now())";
+                // echo $sql . "<br>";
+                $result = execute_sql_update($db_connection, $sql);
 
-            // echo $sql . "<br>";
-            $result = execute_sql_update($db_connection, $sql);
-
-            if ($last_communication_id == 0) {
-                $sql = "select max(id) maxid from communication_table";
-
+                // See if user needs to be blacklisted
+                $sql = "select id, user_status_id, (select count(1) cnt from user_communication uc where uc.black_listed = true and uc.communication_datetime > up.user_status_date and from_user_id = " . $user_id . ") BadListChatCount"
+                     . " from user_profile up where id = " . $user_id;
+                echo $sql;
                 if ($result = mysqli_query($db_connection, $sql)) {
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_array($result)) {
-                            $last_communication_id = $row['maxid'];
+                            if ($row['BadListChatCount'] >= 5 || $row['user_status_id'] == 5) {
+                                $sql = "update user_profile set user_status_id = 3, user_status_date = now(), suspended_until_date = DATE_ADD(now(), INTERVAL 1 MONTH) where id = " . $user_id;
+                                echo $sql;
+                                $result = execute_sql_update($db_connection, $sql);
+                                $message = "You have used offensive language 5 times, your account has been suspended for one month. You will not be able to log onto this system again until your suspension is served!";
+                                $_SESSION['session_hash'] = "";
+                            }
                         }
                     }
                 }
-                $sql = "update match_table set communication_id = " . $last_communication_id . " where id = " . $match_id;
-                //echo $sql . "<br>";
-                $result = execute_sql_update($db_connection, $sql);
+
+
+                if ($last_communication_id == 0) {
+                    $sql = "select max(id) maxid from communication_table";
+
+                    if ($result = mysqli_query($db_connection, $sql)) {
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_array($result)) {
+                                $last_communication_id = $row['maxid'];
+                            }
+                        }
+                    }
+                    $sql = "update match_table set communication_id = " . $last_communication_id . " where id = " . $match_id;
+                    //echo $sql . "<br>";
+                    $result = execute_sql_update($db_connection, $sql);
+                }
             }
+            //   echo $result;
+            //   header("Location: ChatLine.php");
         }
-        //   echo $result;
-        //   header("Location: ChatLine.php");
     }
 }
 ?>
@@ -223,7 +241,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                               echo "</div>";
                                           }
                                           ?>                                          
-                                <button name="btnAction" class="btn btn-success" type="submit" value="Send"><img height="24" width="24"  title="Chat" src='http://hive.csis.ul.ie/4065/group05/images/Send.png'/>Send</button>
+                                <button name="btnAction" class="btn btn-success" type="submit" value="Send"><img height="24" width="24"  title="Chat" src='http://hive.csis.ul.ie/4065/group05/images/send.png'/>Send</button>
                                 <button name="btnAction" class="btn btn-info" type="submit" value="Refresh"><img height="24" width="24"  title="Refresh" src='http://hive.csis.ul.ie/4065/group05/images/refresh.png'/>Refresh</button>
                             </fieldset>
                         </form>
