@@ -295,6 +295,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ------------------------ -->
                                     <div class="col-xs-12 col-sm-12 col-lg-4" style="border-style:solid; border-color: silver;background-color:white; opacity: 1;">
                                         <h3>People who Like me</h3>
+                                        <p>(these will move to Chat section when you like them)</p>
                                         <?php
                                         $peopleWhoLikeMeFound = true;
                                         $sql = "SELECT * FROM matches_view "
@@ -434,6 +435,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ------------------------ -->
                                     <div class="col-xs-12 col-sm-12 col-lg-4" style="border-style:solid; border-color: silver;background-color:white; opacity: 1;">
                                         <h3>People who I Like</h3>
+                                        <p>(these will move to Chat section when they like you</p>
                                         <?php
                                         $iLikeFound = true;
                                         $sql = "SELECT * FROM matches_view "
@@ -475,7 +477,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         }
                                         if ($iLikeFound == true) {
                                             echo '<p><b>Click on Photograph and do one of the following:</b></p>';
-                                            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like</button>';
                                             echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
                                             echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe</button>';
                                             echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye</button>';

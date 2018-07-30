@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: index.php");
         exit();
     }
-        if ($_POST['btnAction'] == "Register") { // Call Edit Profile
+    if ($_POST['btnAction'] == "Register") { // Call Edit Profile
         header("Location: Register.php");
         exit();
     }
@@ -34,14 +34,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $message = "You have been bared from this system, your account is disabled.";
                         $logon = 2;
                     }
-                    if ($row['user_status_id'] == 3 && $row['suspended_until_date'] < date("Y-m-d H:i:s")) {
-                        $message = "You have been suspended unil " . $row['suspended_until_date'];
+                    if ($row['user_status_id'] == 3 && $row['suspended_until_date'] > date("Y-m-d H:i:s")) {
+                        
+                        $message = "You have been suspended until " . $row['suspended_until_date'];
                         $logon = 2;
                     }
+                    if ($row['user_status_id'] == 3 && $row['suspended_until_date'] < date("Y-m-d H:i:s")) {
+                        $message = "Your suspension has been lifted. Please provide your credentials again to continue.";
+                        // reactivate the account
+                        $sql = "update user_profile set user_status_id  = 1, user_status_date = now() where id = " . $row['id'];
+                        execute_sql_update($db_connection, $sql);
+                        $logon = 2;
+                    }
+
                     if ($logon != 2) {
                         // Assign a newly encrypted session identifier when the log on, store this on their user_profile. If not matching on other screens then logon is rejected
                         $session_hash = hash('sha256', get_GUID());
-                        echo "$session_hash " . $session_hash;
+                        //echo "$session_hash " . $session_hash;
                         $sql = "update user_profile set session_hash = '" . $session_hash . "' where id = " . $row['id'];
                         execute_sql_update($db_connection, $sql);
                         $_SESSION['session_hash'] = $session_hash;
@@ -106,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <input type="password" class="form-control" name="password" placeholder="">
                             <?php
                             if (strlen($message) > 0) {
-                                echo "<div class='alert alert-info'>";
+                                echo "<div class='alert alert-danger'>";
                                 echo "<p>" . $message . "</p>";
                                 echo "</div>";
                             }
