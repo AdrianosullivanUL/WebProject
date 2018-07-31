@@ -190,7 +190,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <div class="col-xs-6 col-sm-4" style="border-style:solid; border-color: silver; background-color:white; opacity: 1;">
                                 <?php
-                                $sql = "SELECT * FROM user_profile where id =" . $matching_user_id . ";";
+                                //  $sql = "SELECT * FROM user_profile where id =" . $matching_user_id . ";";
+
+                                $sql = "SELECT up.*, DATE_FORMAT(up.date_of_birth,'%d/%m/%Y') as formatted_dob, g1.gender_name, g2.gender_name as preferred_gender_name, rt.relationship_type, c.city "
+                                        . " fROM user_profile up "
+                                        . " left join gender g1 on g1.id = up.gender_id "
+                                        . " left join gender g2 on g2.id = up.gender_preference_id "
+                                        . " left join relationship_type rt on rt.id = up.relationship_type_id "
+                                        . " left join city c on c.id = up.city_id "
+                                        . " where up.id =" . $matching_user_id . ";";
+
+
+
                                 $mibio = "";
                                 $picture = "";
                                 $first_name = "";
@@ -206,6 +217,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             }
                                             $first_name = $row['first_name'];
                                             $surname = $row['surname'];
+
+
+                                            $email = $row['email'];
+                                            $gender = $row['gender_name'];
+                                            $preferredGender = $row['preferred_gender_name'];
+                                            $dob = $row['date_of_birth'];
+                                            $relationshipType = $row['relationship_type'];
+                                            $ageSelectionFrom = $row['from_age'];
+                                            $ageSelectionTo = $row['to_age'];
+                                            $travelDistance = $row['travel_distance'];
+                                            $city = $row['city'];
                                         }
                                     }
                                 }
@@ -240,10 +262,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class ="col-xs-4 col-sm-4"style="border-style:solid; border-color: silver;background-color:white;; opacity: 0.9;">
                                 <?php
                                 echo "<h3> $first_name's Interests </h3> ";
-                                $sql = "SELECT description
-                       FROM interests
-                       LEFT JOIN user_interests ON interest_id = interests.id
-                       where user_id = " . $matching_user_id . ";";
+                                $sql = "SELECT description  FROM interests "
+                                        . " LEFT JOIN user_interests ON interest_id = interests.id "
+                                        . " where user_id = " . $matching_user_id . ";";
                                 $interest = "";
                                 if ($result = mysqli_query($db_connection, $sql)) {
                                     if (mysqli_num_rows($result) > 0) {
@@ -255,7 +276,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 }
                                 ?>
                             </div>
+
+
                             <div class="col-xs-6 col-sm-6"style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;text-align:right">
+
+                                <div class="form-group">
+                                    
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                        <p>Date of Birth:</p><input style="border-radius: 4px" type="date"  class="form-control"  value= "<?php echo $dob; ?>">
+                                   </div> 
+
+                                    <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                        Nearest City/Town:</div>  
+                                    <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                        <input style="border-radius: 4px" type="text"  class="form-control"  value= "<?php echo $city; ?>">
+                                    </div>                                    
+
+                                    <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                        Gender:</div>  
+                                    <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                        <input style="border-radius: 4px" type="text"  class="form-control"  value= "<?php echo $gender; ?>">
+                                    </div>                                       
+
+                                    <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                        Preferred Gender:</div>  
+                                    <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                        <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $preferredGender; ?>">
+                                    </div> 
+
+                                    <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                        Seeking Age Profile:</div>  
+                                    <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                        <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $ageSelectionFrom; ?>"><p> to </>
+                                            <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $ageSelectionTo; ?>">
+                                    </div>                                     
+
+                                    <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                        Distance Will Travel:</div>  
+                                    <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                        <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $travelDistance; ?>">
+                                    </div>                                       
+
+                                    <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                        Relationship Type:</div>  
+                                    <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                        <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $relationshipType; ?>">
+                                    </div> 
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-xs-6 col-sm-6"style=" border-style:solid; border-color: silver;background-color:white; opacity: 0.9;text-align:right">
                                 <?php
                                 if (strlen($message) > 0) {
                                     echo "<div class='alert alert-danger'>";
@@ -272,17 +344,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
 
                         <div class="col-xs-8 col-sm-8 col-lg-12"style="background-color:lavender; opacity: 0.8;text-align:right">
-
-
-
                         </div>
-
                     </fieldset>
-
-
             </div>
-
         </form>
-
     </body>
 </html> 

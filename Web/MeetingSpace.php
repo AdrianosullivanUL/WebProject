@@ -251,7 +251,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             while ($row = mysqli_fetch_array($result)) {
                                                 $pictureIndex++;
                                                 //echo ("<li>");
+                                                $youHaveMail = false;
                                                 if ($row['match_user_id_1'] == $user_id) {
+                                                    $sql = "select count(*) cnt  from user_communication where to_user_id = $user_id and from_user_id = " . $row['match_user_id_2']
+                                                            . " and id > ifnull((select max(id) from user_communication where from_user_id = $user_id),0)";
+                                                    $result1 = execute_sql_query($db_connection, $sql);
+                                                    if ($result1 != null) {
+                                                        while ($row1 = mysqli_fetch_array($result1)) {
+                                                            if ($row1['cnt'] > 0) {
+                                                                $youHaveMail = true;
+                                                            }
+                                                        }
+                                                    }
                                                     // echo "<div class='container>";
                                                     echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                     echo "        <label for='radio" . $pictureIndex . "'>";
@@ -261,8 +272,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                                     else
                                                         echo ("<img class='selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                                                    if ($youHaveMail == true) {
+                                                        echo ("<br><img height='32' width='32' tiitle='Liked' src='http://hive.csis.ul.ie/4065/group05/images/send.png'/>");
+                                                    }
                                                     echo "</label>";
                                                 } else {
+                                                    $sql = "select count(*) cnt  from user_communication where to_user_id = $user_id and from_user_id = " . $row['match_user_id_1']
+                                                            . " and id > ifnull((select max(id) from user_communication where from_user_id = $user_id),0)";
+                                                    $result1 = execute_sql_query($db_connection, $sql);
+                                                    if ($result1 != null) {
+                                                        while ($row1 = mysqli_fetch_array($result1)) {
+                                                            if ($row1['cnt'] > 0) {
+                                                                $youHaveMail = true;
+                                                            }
+                                                        }
+                                                    }
                                                     echo "        <input type='radio' class='hideinput' name='selected_match' id='radio" . $pictureIndex . "' value='" . $row['match_id'] . "'/>";
                                                     echo "        <label for='radio" . $pictureIndex . "'>";
                                                     echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
@@ -271,6 +295,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         echo "<img  class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                                     else
                                                         echo ("<img class='selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                                                    if ($youHaveMail == true) {
+                                                        echo ("<br><img height='32' width='32' tiitle='Liked' src='http://hive.csis.ul.ie/4065/group05/images/send.png'/>");
+                                                    }
+
                                                     echo "</label>";
                                                 }
                                             }
