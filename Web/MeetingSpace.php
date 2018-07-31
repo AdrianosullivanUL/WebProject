@@ -307,10 +307,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <?php
                                         if ($ChatMatchesFound == true) {
                                             echo '<p><b>Click on Photograph and do one of the following:</b></p>';
-                                            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Chat"><img height="16" width="16"  title="Chat" src="/images/Chat.png"/>Chat</button>';
-                                            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16"  title="View" src="/images/View.png"/>View</button>';
-                                            echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16"  title="Goodbye"  src="/images/Goodbye.png"/>Goodbye</button>';
-                                            echo '<button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="16" width="16"  title="Report"  src="/images/Report.png"/>Report!</button>';
+                                            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Chat"><img height="16" width="16"  title="Chat" src="http://hive.csis.ul.ie/4065/group05/images/Chat.png"/>Chat</button>';
+                                            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16"  title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
+                                            echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16"  title="Goodbye"  src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye</button>';
+                                            echo '<button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="16" width="16"  title="Report"  src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report!</button>';
                                         }
                                         ?>
 
