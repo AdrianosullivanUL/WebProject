@@ -80,10 +80,10 @@ function get_bad_words_in_text($db_connection, $checkText) {
     $sql = "select * from black_list_word where word in (";
     foreach ($words as &$word) {
         if ($firstWord) {
-            $sql = $sql . "'" . md5($word) . "'";
+            $sql = $sql . "'" . md5(strtolower($word)) . "'";
             $firstWord = false;
         } else {
-            $sql = $sql . ",'" . md5($word) . "'";
+            $sql = $sql . ",'" . md5(strtolower($word)) . "'";
         }
     }
     $sql = $sql . ");";
@@ -92,7 +92,7 @@ function get_bad_words_in_text($db_connection, $checkText) {
         return null;
     while ($row = mysqli_fetch_array($result)) {
         foreach ($words as &$word) {
-            if (md5($word) == $row['word']) {
+            if (md5(strtolower($word)) == $row['word']) {
                 $badWords[$row['id']] = $word;
                 break;
             }

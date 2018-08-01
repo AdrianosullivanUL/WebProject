@@ -14,12 +14,11 @@ $message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // check the button selected (these are at the end of this form
     if ($_POST['btnAction'] == "Cancel") { // Process cancel request
-        $message = "Request Cancelled";
-        header("Location: /MeetingSpace.php"); /* Redirect browser */
+        header("Location: MeetingSpace.php"); /* Redirect browser */
         exit();
     }
     if ($_POST['btnAction'] == "Return") { // After delete, allow user to return to index page
-        header("Location: /index.php"); /* Redirect browser */
+        header("Location: index.php"); /* Redirect browser */
         exit();
     }
     // Process the removal of the account
