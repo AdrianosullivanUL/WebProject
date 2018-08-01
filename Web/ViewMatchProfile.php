@@ -20,7 +20,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $user_id = $_SESSION['user_id'];
     $matching_user_id = $_SESSION['matching_user_id'];
+    if ($_POST['btnAction'] == "Suspend") {
 
+        $sql = 'select * from user_profile where id = ' . $matching_user_id . ";";
+        $result = execute_sql_query($db_connection, $sql);
+        if ($result == null) {
+            echo "ERROR: Cannot find match entry to update status with, id =" . $matching_user_id;
+        } else {
+            while ($row = mysqli_fetch_array($result)) {
+                if ($row['user_status_id'] == 3 || $row['user_status_id'] == 4)
+                    $message = "This user is already suspended or barred";
+                else {
+                    $sql = "update user_profile set user_status_id = 3, user_status_date = now(), suspended_until_date = DATE_ADD(now(), INTERVAL 1 MONTH) where id = " . $matching_user_id;
+                    $message = "User Suspended";
+                    echo $sql;
+                    $result1 = execute_sql_update($db_connection, $sql);
+                }
+            }
+        }
+    }
+    if ($_POST['btnAction'] == "Bar") {
+
+        $sql = 'select * from user_profile where id = ' . $matching_user_id . ";";
+        $result = execute_sql_query($db_connection, $sql);
+        if ($result == null) {
+            echo "ERROR: Cannot find match entry to update status with, id =" . $matching_user_id;
+        } else {
+            while ($row = mysqli_fetch_array($result)) {
+                if ($row['user_status_id'] == 4)
+                    $message = "This user is already barred";
+                else {
+                    $sql = "update user_profile set user_status_id = 4, user_status_date = now(), suspended_until_date = DATE_ADD(now(), INTERVAL 99 MONTH) where id = " . $matching_user_id;
+                    //echo $sql;
+                    $result1 = execute_sql_update($db_connection, $sql);
+                    $message = "User barred";
+                }
+            }
+        }
+    }
 
     if ($_POST['btnAction'] == "Like" || $_POST['btnAction'] == "Maybe" || $_POST['btnAction'] == "Goodbye" || $_POST['btnAction'] == "Report" || $_POST['btnAction'] == "View") { // Get Match view row for subsequent buttons
 // Get the match entry for both users
@@ -137,6 +174,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
+
+// Get the user profile of the logged in user
+$sql = "select * from user_profile where id =" . $user_id . ";";
+//echo $sql;
+$isAdmin = false;
+$user_name = " ";
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            $isAdmin = $row['is_administrator'];
+            $user_name = $row['first_name'] . " " . $row['surname'];
+        }
+    }
+}
+// Get the user profile of the being viewed profile
+
+
+$sql = "SELECT up.*, DATE_FORMAT(up.date_of_birth,'%d/%m/%Y') as formatted_dob, g1.gender_name, g2.gender_name as preferred_gender_name, rt.relationship_type, c.city "
+        . " fROM user_profile up "
+        . " left join gender g1 on g1.id = up.gender_id "
+        . " left join gender g2 on g2.id = up.gender_preference_id "
+        . " left join relationship_type rt on rt.id = up.relationship_type_id "
+        . " left join city c on c.id = up.city_id "
+        . " where up.id =" . $matching_user_id . ";";
+//echo $sql;
+$mibio = "";
+$picture = "";
+$first_name = "";
+$surname = "";
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            $mybio = $row['my_bio'];
+            if (strlen($row['picture']) > 0) {
+                $picture = base64_encode($row['picture']);
+            } else {
+                
+            }
+            $first_name = $row['first_name'];
+            $surname = $row['surname'];
+
+
+            $email = $row['email'];
+            $gender = $row['gender_name'];
+            $preferredGender = $row['preferred_gender_name'];
+            $dob = $row['date_of_birth'];
+            $relationshipType = $row['relationship_type'];
+            $ageSelectionFrom = $row['from_age'];
+            $ageSelectionTo = $row['to_age'];
+            $travelDistance = $row['travel_distance'];
+            $city = $row['city'];
+        }
+    }
+}
 ?>
 <html lang="en">
     <head>
@@ -153,18 +244,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <body>
         <form action="/ViewMatchProfile.php" method="Post">
             <div class="topnav">
-                <a class="active">MATCHED PROFILE</a>
-                <a href="MeetingSpace.php" title="Meeting Space">
-                    <?php
-                    $sql = "select first_name, surname from user_profile where id = " . $user_id;
-                    //echo $sql;
-                    $result = execute_sql_query($db_connection, $sql);
-                    if ($result != null) {
-                        while ($row = mysqli_fetch_array($result)) {
-                            echo $row['first_name'] . " " . $row['surname'];
-                        }
+                <a class="active">View Profile</a>
+                <?php
+                if ($isAdmin == true)
+                    echo '<a href="AdminScreen.php" title="AdminScreen">' . $user_name . '(Admin. Mode)</a>';
+                else
+                    echo '<a href="MeetingSpace.php" title="Meeting Space">' . $user_name . '</a>';
+                $sql = "select first_name, surname from user_profile where id = " . $user_id;
+//echo $sql;
+                $result = execute_sql_query($db_connection, $sql);
+                if ($result != null) {
+                    while ($row = mysqli_fetch_array($result)) {
+                        echo $row['first_name'] . " " . $row['surname'];
                     }
-                    ?>
+                }
+                ?>
 
 
                 </a>
@@ -189,49 +283,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <p> " "</p>
                             </div>
                             <div class="col-xs-6 col-sm-4" style="border-style:solid; border-color: silver; background-color:white; opacity: 1;">
-                                <?php
-                                //  $sql = "SELECT * FROM user_profile where id =" . $matching_user_id . ";";
-
-                                $sql = "SELECT up.*, DATE_FORMAT(up.date_of_birth,'%d/%m/%Y') as formatted_dob, g1.gender_name, g2.gender_name as preferred_gender_name, rt.relationship_type, c.city "
-                                        . " fROM user_profile up "
-                                        . " left join gender g1 on g1.id = up.gender_id "
-                                        . " left join gender g2 on g2.id = up.gender_preference_id "
-                                        . " left join relationship_type rt on rt.id = up.relationship_type_id "
-                                        . " left join city c on c.id = up.city_id "
-                                        . " where up.id =" . $matching_user_id . ";";
-
-
-
-                                $mibio = "";
-                                $picture = "";
-                                $first_name = "";
-                                $surname = "";
-                                if ($result = mysqli_query($db_connection, $sql)) {
-                                    if (mysqli_num_rows($result) > 0) {
-                                        while ($row = mysqli_fetch_array($result)) {
-                                            $mybio = $row['my_bio'];
-                                            if (strlen($row['picture']) > 0) {
-                                                $picture = base64_encode($row['picture']);
-                                            } else {
-                                                
-                                            }
-                                            $first_name = $row['first_name'];
-                                            $surname = $row['surname'];
-
-
-                                            $email = $row['email'];
-                                            $gender = $row['gender_name'];
-                                            $preferredGender = $row['preferred_gender_name'];
-                                            $dob = $row['date_of_birth'];
-                                            $relationshipType = $row['relationship_type'];
-                                            $ageSelectionFrom = $row['from_age'];
-                                            $ageSelectionTo = $row['to_age'];
-                                            $travelDistance = $row['travel_distance'];
-                                            $city = $row['city'];
-                                        }
-                                    }
-                                }
-                                ?>
                                 <h4><?php echo $first_name . " " . $surname ?> </h4>
                                 <!-- Display Image -->
                                 <?php
@@ -281,10 +332,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="col-xs-6 col-sm-6"style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;text-align:right">
 
                                 <div class="form-group">
-                                    
+
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
                                         <p>Date of Birth:</p><input style="border-radius: 4px" type="date"  class="form-control"  value= "<?php echo $dob; ?>">
-                                   </div> 
+                                    </div> 
 
                                     <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
                                         Nearest City/Town:</div>  
@@ -334,12 +385,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     echo "<p>" . $message . "</p>";
                                     echo "</div>";
                                 }
-                                ?>
 
-                                <button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>
-                                <button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>
-                                <button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>
-                                <button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>
+                                if ($isAdmin == true) {
+                                    echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Suspend" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Suspend (1 Month)</button>';
+                                    echo '<button name="btnAction" class="btn btn-dark" type="submit" value="Bar"><img height="16" width="16" title="Bar" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Bar</button>';
+                                    echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
+                                } else {
+                                    echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>';
+                                    echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>';
+                                    echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye">Goodbye</button>';
+                                    echo '<button name="btnAction" class="btn btn-danger" type="submit" value="Report"> Report!</button>';
+                                }
+                                ?>
                             </div>
                         </div>
 
