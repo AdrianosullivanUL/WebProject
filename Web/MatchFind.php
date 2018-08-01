@@ -313,7 +313,6 @@ if (isset($_SESSION['user_name']))
                 echo '<a href="MeetingSpace.php" title="Meeting Space">' . $user_name . '</a>';
             ?>
             <div class="topnav-right">
-                <a href="index.php">About</a>
                 <a href="logout.php">Log Out</a>
             </div>
         </div>
