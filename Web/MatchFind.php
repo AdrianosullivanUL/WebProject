@@ -57,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $updatesql = "INSERT INTO match_table "
                         . " (match_user_id_1,match_user_id_2,match_date,user_1_match_status_id,user_1_match_status_date,user_2_match_status_id,user_2_match_status_date,system_generated_match)"
                         . " VALUES (" . $user_id . "," . $matching_user_id
-                        . ",now(),(select id from status_master where is_match_table_status = true and status_description = 'Like')"
-                        . ",now(),(select id from status_master where is_match_table_status = true and status_description = 'Like'),now(),0); ";
+                        . ",now(),(select id from status_master where is_match_table_status = true and status_description = 'Matched')"
+                        . ",now(),(select id from status_master where is_match_table_status = true and status_description = 'Matched'),now(),0); ";
                 $updateResult = execute_sql_update($db_connection, $updatesql);
 // get the new entry 
                 $result = execute_sql_query($db_connection, $sql);
@@ -76,10 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($valid == true) {
                         $newStatus = "";
                         if ($row['match_user_id_1'] == $user_id) {
+                            //echo "match_user_id_1";
                             $updateUser1or2 = 1;
                             //   echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
                             if ($row['user_profile_2_match_status'] == 'Like') {
-// both users must like each other before chatting
+                                // both users must like each other before chatting
+                                //echo $matchId . ",Chatting, 2";
                                 $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
                                 $newStatus = "Chatting";
                             } else
@@ -88,9 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $updateUser1or2 = 2;
                             //  echo "user_profile_1_match_status" . $row['user_profile_2_match_status'];
                             if ($row['user_profile_1_match_status'] == 'Like') {
-
+                                //echo $matchId . ",Chatting, 1";
                                 $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 1);
-// both users must like each other before chatting
+                                // both users must like each other before chatting
                                 $newStatus = "Chatting";
                             } else
                                 $newStatus = "Like";
@@ -146,6 +148,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     header("Location: MeetingSpace.php");
                     exit();
                 }
+        if ($_POST['btnAction'] == "Suspend") {
+            echo $matchId;
+            $sql = 'select * from matches_view where match_id = ' . $matchId . ";";
+            $result = execute_sql_query($db_connection, $sql);
+            if ($result == null) {
+                echo "ERROR: Cannot find match entry to update status with, id =" . $matchId;
+            } else {
+                while ($row = mysqli_fetch_array($result)) {
+                    if ($row['match_user_id_1'] == $user_id)
+                        $_SESSION['matching_user_id'] = $row['match_user_id_2'];
+                    else
+                        $_SESSION['matching_user_id'] = $row['match_user_id_1'];
+                    $matchId = $row['match_id'];
+                    if ($_POST['btnAction'] == "View") { // View Profile
+                        header("Location: ViewMatchProfile.php");
+                        exit();
+                    }
+                }
+            }
+        }                
             }
         }
     }
@@ -161,6 +183,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // echo "Cancel pressed";
         header("Location: meetingspace.php");
         exit();
+    }
+    $sql = "SELECT up.* FROM user_profile up   "
+            . " where up.id = '" . $user_id . "'";
+    //echo $sql;
+// 
+    if ($result = mysqli_query($db_connection, $sql)) {
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_array($result)) {
+                $isAdmin = $row['is_administrator'];
+            }
+        } else {
+            $message = "Cannot find user profile";
+        }
     }
 } else {
     $sql = "SELECT up.*, c.city, r.relationship_type, g1.gender_name, g2.gender_name as preferred_gender_name, description "
@@ -190,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $description = $row['description'];
                 $from_age = $row['from_age'];
                 $to_age = $row['to_age'];
-
+                $isAdmin = $row['is_administrator'];
                 $_SESSION['user_name'] = $first_name . " " . $surname;
                 // echo "relationship " . $relationship_type;
                 //echo "hobby " . $description;
@@ -256,19 +291,19 @@ if (isset($_SESSION['user_name']))
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select name="preferredGenderInput" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
                                         <option ></option>";
-                                        <?php
-                                        $sql = "select gender_name  from gender order by gender_name";
-                                        if ($result = mysqli_query($db_connection, $sql)) {
-                                            if (mysqli_num_rows($result) > 0) {
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    if ($preferred_gender_name == $row['gender_name'])
-                                                        echo "<option selected='selected'>" . $row['gender_name'] . "</option>";
-                                                    else
-                                                        echo "<option>" . $row['gender_name'] . "</option>";
-                                                }
-                                            }
-                                        }
-                                        ?>
+<?php
+$sql = "select gender_name  from gender order by gender_name";
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            if ($preferred_gender_name == $row['gender_name'])
+                echo "<option selected='selected'>" . $row['gender_name'] . "</option>";
+            else
+                echo "<option>" . $row['gender_name'] . "</option>";
+        }
+    }
+}
+?>
                                     </select>
                                 </div>
                             </div>
@@ -279,23 +314,23 @@ if (isset($_SESSION['user_name']))
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select name ="selectedCity" class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
                                         <option ></option>";
-                                        <?php
+<?php
 // get the user_profile record here
 // 
 
-                                        $sql = "select city from city";
-                                        if ($result = mysqli_query($db_connection, $sql)) {
-                                            if (mysqli_num_rows($result) > 0) {
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    //echo $city . " " . $row['city'];
-                                                    if ($city == $row['city'])
-                                                        echo "<option selected='selected'>" . $row['city'] . "</option>";
-                                                    else
-                                                        echo "<option>" . $row['city'] . "</option>";
-                                                }
-                                            }
-                                        }
-                                        ?>
+$sql = "select city from city";
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            //echo $city . " " . $row['city'];
+            if ($city == $row['city'])
+                echo "<option selected='selected'>" . $row['city'] . "</option>";
+            else
+                echo "<option>" . $row['city'] . "</option>";
+        }
+    }
+}
+?>
 
                                     </select>
                                 </div>
@@ -308,19 +343,19 @@ if (isset($_SESSION['user_name']))
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select name= "selectedRelationship"class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
                                         <option ></option>";
-                                        <?php
-                                        $sql = "select relationship_type from relationship_type";
-                                        if ($result = mysqli_query($db_connection, $sql)) {
-                                            if (mysqli_num_rows($result) > 0) {
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    if ($relationship_type == $row['relationship_type'])
-                                                        echo "<option selected='selected'>" . $row['relationship_type'] . "</option>";
-                                                    else
-                                                        echo "<option>" . $row['relationship_type'] . "</option>";
-                                                }
-                                            }
-                                        }
-                                        ?>
+<?php
+$sql = "select relationship_type from relationship_type";
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            if ($relationship_type == $row['relationship_type'])
+                echo "<option selected='selected'>" . $row['relationship_type'] . "</option>";
+            else
+                echo "<option>" . $row['relationship_type'] . "</option>";
+        }
+    }
+}
+?>
 
                                     </select>
                                 </div>
@@ -332,32 +367,32 @@ if (isset($_SESSION['user_name']))
                                 <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
                                     <select name= "selectedHobby"class="selectpicker form-control"style=" font-size:15pt;height: 40px;">
                                         <option ></option>";
-                                        <?php
-                                        $sql = "select description from interests";
-                                        if ($result = mysqli_query($db_connection, $sql)) {
-                                            if (mysqli_num_rows($result) > 0) {
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    if ($description == $row['description'])
-                                                        echo "<option selected='selected'>" . $row['rdescrition'] . "</option>";
-                                                    else
-                                                        echo "<option>" . $row['description'] . "</option>";
-                                                }
-                                            }
-                                        }
-                                        ?> 
+<?php
+$sql = "select description from interests";
+if ($result = mysqli_query($db_connection, $sql)) {
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            if ($description == $row['description'])
+                echo "<option selected='selected'>" . $row['rdescrition'] . "</option>";
+            else
+                echo "<option>" . $row['description'] . "</option>";
+        }
+    }
+}
+?> 
                                     </select>
                                 </div>
 
-                                <?php
-                                if (!empty($_POST['check_list'])) {
-                                    foreach ($_POST['check_list'] as $check) {
-                                        echo $check;
-                                        //echoes the value set in the HTML form for each checked checkbox.
-                                        //so, if I were to check 1, 3, and 5 it would echo value 1, value 3, value 5.
-                                        //in your case, it would echo whatever $row['Report ID'] is equivalent to.
-                                    }
-                                }
-                                ?>
+                                        <?php
+                                        if (!empty($_POST['check_list'])) {
+                                            foreach ($_POST['check_list'] as $check) {
+                                                echo $check;
+                                                //echoes the value set in the HTML form for each checked checkbox.
+                                                //so, if I were to check 1, 3, and 5 it would echo value 1, value 3, value 5.
+                                                //in your case, it would echo whatever $row['Report ID'] is equivalent to.
+                                            }
+                                        }
+                                        ?>
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
                                 <div class="form-group">
@@ -401,13 +436,13 @@ if (isset($_SESSION['user_name']))
                                 <div class="form-group">
                                     <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                     <div class="col-sm-11 col-md-11 col-lg-11 col-xs-10" style="text-align:center;">
-                                        <?php
-                                        if (strlen($message) > 0) {
-                                            echo "<div class='alert alert-danger'>";
-                                            echo "<p>" . $message . "</p>";
-                                            echo "</div>";
-                                        }
-                                        ?>
+<?php
+if (strlen($message) > 0) {
+    echo "<div class='alert alert-danger'>";
+    echo "<p>" . $message . "</p>";
+    echo "</div>";
+}
+?>
                                         <button class="btn btn-primary" id="valuser" type="submit" name="btnAction" name="btnAction" value="Submit" class="btn btn-success">
                                             Submit</button>
                                     </div>
@@ -419,87 +454,91 @@ if (isset($_SESSION['user_name']))
 
                                     <div class="row">
                                         <div class="col-md-12 col-md-offset-0.5" >
-                                            <?php
-                                            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                                                // check the button selected (these are at the end of this form
-                                                if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
-                                                    // Sql to pull data from other users and match selected gender selectedcity and relationshiptyoe
-                                                    $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city, i.description, r.relationship_type "
-                                                            . "FROM user_profile up"
-                                                            . " left join gender g1 on g1.id = up.gender_id "
-                                                            . " left join gender g2 on g2.id = up.gender_preference_id  "
-                                                            . " left join city c on c.id = up.city_id "
-                                                            . " left join relationship_type r on r.id=up.relationship_type_id"
-                                                            . " left join user_interests ui on ui.user_id = up.id "
-                                                            . " left join interests i on i.id = ui.interest_id"
-                                                            . " where is_administrator = FALSE AND black_listed_user = false "
-                                                            . " and up.id != " . $user_id;
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // check the button selected (these are at the end of this form
+    if ($_POST['btnAction'] == "Submit") { // Call Edit Profile
+        // Sql to pull data from other users and match selected gender selectedcity and relationshiptyoe
+        $sql = "SELECT up.*, g1.gender_name, g2.gender_name as preferred_gender_name, c.city, r.relationship_type " // i.description "
+                . "FROM user_profile up"
+                . " left join gender g1 on g1.id = up.gender_id "
+                . " left join gender g2 on g2.id = up.gender_preference_id  "
+                . " left join city c on c.id = up.city_id "
+                . " left join relationship_type r on r.id=up.relationship_type_id"
+               // . " left join user_interests ui on ui.user_id = up.id "
+               // . " left join interests i on i.id = ui.interest_id"
+                . " where is_administrator = FALSE AND black_listed_user = false "
+                . " and up.id != " . $user_id;
 
-                                                    if (strlen($preferred_gender_name) > 0)
-                                                        $sql = $sql . " and gender_id in (select id from gender where gender_name = '" . $preferred_gender_name . "')"
-                                                                . " ";
-                                                    if (strlen($city) > 0)
-                                                        $sql = $sql . " And city_id in (select id from city where city = '" . $city . "')";
+        if (strlen($preferred_gender_name) > 0)
+            $sql = $sql . " and gender_id in (select id from gender where gender_name = '" . $preferred_gender_name . "')"
+                    . " ";
+        if (strlen($city) > 0)
+            $sql = $sql . " And city_id in (select id from city where city = '" . $city . "')";
 
-                                                    if (strlen($relationship_type) > 0)
-                                                        $sql = $sql . " and relationship_type_id in (select id from relationship_type where relationship_type = '" . $relationship_type . "')";
-                                                    if (strlen($description) > 0)
-                                                        $sql = $sql . " And ui.interest_id = (select id from interests where description = '" . $description . "')";
-                                                    if (strlen($from_age) > 0)
-                                                        $sql = $sql . " And up.id in (select id from user_profile where from_age > '" . $from_age . "')";
-                                                    if (strlen($to_age) > 0)
-                                                        $sql = $sql . " And up.id in (select id from user_profile where to_age < '" . $to_age . "')";
-                                                   // echo $sql;
+        if (strlen($relationship_type) > 0)
+            $sql = $sql . " and relationship_type_id in (select id from relationship_type where relationship_type = '" . $relationship_type . "')";
+        if (strlen($description) > 0)
+            $sql = $sql . " And up.id in (select user_id  from user_interests ui join interests i on i.id = ui.interest_id  where description = '" . $description . "')";
+        if (strlen($from_age) > 0)
+            $sql = $sql . " And up.id in (select id from user_profile where from_age > '" . $from_age . "')";
+        if (strlen($to_age) > 0)
+            $sql = $sql . " And up.id in (select id from user_profile where to_age < '" . $to_age . "')";
+        // echo $sql;
 
-                                                    $pictureIndex = 0;
-                                                    $matchesFound = true;
-                                                    $result = execute_sql_query($db_connection, $sql);
-                                                    if ($result == null) {
-                                                        echo "<div class='alert alert-info col-md-12'>";
-                                                        echo "No matches found";
-                                                        echo "</div>";
-                                                        $matchesFound = false;
-                                                    } else {
-                                                        while ($row = mysqli_fetch_array($result)) {
-                                                            $pictureIndex++;
-                                                            //echo ("<li>");
-                                                            // echo "<div class='container>";
-                                                            echo "        <input type='radio' class='hideinput' name='selected_user_id' id='radio" . $pictureIndex . "' value='" . $row['id'] . "'/>";
-                                                            echo "        <label for='radio" . $pictureIndex . "'>";
-                                                            echo "        <label >" . $row['first_name'] . " " . $row['surname'] . "</label>";
-                                                            echo "<br>";
-                                                            if (strlen($row['picture']) > 0)
-                                                                echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
-                                                            else
-                                                                echo ("<img class='selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
-                                                            echo "</label>";
-                                                        }
-                                                    }
+        $pictureIndex = 0;
+        $matchesFound = true;
+        $result = execute_sql_query($db_connection, $sql);
+        if ($result == null) {
+            echo "<div class='alert alert-info col-md-12'>";
+            echo "No matches found";
+            echo "</div>";
+            $matchesFound = false;
+        } else {
+            while ($row = mysqli_fetch_array($result)) {
+                $pictureIndex++;
+                //echo ("<li>");
+                // echo "<div class='container>";
+                echo "        <input type='radio' class='hideinput' name='selected_user_id' id='radio" . $pictureIndex . "' value='" . $row['id'] . "'/>";
+                echo "        <label for='radio" . $pictureIndex . "'>";
+                echo "        <label >" . $row['first_name'] . " " . $row['surname'] . "</label>";
+                echo "<br>";
+                if (strlen($row['picture']) > 0)
+                    echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
+                else
+                    echo ("<img class='selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                echo "</label>";
+            }
+        }
 
 
-                                                    if ($result == null) {
-                                                        $message = "ERROR: Cannot match entry " . $user_id;
-                                                    } else {
-                                                        while ($row = mysqli_fetch_array($result)) {
-                                                            echo $row['first_name'] . " " . $row['city'] . " " . $row['gender_name'] . " " . $row['preferred_gender_name'] . "<br>";
-                                                            if (strlen($row['picture']) > 0)
-                                                                echo "<img class='rounded-circle'  height='32' width='32' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
-                                                            else
-                                                                echo ("<img height='32' width='32' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
-                                                        }
-                                                    }
-                                                    if ($matchesFound == true) {
-                                                        echo '<div>';
-                                                        echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like</button>';
-                                                        echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
-                                                        echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe</button>';
-                                                        echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye</button>';
-                                                        echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
-                                                        echo '</div>';
-                                                    }
-                                                }
-                                            }
-                                            ?>
+        if ($result == null) {
+            $message = "ERROR: Cannot match entry " . $user_id;
+        } else {
+            while ($row = mysqli_fetch_array($result)) {
+                echo $row['first_name'] . " " . $row['city'] . " " . $row['gender_name'] . " " . $row['preferred_gender_name'] . "<br>";
+                if (strlen($row['picture']) > 0)
+                    echo "<img class='rounded-circle'  height='32' width='32' src='data:image/jpeg;base64," . base64_encode($row["picture"]) . "'/>";
+                else
+                    echo ("<img height='32' width='32' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+            }
+        }
+        if ($matchesFound == true) {
+            echo '<div>';
+            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like</button>';
+            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
+            echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe</button>';
+            echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye</button>';
+            echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
+            if ($isAdmin == true) {
+                echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Bar"><img height="16" width="16" title="Bar" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Bar</button>';
+                echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Suspend" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Suspend (1 Month)</button>';
+            }
+            echo '</div>';
+        }
+    }
+}
+?>
                                         </div>
                                     </div>
 

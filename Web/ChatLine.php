@@ -101,10 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
 
-
             if ($last_communication_id == 0) {
                 $sql = "select max(id) maxid from user_communication where from_user_id =" . $user_id;
-//echo $sql;
                 if ($result = mysqli_query($db_connection, $sql)) {
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_array($result)) {
