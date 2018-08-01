@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_array($result)) {
                         if ($row['BadListChatCount'] >= 5 || $row['user_status_id'] == 5) {
-                            $sql = "update user_profile set user_status_id = 3, user_status_date = now(), suspended_until_date = DATE_ADD(now(), INTERVAL 1 MONTH) where id = " . $user_id;
+                            $sql = "update user_profile set user_status_id = 3, user_status_date = now(), suspended_until_date = DATE_ADD(now(), INTERVAL 7 DAY) where id = " . $user_id;
                             //echo $sql;
                             $result = execute_sql_update($db_connection, $sql);
                             $message = "You have used offensive language 5 times, your account has been suspended for one month. You will not be able to log onto this system again until your suspension is served!";
