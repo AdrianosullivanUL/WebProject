@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     . " where (match_user_id_1 = " . $user_id . " and match_user_id_2 = " . $matching_user_id . ")"
                     . " or (match_user_id_1 = " . $matching_user_id . " and match_user_id_2 = " . $user_id . ");";
 
-            //echo $sql;
+            echo $sql;
             $result = execute_sql_query($db_connection, $sql);
             if ($result == null) {
                 // No entry found so create a new match entry
@@ -106,8 +106,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         . " VALUES (" . $user_id . "," . $matching_user_id
                         . ",now(),(select id from status_master where is_match_table_status = true and status_description = 'Matched')"
                         . ",now(),(select id from status_master where is_match_table_status = true and status_description = 'Matched'),now(),0); ";
+                //echo $sql;
                 $updateResult = execute_sql_update($db_connection, $updatesql);
 // get the new entry 
+                $result = execute_sql_query($db_connection, $sql);
+                $sql = 'select * from matches_view '
+                        . " where (match_user_id_1 = " . $user_id . " and match_user_id_2 = " . $matching_user_id . ")"
+                        . " or (match_user_id_1 = " . $matching_user_id . " and match_user_id_2 = " . $user_id . ");";
+
+                //echo $sql;
                 $result = execute_sql_query($db_connection, $sql);
             }
             while ($row = mysqli_fetch_array($result)) {
@@ -165,6 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $updateUser1or2 = 1;
                         else
                             $updateUser1or2 = 2;
+//echo "update " . $matchId . 'Maybe ' . $updateUser1or2;
                         $updateResult = update_match_status($db_connection, $matchId, 'Maybe', $updateUser1or2);
 // Return to meeting space
                         header("Location: MeetingSpace.php");
