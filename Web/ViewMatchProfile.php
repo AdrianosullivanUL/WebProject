@@ -248,12 +248,12 @@ if ($result = mysqli_query($db_connection, $sql)) {
                     echo '<a href="MeetingSpace.php" title="Meeting Space">' . $user_name . '</a>';
                 $sql = "select first_name, surname from user_profile where id = " . $user_id;
 //echo $sql;
-                $result = execute_sql_query($db_connection, $sql);
+                /*$result = execute_sql_query($db_connection, $sql);
                 if ($result != null) {
                     while ($row = mysqli_fetch_array($result)) {
                         echo $row['first_name'] . " " . $row['surname'];
                     }
-                }
+                }*/
                 ?>
 
 
