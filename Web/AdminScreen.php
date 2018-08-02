@@ -163,12 +163,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     echo "<img class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                 else
                                     echo ("<img class='rounded-circle selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
-                                echo "<br>" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'];
+                                echo "<br> " . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'];
                                 echo "</label>";
                             } else {
                                 echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_user_id_2'] . "'/>";
                                 echo "        <label for='radio" . $pictureIndex . "'>";
-                                echo "        <label >Reported By " . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
+                                echo "        <label >Reported By " . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
                                 echo "<br>";
                                 if (strlen($row['user_profile_2_picture']) > 0)
                                     echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
