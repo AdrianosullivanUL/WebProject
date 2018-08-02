@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 else {
                     $sql = "update user_profile set user_status_id = 3, user_status_date = now(), suspended_until_date = DATE_ADD(now(), INTERVAL 1 MONTH) where id = " . $matching_user_id;
                     $message = "User Suspended";
-                    echo $sql;
+                    //echo $sql;
                     $result1 = execute_sql_update($db_connection, $sql);
                 }
             }
@@ -246,6 +246,17 @@ if ($result = mysqli_query($db_connection, $sql)) {
                     echo '<a href="AdminScreen.php" title="AdminScreen">' . $user_name . '(Admin. Mode)</a>';
                 else
                     echo '<a href="MeetingSpace.php" title="Meeting Space">' . $user_name . '</a>';
+                
+                              
+                if (strlen($picture) > 0)
+                    echo "<img class='rounded-circle selectimg'  height='32' width='32' src='data:image/jpeg;base64," . base64_encode($picture) . "'/>";
+                else
+                    echo ("<img class='selectimg' height='32' width='32' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                echo "&nbsp;" . $user_name;
+                
+                
+                
+                
                 $sql = "select first_name, surname from user_profile where id = " . $user_id;
 //echo $sql;
                 $result = execute_sql_query($db_connection, $sql);
@@ -385,7 +396,6 @@ if ($result = mysqli_query($db_connection, $sql)) {
                             if ($isAdmin == true) {
                                 echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Suspend" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Suspend (1 Month)</button>';
                                 echo '<button name="btnAction" class="btn btn-dark" type="submit" value="Bar"><img height="16" width="16" title="Bar" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Bar</button>';
-                                echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
                             } else {
                                 echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like">Like</button>';
                                 echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe">Maybe</button>';

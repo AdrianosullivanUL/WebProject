@@ -400,8 +400,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <h3>Possible Matches</h3>
                                         <?php
                                         $systemMatchesFound = true;
-                                        $sql = "SELECT * FROM matches_view where system_generated_match = true"
-                                                . " and (match_user_id_1 =" . $user_id . " and user_profile_1_match_status in ('Matched','Maybe') and user_profile_2_match_status not in ('Like','Report', 'Goodbye')) "
+                                        $sql = "SELECT * FROM matches_view where "
+                                                . "  (match_user_id_1 =" . $user_id . " and user_profile_1_match_status in ('Matched','Maybe') and user_profile_2_match_status not in ('Like','Report', 'Goodbye')) "
                                                 . " or  (match_user_id_2 =" . $user_id . " and user_profile_2_match_status in ('Matched','Maybe') and user_profile_1_match_status not in ('Like','Report', 'Goodbye'));";
 
                                         //echo $sql;

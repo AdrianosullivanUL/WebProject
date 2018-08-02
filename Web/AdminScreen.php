@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <a class="active">ADMINISTRATION</a>
             <a href="AdminScreen.php" title="Meeting Space"></a>
             <div class="topnav-right">
-                <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='http://hive.csis.ul.ie/4065/group05/images/Find.png'/>Match Finder</a>
+                <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='http://hive.csis.ul.ie/4065/group05/images/Find.png'/>Profile Finder</a>
                 <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Logoff.png'/>Logoff</a>
 
             </div>
@@ -146,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $pictureIndex = 0;
                     $sql = "SELECT * FROM matches_view where  "
                             . " (user_profile_1_match_status = 'Report' or user_profile_2_match_status = 'Report')";
-                    //echo $sql;
+                    // echo $sql;
                     $result = execute_sql_query($db_connection, $sql);
                     if ($result == null) {
                         echo "<br><p>No matches found</p>";
@@ -157,22 +157,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             if ($row['user_profile_1_match_status'] == 'Report') {
                                 echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_user_id_1'] . "'/>";
                                 echo "        <label for='radio" . $pictureIndex . "'>";
-                                echo "        <label >" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'] . "</label>";
+                                echo "        <label >Reported By " . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                 echo "<br>";
                                 if (strlen($row['user_profile_1_picture']) > 0)
                                     echo "<img class='rounded-circle selectimg' height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_1_picture"]) . "'/>";
                                 else
                                     echo ("<img class='rounded-circle selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                                echo "<br>" . $row['user_profile_1_first_name'] . " " . $row['user_profile_1_surname'];
                                 echo "</label>";
                             } else {
                                 echo "        <input type='radio' class='hideinput' name='selected_user' id='radio" . $pictureIndex . "' value='" . $row['match_user_id_2'] . "'/>";
                                 echo "        <label for='radio" . $pictureIndex . "'>";
-                                echo "        <label >" . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
+                                echo "        <label >Reported By " . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'] . "</label>";
                                 echo "<br>";
                                 if (strlen($row['user_profile_2_picture']) > 0)
                                     echo "<img class='rounded-circle selectimg'  height='100' width='100' src='data:image/jpeg;base64," . base64_encode($row["user_profile_2_picture"]) . "'/>";
                                 else
                                     echo ("<img class='selectimg' height='100' width='100' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                                 echo "<br> " . $row['user_profile_2_first_name'] . " " . $row['user_profile_2_surname'];
                                 echo "</label>";
                             }
                             echo "    </li>";
