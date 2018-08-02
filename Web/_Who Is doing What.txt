@@ -12,3 +12,29 @@ removeaccount           Adrian          Prototype Complete
 updateprofile		Deirdre         WIP
 viewmatchprofile        Mary            WIP
 stylesheet		Mary
+
+
+DONE List
+    View Profile -
+    Wire up button functions for Like, etc. -> Done
+    Match Profile - Fix issue with selecting user you are not already matched to -> Done
+    UpdateProfile - Improve Formatting and include Mary's Sliders -> Done
+    Session control - Make sure users cant spoof site -> Done
+    Password Reset - Write code -> Done
+    View Profile    -   Code "Return to Match Profile" -> Done
+    UpdateProfile2  - Improve Formatting -> Done
+    Chatline        - Include bad word logic -> Done
+    BadWords        - Track 5 instances and suspend account (trigger)
+    all - sql injection -> adrian
+    MeetingSpace    - Add icon to show new message to chat section -> Adrian
+
+
+TODO List
+    AdminScreen     - Write moderation code -> Niall
+    Testing/Report  - Deirdre
+    
+    PasswordReset   - Fix email problem -> Adrian
+    Register/ChangePassword -> Add password policy dropdown & jscript from Mary's file
+    MeetingSpace    - Add dropdown text to show how it works
+    FAQ             - How it works and all that -> Adrian
+    
