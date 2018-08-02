@@ -328,7 +328,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16"  title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
                                             echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16"  title="Goodbye"  src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye</button>';
                                             echo '<button name="btnAction" class="btn btn-danger" type="submit" value="Report"><img height="16" width="16"  title="Report"  src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report!</button>';
-                                            echo '<button data-toggle="collapse" data-target="#ChatHelp"><img height="16" width="16"  src="http://hive.csis.ul.ie/4065/group05/images/help-faq.png"/>Help</button>';
                                         }
                                         ?>
 
