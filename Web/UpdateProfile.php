@@ -7,8 +7,8 @@ $session_hash = $_SESSION['session_hash'];
 
 if (validate_logon($db_connection, $user_id, $session_hash) == false) {
     // User is not correctly logged on, route to Logon screen
-    Echo "Logon issue " . $session_hash;
-    header("Location: Logon.php");
+   // Echo "Logon issue " . $session_hash;
+  //  header("Location: Logon.php");
 }
 
 // Get the standard session parameters
