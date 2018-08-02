@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     . " where (match_user_id_1 = " . $user_id . " and match_user_id_2 = " . $matching_user_id . ")"
                     . " or (match_user_id_1 = " . $matching_user_id . " and match_user_id_2 = " . $user_id . ");";
 
-            echo $sql;
+           // echo $sql;
             $result = execute_sql_query($db_connection, $sql);
             if ($result == null) {
                 // No entry found so create a new match entry
@@ -313,7 +313,7 @@ if (isset($_SESSION['user_name']))
     </head>
     <body>
         <div class="topnav">
-            <a class="active">FIND YOUR MATCH</a>
+            <a class="active"><?php if ($isAdmin == true) echo "Find Profiles"; else echo "FIND YOUR MATCH"; ?></a>
             <?php
             if ($isAdmin == true)
                 echo '<a href="AdminScreen.php" title="AdminScreen">' . $user_name . '(Admin. Mode)</a>';
@@ -321,10 +321,19 @@ if (isset($_SESSION['user_name']))
                 echo '<a href="MeetingSpace.php" title="Meeting Space">' . $user_name . '</a>';
             ?>
             <div class="topnav-right">
+                <a data-toggle = "collapse" data-target = "#Help"><img height="16" width="16" src='http://hive.csis.ul.ie/4065/group05/images/help-faq.png'/><font color="white">Help</font></a>
                 <a href="logout.php">Log Out</a>
             </div>
         </div>
-
+        <div id="Help" class="collapse container">
+            Search our database of profiles by setting different preferences. 
+            <br>It works as follows:<br>
+            Your own preferences are pre-loaded, modify to suit your refined search and press submit.
+            <br> The results are presented with options to Like, View, Maybe, Goodbye or Report.
+            To process one of the profiles, click in their picture and press the required button.
+            
+           
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-md-offset-0.5" >
@@ -457,7 +466,7 @@ if (isset($_SESSION['user_name']))
                                 <div class="form-group">
                                     <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                                     <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 15pt;padding-top: 7px; text-align: left;">
-                                        Seeking Age Profile <span style="color: red">*</span> :</div>
+                                          Seeking Age Profile <span style="color: red">*</span> :</div>
                                     <div class="col-sm-2 col-md-2 col-lg-2 col-xs-8 mobileLabel">
                                         <input name= "fromAge" type="range" min="18" max="100" value="18" step="2" list="tickmarks" id="rangeInput" oninput="output.value = rangeInput.value">
                                         <datalist id="tickmarks">
@@ -588,7 +597,7 @@ if (isset($_SESSION['user_name']))
                                                             echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
                                                             echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Suspend" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Suspend (1 Month)</button>';
                                                             echo '<button name="btnAction" class="btn btn-dark" type="submit" value="Bar"><img height="16" width="16" title="Bar" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Bar</button>';
-                                                            echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
+                                                            
                                                         } else {
                                                             echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like</button>';
                                                             echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
