@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Chance Dating</legend>
 
                     <div class="row">
-                        <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
+                        <div class="col-sm-7 container border border-primary rounded bg-light text-dark">
                             <h1>Reach Out to your future partner</h1>
                             <p>Connecting singles across the Ireland to their ideal partner</p>
                             <br><br>

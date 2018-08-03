@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // See if user needs to be blacklisted
             $sql = "select id, user_status_id, (select count(1) cnt from user_communication uc where uc.black_listed = true and uc.communication_datetime > up.user_status_date and from_user_id = " . $user_id . ") BadListChatCount"
                     . " from user_profile up where id = " . $user_id;
-            echo $sql;
+            //echo $sql;
             if ($result = mysqli_query($db_connection, $sql)) {
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_array($result)) {
