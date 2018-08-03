@@ -48,7 +48,7 @@ if (isset($_GET['ResetKey'])) {
 // already on file
             $email_found = 0;
             $sql = "SELECT * FROM user_profile where lower(email) ='" . $email . "' and session_hash = '" . $resetKey . "';";
-   echo $sql;
+   //echo $sql;
             if ($result = mysqli_query($db_connection, $sql)) {
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_array($result)) {
@@ -68,11 +68,11 @@ if (isset($_GET['ResetKey'])) {
                 $session_hash = hash('sha256', get_GUID());
                 $sql = "update user_profile set password_hash = sha2('" . $password . "',256), session_hash = '" . $session_hash . "' where id = " . $user_id . ";";
 
-                echo $sql;
+                //echo $sql;
                 if ($result = mysqli_query($db_connection, $sql)) {
                     // get the user profile row again
                     $sql = "select id from user_profile where id = " . $user_id . ";";
-                    echo $sql;
+                   // echo $sql;
                     if ($result = mysqli_query($db_connection, $sql)) {
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_array($result)) {

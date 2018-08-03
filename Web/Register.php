@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($result = mysqli_query($db_connection, $sql)) {
                 // get the new user id
                 $sql = "select id from user_profile where email = '" . $email . "';";
-                echo $sql;
+                //echo $sql;
                 if ($result = mysqli_query($db_connection, $sql)) {
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_array($result)) {

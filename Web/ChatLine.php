@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 if ($last_communication_id > 0) {
                     $sql = "update match_table set communication_id = " . $last_communication_id . " where id = " . $match_id;
-                    echo $sql . "<br>";
+                    //echo $sql . "<br>";
                     $result = execute_sql_update($db_connection, $sql);
                 } else {
                     $message = "Problem updating the Last Communication Id, cannot find entries in communication table for user id " . $user_id;

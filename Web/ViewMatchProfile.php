@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 else {
                     $sql = "update user_profile set user_status_id = 3, user_status_date = now(), suspended_until_date = DATE_ADD(now(), INTERVAL 1 MONTH) where id = " . $matching_user_id;
                     $message = "User Suspended";
-                    echo $sql;
+                    //echo $sql;
                     $result1 = execute_sql_update($db_connection, $sql);
                 }
             }
