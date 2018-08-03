@@ -218,15 +218,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
         <div id="Help" class="collapse container">
-            This is where you meet your potential partners. 
-            <br>It works as follows:<br>
-            When you add or update your profile, the system automatically finds matches for you and places these in the "Possible Matches" section. 
-            You can also add matches here by finding people in the Match Finder screen and selecting them as a maybe. The system matches expire after a month so click on "maybe" to keep them.
-            <br>If you are interested in someone, select their profile and click Like, this will put them into the "People who I Like" section, they will stay there until they also like you.
-            <br>If they also like you then they will move to your chat area and you can both chat then.
-            <br>People who have liked you show in "People who like me" and again if you lile them they move into the chat area.
-            <br>If you want to remove a profile from your page, click on goodbye and they are removed.
-            <br>Have you taken offence from someone? Click on Report and the system moderator will review their account and if required Suspend
+            <fieldset class="landscape_nomargin" style="max-width: min-width 0;padding:.75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">                                                                
+                <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Help</legend>
+                <div class="container">
+                    <h5>You are now in <b>Meeting Space screen</b></h5>
+                    <br>
+                    <br><b> What do i do next?</b>
+                    <br>The Navigation Bar consists of the following links:<br>
+                    <b>&nbsp;&nbsp;&nbsp;User Name</b> - Click on your name at any point to return to the Meeting Space screen<br>
+                    <b>&nbsp;&nbsp;&nbsp;Edit Profile</b> - Fine tune your preferences to allow the system make better matches<br>
+                    <b>&nbsp;&nbsp;&nbsp;Match Finder</b> - Do wild card searches and see a wider range of people on our site<br>
+                    <b>&nbsp;&nbsp;&nbsp;Remove Profile</b> - Remove your profile from this system<br>
+                    <b>&nbsp;&nbsp;&nbsp;Help</b> - Get information on how the current screen works<br>
+                    <b>&nbsp;&nbsp;&nbsp;Logoff</b> - Log off and return to the log on screen<br>
+                    <br><br><b>In this screen you can see the following sections:</b>
+                    <ul >
+                        <li><b>Possible Matches</b><br>These are people who the system have identified <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/SystemGenerated.png"/> as meeting your profile match criteria or people who you have searched for and marked as a Maybe</li>
+                        <li><b>People who I like</b><br>These I have selected and then Liked them, they are "pending" they liking you and will progress to the Chat section when they do so</li>
+                        <li><b>People who like me</b><br>These are people who like me and are pending you liking them</li>
+                        <li><b>You are chatting with</b><br>After you both like each other, people are shown in this window you are free to chat with the people listed here</li>
+                    </ul>
+                    <br>In each section a set of buttons are provided relevant to that section, click on the user image first and then select from one of the following:
+                    <ul>
+                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like<br>You like this person and would like to chat with them. When you use this option, the person is moved to your <b>People who I like</b> section.</li>
+                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View<br>Have a look at this persons profile, from there you can also action their profile</li>
+                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe<br>If you are not sure about a person, you can click this button to have them remain in your <b>Possible Matches</b>,
+                            <br> Please note: by default <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/SystemGenerated.png"/> system generate matches expire after one month</li>
+                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye<br>If you are not interested, click this to remove the profile from your meeting space</li>
+                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report<br>Feel offended by they persons profile, an in appropriate image for instance? Click to have their profile reviewed by the system moderator</li>
+                    </ul>
+
+                </div>
+            </fieldset>
         </div>
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-group" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >        
 

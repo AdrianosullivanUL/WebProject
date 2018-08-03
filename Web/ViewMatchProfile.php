@@ -248,194 +248,201 @@ if ($result = mysqli_query($db_connection, $sql)) {
 
     </head>
     <body>
-        
-            <div class="topnav">
-                <a class="active">View Profile</a>
-                <?php
-                if ($isAdmin == true)
-                    echo '<a href="AdminScreen.php" title="AdminScreen">' . $user_name . '(Admin. Mode)</a>';
-                else
-                    echo '<a href="MeetingSpace.php" title="Meeting Space">' . $user_name . '</a>';
-                $sql = "select first_name, surname from user_profile where id = " . $user_id;
+
+        <div class="topnav">
+            <a class="active">View Profile</a>
+            <?php
+            if ($isAdmin == true)
+                echo '<a href="AdminScreen.php" title="AdminScreen">' . $user_name . '(Admin. Mode)</a>';
+            else
+                echo '<a href="MeetingSpace.php" title="Meeting Space">' . $user_name . '</a>';
+            $sql = "select first_name, surname from user_profile where id = " . $user_id;
 //echo $sql;
-                /* $result = execute_sql_query($db_connection, $sql);
-                  if ($result != null) {
-                  while ($row = mysqli_fetch_array($result)) {
-                  echo $row['first_name'] . " " . $row['surname'];
-                  }
-                  } */
-                ?>
+            /* $result = execute_sql_query($db_connection, $sql);
+              if ($result != null) {
+              while ($row = mysqli_fetch_array($result)) {
+              echo $row['first_name'] . " " . $row['surname'];
+              }
+              } */
+            ?>
 
 
-                </a>
-                <div class="topnav-right">
-                    <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='http://hive.csis.ul.ie/4065/group05/images/Find.png'/>Match Finder</a>
-                    <a href="UpdateProfile.php">Update Profile</a>
-                    <a data-toggle = "collapse" data-target = "#Help"><img height="16" width="16" src='http://hive.csis.ul.ie/4065/group05/images/help-faq.png'/><font color="white">Help</font></a>
-                    <a href="Logout.php">Log Out</a>
-                </div>
-            </div>
-            <div id="Help" class="collapse container">
+        </a>
+        <div class="topnav-right">
+            <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='http://hive.csis.ul.ie/4065/group05/images/Find.png'/>Match Finder</a>
+            <a href="UpdateProfile.php">Update Profile</a>
+            <a data-toggle = "collapse" data-target = "#Help"><img height="16" width="16" src='http://hive.csis.ul.ie/4065/group05/images/help-faq.png'/><font color="white">Help</font></a>
+            <a href="Logout.php">Log Out</a>
+        </div>
+    </div>
+
+    <div id="Help" class="collapse container">
+        <fieldset class="landscape_nomargin" style="max-width: min-width 0;padding:.75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">                                                                
+            <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Help</legend>
+            <div class="container">
                 <h5>You are now in <b>View Selected match</b></h5>
                 <br><b>How did you get here ? </b><br>
-                You have selected<<b><font color="turquoise"> View </font></b> in the <b>Meeting Space</b><br>
+                You have selected <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/><b><font color="turquoise"> View </font></b> in the <b>Meeting Space</b><br>
                 <br><b> What do i do next?</b>
                 <br>From here you can checkout the Bio, Interests, and Profile details of the person you selected
-                <br>If you are interested in this person, click <b><font color="blue"> Like </font></b>, this will put them into the <b>"People who I Like"</b>section in the Meeting Space,they will stay there until they also like you.
-                <br>If they also <b><font color="blue"> Like </font></b> you then they will move to your chat area and you can both chat then.
+                <br>If you are interested in this person, click <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/><b><font color="blue"> Like </font></b>, 
+                this will put them into the <b>"People who I Like"</b>section in the Meeting Space,they will stay there until they also like you.
+                <br>If they also <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/><b><font color="blue"> Like </font></b> you then they will move to your chat area and you can both chat then.
                 <br>People who have liked you show in <b>"People who like me"</b> and again if you like them they move into the chat area.
-                <br>If you want to remove a profile from your page, click on <b><font color="yellow"> Goodbye </font></b> and they are removed.
-                <br>Have you been offended by someone? Click on <b><font color="red">Report </font></b>and the system moderator will review their account and if required Suspend
+                <br>If you want to remove a profile from your page, click on <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/><b><font color="yellow"> Goodbye </font></b> and they are removed.
+                <br>Have you been offended by someone? Click on <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/><b><font color="red">Report </font></b>and the system moderator will review their account and if required Suspend
             </div>
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
-            <div class="col-md-10 col-md-offset-1" >
+        </fieldset>
+    </div>                
+    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
+        <div class="col-md-10 col-md-offset-1" >
 
-                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">
-                    <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">View Your Selected Match</legend>
-                    <div class="container-fluid">
-                        <div class ="row">
-                            <div class="col-xs-12 col-sm-12 col-lg-12 col-xs-12 " style="border-style: solid;border-color: silver;background-color:transparent; opacity: 0.0;">
-                            </div> 
-                        </div>
-                    </div>
+            <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">
+                <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">View Your Selected Match</legend>
+                <div class="container-fluid">
                     <div class ="row">
-                        <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
-                            <p> " "</p>
-                        </div>
-                        <div class="col-xs-6 col-sm-4 col-xs-6" style="border-style:solid; border-color: silver; background-color:white; opacity: 1;">
-                            <h4><?php echo $first_name . " " . $surname ?> </h4>
-                            <!-- Display Image -->
-                            <?php
-                            if (strlen($picture) > 0) {
-                                echo '<img class="portrait"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
-                            } else {
-                                echo ("<img class='portrait' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
-                            }
-                            ?>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-xs-6" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
-                            <h3><?php echo $first_name ?>'s bio</h3>
-                            <h5><?php echo $mybio ?></h5>
-
-                        </div>
+                        <div class="col-xs-12 col-sm-12 col-lg-12 col-xs-12 " style="border-style: solid;border-color: silver;background-color:transparent; opacity: 0.0;">
+                        </div> 
                     </div>
-                    <div class ="row">
-                        <div class="col-sm-12" style="background-color:transparent; opacity: 0.0;">
-
-                        </div>
+                </div>
+                <div class ="row">
+                    <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
+                        <p> " "</p>
                     </div>
+                    <div class="col-xs-6 col-sm-4 col-xs-6" style="border-style:solid; border-color: silver; background-color:white; opacity: 1;">
+                        <h4><?php echo $first_name . " " . $surname ?> </h4>
+                        <!-- Display Image -->
+                        <?php
+                        if (strlen($picture) > 0) {
+                            echo '<img class="portrait"src="data:image/jpeg;base64,' . $picture . '"/><i></i>';
+                        } else {
+                            echo ("<img class='portrait' src='http://hive.csis.ul.ie/4065/group05/images/camera-photo-7.png'/><i></i>");
+                        }
+                        ?>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-xs-6" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
+                        <h3><?php echo $first_name ?>'s bio</h3>
+                        <h5><?php echo $mybio ?></h5>
 
-                    <div class ="row">
-                        <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
-                            <p>     </p>
-                            <p>     </p>    
-                        </div>
-                        <div class ="col-xs-4 col-sm-4 col-xs-6"style="border-style:solid; border-color: silver;background-color:white;; opacity: 0.9;">
-                            <?php
-                            echo "<h3> $first_name's Interests </h3> ";
-                            $sql = "SELECT description  FROM interests "
-                                    . " LEFT JOIN user_interests ON interest_id = interests.id "
-                                    . " where user_id = " . $matching_user_id . ";";
-                            $interest = "";
-                            if ($result = mysqli_query($db_connection, $sql)) {
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_array($result)) {
-                                        $description = $row['description'];
-                                        echo("<h5> * $description ");
-                                    }
+                    </div>
+                </div>
+                <div class ="row">
+                    <div class="col-sm-12" style="background-color:transparent; opacity: 0.0;">
+
+                    </div>
+                </div>
+
+                <div class ="row">
+                    <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
+                        <p>     </p>
+                        <p>     </p>    
+                    </div>
+                    <div class ="col-xs-4 col-sm-4 col-xs-6"style="border-style:solid; border-color: silver;background-color:white;; opacity: 0.9;">
+                        <?php
+                        echo "<h3> $first_name's Interests </h3> ";
+                        $sql = "SELECT description  FROM interests "
+                                . " LEFT JOIN user_interests ON interest_id = interests.id "
+                                . " where user_id = " . $matching_user_id . ";";
+                        $interest = "";
+                        if ($result = mysqli_query($db_connection, $sql)) {
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_array($result)) {
+                                    $description = $row['description'];
+                                    echo("<h5> * $description ");
                                 }
                             }
-                            ?>
+                        }
+                        ?>
+                    </div>
+
+
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6 mobileLabel"style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;text-align:left">
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-8 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                <p>Date of Birth:</div>
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
+                                <input style="border-radius: 4px" type="date"  class="form-control"  value= "<?php echo $dob; ?>">
+                            </div> 
                         </div>
 
 
-                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6 mobileLabel"style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;text-align:left">
-
-                            <div class="form-group">
-                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-8 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
-                                    <p>Date of Birth:</div>
-                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
-                                    <input style="border-radius: 4px" type="date"  class="form-control"  value= "<?php echo $dob; ?>">
-                                </div> 
-                            </div>
-
-
-                            <div class="form-group">
-                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-8 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
-                                    Nearest City:</div>  
-                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
-                                    <input style="border-radius: 4px" type="text"  class="form-control"  value= "<?php echo $city; ?>">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-8 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
-                                    Gender:</div>  
-                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
-                                    <input style="border-radius: 4px" type="text"  class="form-control"  value= "<?php echo $gender; ?>">
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-8 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
-                                    Preferred Gender:</div>  
-                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
-                                    <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $preferredGender; ?>">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-8 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
-                                    Seeking Age Profile:</div>  
-                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
-                                    <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $ageSelectionFrom; ?>"><p> to </>
-                                        <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $ageSelectionTo; ?>">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
-                                    Distance Will Travel:</div>  
-                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
-                                    <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $travelDistance; ?>">
-                                </div> 
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
-                                    Relationship Type:</div>  
-                                <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
-                                    <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $relationshipType; ?>">
-                                </div> 
-
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-8 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Nearest City:</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
+                                <input style="border-radius: 4px" type="text"  class="form-control"  value= "<?php echo $city; ?>">
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-8 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Gender:</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
+                                <input style="border-radius: 4px" type="text"  class="form-control"  value= "<?php echo $gender; ?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
 
-                        <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10 mobileLabel" style=" text-align: center;">
-                            <?php
-                            if (strlen($message) > 0) {
-                                echo "<div class='alert alert-danger'>";
-                                echo "<p>" . $message . "</p>";
-                                echo "</div>";
-                            }
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-8 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Preferred Gender:</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
+                                <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $preferredGender; ?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-8 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Seeking Age Profile:</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-8 mobileLabel">
+                                <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $ageSelectionFrom; ?>"><p> to </>
+                                    <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $ageSelectionTo; ?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Distance Will Travel:</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $travelDistance; ?>">
+                            </div> 
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" style=" font-size: 10pt; padding-top: 8px; text-align: left;">
+                                Relationship Type:</div>  
+                            <div class="col-sm-6 col-md-6 col-lg-5 col-xs-9 mobileLabel">
+                                <input style="border-radius: 4px" type="text"  class="form-control" value= "<?php echo $relationshipType; ?>">
+                            </div> 
 
-                            if ($isAdmin == true) {
-                                echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
-                                echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Suspend" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Suspend (1 Month)</button>';
-                                echo '<button name="btnAction" class="btn btn-dark" type="submit" value="Bar"><img height="16" width="16" title="Bar" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Bar</button>';
-                                echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
-                            } else {
-                                echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like</button>';
-                                echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
-                                echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe</button>';
-                                echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye</button>';
-                                echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
-                            }
-                            ?>
                         </div>
                     </div>
 
-                   
-                </fieldset>
-            </div>
-        </form>
-    </body>
+
+                    <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10 mobileLabel" style=" text-align: center;">
+                        <?php
+                        if (strlen($message) > 0) {
+                            echo "<div class='alert alert-danger'>";
+                            echo "<p>" . $message . "</p>";
+                            echo "</div>";
+                        }
+
+                        if ($isAdmin == true) {
+                            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
+                            echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Suspend"><img height="16" width="16" title="Suspend" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Suspend (1 Month)</button>';
+                            echo '<button name="btnAction" class="btn btn-dark" type="submit" value="Bar"><img height="16" width="16" title="Bar" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Bar</button>';
+                            echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
+                        } else {
+                            echo '<button name="btnAction" class="btn btn-success" type="submit" value="Like"><img height="16" width="16"  title="Like" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like</button>';
+                            echo '<button name="btnAction" class="btn btn-info" type="submit" value="View"><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View</button>';
+                            echo '<button name="btnAction" class="btn btn-primary" type="submit" value="Maybe"><img height="16" width="16" title="Maybe" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe</button>';
+                            echo '<button name="btnAction" class="btn btn-warning" type="submit" value="Goodbye"><img height="16" width="16" title="Goodbye" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye</button>';
+                            echo '<button name="btnAction" class="btn btn-danger" type="</div>submit" value="Report"><img height="16" width="16" title="Report" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report</button>';
+                        }
+                        ?>
+                    </div>
+                </div>
+
+
+            </fieldset>
+        </div>
+    </form>
+</body>
 </html> 
