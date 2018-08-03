@@ -228,7 +228,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
 <html lang="en">
     <head>
         <title>view matching profile</title>
-        <<meta charset="utf-8">
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -248,7 +248,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
 
     </head>
     <body>
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
+        
             <div class="topnav">
                 <a class="active">View Profile</a>
                 <?php
@@ -276,19 +276,21 @@ if ($result = mysqli_query($db_connection, $sql)) {
                 </div>
             </div>
             <div id="Help" class="collapse container">
-                This is where you view your selected match. 
-                <br>It works as follows:<br>
-                When you add or update your profile, the system automatically finds matches for you and places these in the "Possible Matches" section. 
-                You can also add matches here by finding people in the Match Finder screen and selecting them as a maybe. The system matches expire after a month so click on "maybe" to keep them.
-                <br>If you are interested in someone, select their profile and click Like, this will put them into the "People who I Like" section, they will stay there until they also like you.
-                <br>If they also like you then they will move to your chat area and you can both chat then.
-                <br>People who have liked you show in "People who like me" and again if you lile them they move into the chat area.
-                <br>If you want to remove a profile from your page, click on goodbye and they are removed.
-                <br>Have you taken offence from someone? Click on Report and the system moderator will review their account and if required Suspend
+                <h5>You are now in <b>View Selected match</b></h5>
+                <br><b>How did you get here ? </b><br>
+                You have selected<<b><font color="turquoise"> View </font></b> in the <b>Meeting Space</b><br>
+                <br><b> What do i do next?</b>
+                <br>From here you can checkout the Bio, Interests, and Profile details of the person you selected
+                <br>If you are interested in this person, click <b><font color="blue"> Like </font></b>, this will put them into the <b>"People who I Like"</b>section in the Meeting Space,they will stay there until they also like you.
+                <br>If they also <b><font color="blue"> Like </font></b> you then they will move to your chat area and you can both chat then.
+                <br>People who have liked you show in <b>"People who like me"</b> and again if you like them they move into the chat area.
+                <br>If you want to remove a profile from your page, click on <b><font color="yellow"> Goodbye </font></b> and they are removed.
+                <br>Have you been offended by someone? Click on <b><font color="red">Report </font></b>and the system moderator will review their account and if required Suspend
             </div>
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
             <div class="col-md-10 col-md-offset-1" >
 
-                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
+                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">
                     <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">View Your Selected Match</legend>
                     <div class="container-fluid">
                         <div class ="row">
@@ -300,7 +302,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
                         <div class="col-xs-0 col-sm-1" style="background-color:transparent; opacity: 0.0;">
                             <p> " "</p>
                         </div>
-                        <div class="col-xs-6 col-sm-4" style="border-style:solid; border-color: silver; background-color:white; opacity: 1;">
+                        <div class="col-xs-6 col-sm-4 col-xs-6" style="border-style:solid; border-color: silver; background-color:white; opacity: 1;">
                             <h4><?php echo $first_name . " " . $surname ?> </h4>
                             <!-- Display Image -->
                             <?php
@@ -311,7 +313,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
                             }
                             ?>
                         </div>
-                        <div class="col-xs-6 col-sm-6" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
+                        <div class="col-xs-6 col-sm-6 col-xs-6" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
                             <h3><?php echo $first_name ?>'s bio</h3>
                             <h5><?php echo $mybio ?></h5>
 
@@ -328,7 +330,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
                             <p>     </p>
                             <p>     </p>    
                         </div>
-                        <div class ="col-xs-4 col-sm-4"style="border-style:solid; border-color: silver;background-color:white;; opacity: 0.9;">
+                        <div class ="col-xs-4 col-sm-4 col-xs-6"style="border-style:solid; border-color: silver;background-color:white;; opacity: 0.9;">
                             <?php
                             echo "<h3> $first_name's Interests </h3> ";
                             $sql = "SELECT description  FROM interests "
@@ -407,7 +409,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
                         </div>
 
 
-                        <div class="col-sm-8 col-md-8 col-lg-10 col-xs-10 mobileLabel" style=" text-align: center;">
+                        <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10 mobileLabel" style=" text-align: center;">
                             <?php
                             if (strlen($message) > 0) {
                                 echo "<div class='alert alert-danger'>";
@@ -431,8 +433,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
                         </div>
                     </div>
 
-                    <div class="col-xs-8 col-sm-8 col-lg-12"style="background-color:lavender; opacity: 0.8;text-align:right">
-                    </div>
+                   
                 </fieldset>
             </div>
         </form>
