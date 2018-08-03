@@ -193,7 +193,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
 
         
-        <div class="container-fluid">        
+        <div class="container-fluid"> 
+            <div class="col-md-10 col-md-offset-1" >
             <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
                 <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
 
@@ -219,6 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
                 </fieldset>
+            </form>
         </div>
     </body>
 </html> 
