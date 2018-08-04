@@ -112,7 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $newStatus = "";
                         if ($row['match_user_id_1'] == $user_id) {
                             $updateUser1or2 = 1;
-                            echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
                             if ($row['user_profile_2_match_status'] == 'Like') {
                                 // both users must like each other before chatting
                                 $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);

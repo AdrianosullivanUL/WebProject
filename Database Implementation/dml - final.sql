@@ -938,5 +938,5 @@ VALUES(24,now(),'great, weather good your end?',11,15,2,false,null,null);
 
 update match_table set communication_id = 1 where id = 28;
 
-update user_profile set user_status_date = now();
+update user_profile set user_status_date = now() where user_status_date is null;
 
