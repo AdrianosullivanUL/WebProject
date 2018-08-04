@@ -90,10 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <title>Chance Dating</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="StyleSheet.css">
         <style>
@@ -108,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             .navbar {
                 overflow: hidden;
                 background-color: #333;
-
                 font-family: Arial, Helvetica, sans-serif;
             }
 
@@ -119,6 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 text-align: center;
                 padding: 14px 16px;
                 text-decoration: none;
+                background-color: grey;
+                
             }
 
             .dropdown {
@@ -171,7 +168,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 height: 400px;
             }
             .container{
-                float: center;
+                float: left;
+                margin: 0 auto;              
                 width: 33.33%;
                 padding: 10px;
                 background-color: transparent;
@@ -183,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             .column a {
                 float: none;
-                color: black;
+                color: white;
                 padding: 16px;
                 text-decoration: none;
                 display: block;
@@ -223,13 +221,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 [class = "container"]{
                     width: 100%;
                 }
-                .footer {
-                    background-color: purple;
+            }
+            .footer {
+                    background-color: silver;
                     color: #ffffff;
                     text-align: center;
                     font-size: 12px;
                     padding: 15px;
+                    opacity: 0.9;
                 }
+                
 
             </style>
         </head>
@@ -242,9 +243,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </button>
                     <div class="dropdown-content">
                         <div class="header">
-                            <h2>Chance Dating will help you make up your mind <br>
-                                with eligible partners in line<br>
-                                Honey are you still free ?<br>
+                            <h2>Chance Dating will help you make up your mind,<br>
+                                with eligible partners in line &#8192;    &#9794;&#9792;&#9794;&#9792;<br>
+                                Honey are you still free? &#8192;   &hearts;&#9892;&hearts;&#9890;&hearts;&#9891;<br>
                                 Take that CHANCE......there's no Fee </h2>
                         </div>   
                         <div class="row">
@@ -288,8 +289,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p>   2. Complete your Profile details</p>
                             <p>   3. Chat with your potential partner </p><br>
 
-                            <button name="btnAction" class="register" type="register" value="Register">Register Now</button><br>
-                            <br>
+                            <p><button name="btnAction" class="register" type="Register" value="Register">Register Now</button><br>
+                            
                             <br>
                             <br>
 
