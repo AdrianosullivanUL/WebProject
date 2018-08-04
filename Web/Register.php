@@ -112,16 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <title>Register</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
         <link rel="stylesheet" href="StyleSheet.css">
     </head>
 
@@ -130,105 +124,108 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="topnav">
         <a class="active">REGISTER</a>
         <div class="topnav-right">
-            <a href="Logon.php" title="Log In"><img height="16" width="16"  src='/images/Logoff.png'/>Log In</a>
+            <a data-toggle = "collapse" data-target = "#Help"><img height="16" width="16" src='http://hive.csis.ul.ie/4065/group05/images/help-faq.png'/><font color="white">Help</font></a>
+            <a href="Logon.php" title="Log In"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/logon.png'/>Log In</a>
         </div>
     </div>
+    <div id="Help" class="collapse container">
+        <fieldset class="landscape_nomargin" style="max-width: min-width 0;padding:.75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">                                                                
+            <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Help</legend>
+            <div class="container">
+                <h3>How it works</h3>
+                <p>Our process is simple and easy to use, we don't ask you a million questions or need you to do psychological tests! Just answer a few simple questions, upload a recent picture and take a CHANCE with us:</p>
+                <ul>
+                    <li>Based on the criteria you have entered, we will find people who match your preferences and present these in the Meeting Space under the <b>Possible Matches</b> heading</li>
+                    <li>From here you can view all of the people matched to you and do the following:</li>
+                    <ul>
+                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like<br>You like this person and would like to chat with them. When you use this option, the person is moved to your <b>People who I like</b> section.</li>
+                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View<br>Have a look at this persons profile, from there you can also action their profile</li>
+                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe<br>If you are not sure about a person, you can click this button to have them remain in your <b>Possible Matches</b>,
+                            <br> Please note: by default <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/SystemGenerated.png"/> system generate matches expire after one month</li>
+                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye<br>If you are not interested, click this to remove the profile from your meeting space</li>
+                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report<br>Feel offended by they persons profile, an in appropriate image for instance? Click to have their profile reviewed by the system moderator</li>
+                    </ul>
+                    <li>If you "like" someone, you will be added to their "Interested in me" list in their Meeting Space, if they also "like" you then you are free to chat</li>
+                    <li>A list of people who you are "chatting" with are presented in your Meeting Space also, click on their picture and click on the Chat button to communicate with them</li>
+                </ul>
+                Want to search the field? Have a look at our <b>match finder</b> where you can browse the entire menu and go "al a carte".
+                <br><br>
+                <p>Note: Distance willing to travel is used to calculate the distance from your town to your potential match, this is done using "as the crow flies", please bear this in mind when contacting people.</p>
+            </div>
+        </fieldset>
+    </div>                
+
 
     <div class="container">
     </div>
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1" >
+                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="challenge"  class="form-horizontal" role="form" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
+                    <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">
+                        <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Registration Details</legend>
 
-            <form method="post" name="challenge"  class="form-horizontal" role="form" action="#" onSubmit="return submitForm()" AUTOCOMPLETE = "off" >
-                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em;margin:0 2px;border: 2px solid silver;margin-bottom: 10em;background-color:lavender; opacity: .9;">
-                    <legend style="border-bottom: none;width: inherit;;padding:inherit;" class="legend">Registration</legend>
-
-                    <div class="form-group">
-                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold;padding-top: 10px; text-align: left;">
-                            Your Email <span style="color: red">*</span> :</div>
-                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 input-group mobilePad" style="font-weight:800;">
-                            <input style="border-radius: 4px" type="email"  class="form-control" name="email" id="yourEmail">                   
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold;padding-top: 10px; text-align: left;">
+                                Your Email <span style="color: red">*</span> :</div>
+                            <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 input-group mobilePad" style="font-weight:800;">
+                                <input style="border-radius: 4px" type="email"  class="form-control" name="email" id="yourEmail">                   
+                            </div>
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                         </div>
-                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: left;">
-                            Password <span style="color: red">*</span> :</div>
-                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 input-group mobilePad" style="font-weight: bold;">
-                            <input style="border-radius: 4px" type="password"  class="form-control" name="password" id="yourEmail">                   
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                         </div>
-                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: left;">
-                            Confirm Your Password  <span style="color: red">*</span> :</div>
-                        <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 input-group mobilePad" style=""font-weight: bold;">
-                             <input style="border-radius: 4px" type="password"  class="form-control" name="confirmPassword" id="yourEmail">                   
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: left;">
+                                Password <span style="color: red">*</span> :</div>
+                            <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 input-group mobilePad" style="font-weight: bold;">
+                                <input style="border-radius: 4px" type="password"  class="form-control" name="password" id="yourEmail">                   
+                            </div>
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                         </div>
-                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                    </div>
-
-
-                    <?php
-                    if (strlen($message) > 0) {
-                        echo "<div class='alert alert-danger'>";
-                        echo "<p>" . $message . "</p>";
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <br>
-                    <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: right;">
-
-                        <div class="col-sm-3 col-md-3 col-lg-3 col-xs-10" style="text-align: right;">
-                            <span style="color: red">*</span> <span style="font-size: 6pt;">mandatory fields</span>
-                        </div> 
-                        <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10" style="text-align: left;">   
-                            <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
-                            <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-sm-1 col-md-2 col-lg-2 col-xs-1"></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
-                        <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10" style="border-style:solid; border-color: silver;background-color:white; opacity: 0.9;">
-
-                            <h3>How does it work?</h3>
-                            <p>Our process is simple and easy to use, we don't ask you a million questions or need you to do a psychological tests! Just answer a few simple questions and upload a recent picture. Leave the rest to us :</p>
-                            <ul>
-                                <li>Based on the criteria you have entered, we will find people who match your preferences and present these in the Meeting Space under the System Matches heading</li>
-                                <li>From here you can view all of the people matched to you and do the following</li>
-                                <ul>
-                                    <li>Like - You would like to engage with this person, if they also like you then you are both free to chat</li>
-                                    <li>Maybe - This keeps the person in your meeting space and you can decide later, by default people who you don't action are removed after 1 month</li>
-                                    <li>Goodbye - You are not interested in this person, they will not be presented to you again</li>
-                                    <li>Report - THis person has posted an offensive photo or used inappropriate language, this reports them to the site administrator for review/sanction</li>
-                                </ul>
-                                <li>If you "like" someone, you will be added to their "Interested in me" list in their Meeting Space, if they also "like" you then you are free to chat</li>
-                                <li>A list of people who you are "chatting" with are presented in your Meeting Space also, click on their picture and click on the Chat button to communicate with them</li>
-                            </ul>
-                            &nbsp;
-                            <p>Note: Distance willing to travel is used to calculate the distance from your town to your potential match, this is done using "as the crow flies", please bear this in mind when contacting people.</p>
+                        <div class="form-group">
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: left;">
+                                Confirm Your Password  <span style="color: red">*</span> :</div>
+                            <div class="col-sm-7 col-md-7 col-lg-6 col-xs-10 input-group mobilePad" style=""font-weight: bold;">
+                                 <input style="border-radius: 4px" type="password"  class="form-control" name="confirmPassword" id="yourEmail">                   
+                            </div>
+                            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1"></div>
                         </div>
-                    </div>
-                </fieldset> 
 
-            </form>
+
+                        <?php
+                        if (strlen($message) > 0) {
+                            echo "<div class='alert alert-danger'>";
+                            echo "<p>" . $message . "</p>";
+                            echo "</div>";
+                        }
+                        ?>
+
+                        <br>
+                        <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10 mobileLabel" style="font-weight: bold; padding-top: 10px; text-align: right;">
+
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-10" style="text-align: right;">
+                                <span style="color: red">*</span> <span style="font-size: 6pt;">mandatory fields</span>
+                            </div> 
+                            <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10" style="text-align: left;">   
+                                <button name="btnAction" class="btn btn-success" type="submit" value="Next">Next</button>
+                                <button name="btnAction" class="btn btn-warning" type="submit" value="Cancel">Cancel</button>
+                            </div>
+                        </div>
+
+
+                    </fieldset> 
+
+                </form>
+            </div>
         </div>
-        &nbsp;
-    </div>
-</div> 
+    </div> 
 </body>
 </html> 

@@ -112,7 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $newStatus = "";
                         if ($row['match_user_id_1'] == $user_id) {
                             $updateUser1or2 = 1;
-                            echo "user_profile_2_match_status" . $row['user_profile_2_match_status'];
                             if ($row['user_profile_2_match_status'] == 'Like') {
                                 // both users must like each other before chatting
                                 $updateResult = update_match_status($db_connection, $matchId, 'Chatting', 2);
@@ -363,7 +362,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ------------------------ -->
                                     <div class="col-xs-12 col-sm-12 col-lg-4" style="border-style:solid; border-color: silver;background-color:white; opacity: 1; padding: 5px;">
                                         <h3>People who Like me</h3>
-                                        <p>(these will move to Chat section when you like them)</p>
                                         <?php
                                         $peopleWhoLikeMeFound = true;
                                         $sql = "SELECT * FROM matches_view "
@@ -503,7 +501,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ------------------------ -->
                                     <div class="col-xs-12 col-sm-12 col-lg-4" style="border-style:solid; border-color: silver;background-color:white; opacity: 1;">
                                         <h3>People who I Like</h3>
-                                        <p>(these will move to Chat section when they like you)</p>
                                         <?php
                                         $iLikeFound = true;
                                         $sql = "SELECT * FROM matches_view "
