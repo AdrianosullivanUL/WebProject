@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 height: 400px;
             }
             .container{
-                float: left;
+                float: none;
                 margin: 0 auto;              
                 width: 33.33%;
                 padding: 10px;
