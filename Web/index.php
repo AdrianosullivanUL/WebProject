@@ -221,6 +221,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 [class = "container"]{
                     width: 100%;
                 }
+                [class = "column"]{
+                    width: 100%;
+                }
             }
             .footer {
                     background-color: silver;
