@@ -7,8 +7,8 @@ $session_hash = $_SESSION['session_hash'];
 
 if (validate_logon($db_connection, $user_id, $session_hash) == false) {
     // User is not correctly logged on, route to Logon screen
-   // Echo "Logon issue " . $session_hash;
-  //  header("Location: Logon.php");
+    header("Location: Logon.php");
+    exit();
 }
 
 // Get the standard session parameters
@@ -241,8 +241,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             </a>
             <div class="topnav-right">
-                <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='/images/Delete.png'/>Delete Profile</a>
-                <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='/images/Logoff.png'/>Logoff</a>
+                <a href="RemoveAccount.php" title="Remove your User Profile"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Delete.png'/>Delete Profile</a>
+                <a href="Logout.php" title="Log out of the system"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Logoff.png'/>Logoff</a>
             </div>
         </div>
         <div class="row">

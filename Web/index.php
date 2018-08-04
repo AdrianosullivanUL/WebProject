@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             .dropdown {
-                float: left;
+                float: Right;
                 overflow: hidden;
             }
 
@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 background: purple;
                 padding: 16px;
                 color: white;
+                opacity:0.9;
             }
 
             .dropdown:hover .dropdown-content {
@@ -109,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             .column a {
                 float: none;
-                color: black;
+                color:grey;
                 padding: 16px;
                 text-decoration: none;
                 display: block;
@@ -144,83 +145,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>   
                     <div class="row">
                         <div class="column">
-                            <h3>New to Chance Dating</h3>
-                            <a href="Register.php">Register</a>
+                            <h3>New to Chance Dating?</h3>
+                            <a href="Register.php"><img height="32" width="32"  src='http://hive.csis.ul.ie/4065/group05/images/register.png'/>Register</a>
                             
                         </div>
                         <div class="column">
-                            <h3>Already a Member</h3>
-                            <a href="Logon.php">Log In</a>
+                            <h3>Already a Member?</h3>
+                            <a href="Logon.php"><img height="32" width="32"  src='http://hive.csis.ul.ie/4065/group05/images/logon.png'/>Log In</a>
                             </div>
+                        <div class="column">
+                            <h3>Who Are We ?</h3>
+                            <h5>We are a dating agency focused on helping single people to find a partner on the island of Ireland. We are a small technologically minded group based in in Limerick and our aim is to help you find your perfect match.</h5>
+
+                            </div>
+                        
+                       
                         
                     </div>
                 </div>
             </div>
-            <div id="Help" class="collapse container">
-            <fieldset class="landscape_nomargin" style="max-width: min-width 0;padding:.75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">                                                                
-                <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Help</legend>
-                <div class="container">
-                    <h5>You are now in <b>Meeting Space screen</b></h5>
-                    <br>
-                    <br><b> What do i do next?</b>
-                    <br>The Navigation Bar consists of the following links:<br>
-                    <b>&nbsp;&nbsp;&nbsp;User Name</b> - Click on your name at any point to return to the Meeting Space screen<br>
-                    <b>&nbsp;&nbsp;&nbsp;Edit Profile</b> - Fine tune your preferences to allow the system make better matches<br>
-                    <b>&nbsp;&nbsp;&nbsp;Match Finder</b> - Do wild card searches and see a wider range of people on our site<br>
-                    <b>&nbsp;&nbsp;&nbsp;Remove Profile</b> - Remove your profile from this system<br>
-                    <b>&nbsp;&nbsp;&nbsp;Help</b> - Get information on how the current screen works<br>
-                    <b>&nbsp;&nbsp;&nbsp;Logoff</b> - Log off and return to the log on screen<br>
-                    <br><br><b>In this screen you can see the following sections:</b>
-                    <ul >
-                        <li><b>Possible Matches</b><br>These are people who the system have identified <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/SystemGenerated.png"/> as meeting your profile match criteria or people who you have searched for and marked as a Maybe</li>
-                        <li><b>People who I like</b><br>These I have selected and then Liked them, they are "pending" they liking you and will progress to the Chat section when they do so</li>
-                        <li><b>People who like me</b><br>These are people who like me and are pending you liking them</li>
-                        <li><b>You are chatting with</b><br>After you both like each other, people are shown in this window you are free to chat with the people listed here</li>
-                    </ul>
-                    <br>In each section a set of buttons are provided relevant to that section, click on the user image first and then select from one of the following:
-                    <ul>
-                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like<br>You like this person and would like to chat with them. When you use this option, the person is moved to your <b>People who I like</b> section.</li>
-                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View<br>Have a look at this persons profile, from there you can also action their profile</li>
-                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe<br>If you are not sure about a person, you can click this button to have them remain in your <b>Possible Matches</b>,
-                            <br> Please note: by default <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/SystemGenerated.png"/> system generate matches expire after one month</li>
-                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye<br>If you are not interested, click this to remove the profile from your meeting space</li>
-                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report<br>Feel offended by they persons profile, an in appropriate image for instance? Click to have their profile reviewed by the system moderator</li>
-                    </ul>
-
-                </div>
-            </fieldset>
-        </div>
+            
         </div>
 
         
-        <div class="container-fluid"> 
-            <div class="col-md-10 col-md-offset-1" >
-            <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
-                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
-
-                    <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Chance Dating</legend>
-
-                    <div class="row">
-                        <div class="col-sm-7 container border border-primary rounded bg-light text-dark">
-                            <h1>Reach Out to your future partner</h1>
-                            <p>Connecting singles across the Ireland to their ideal partner</p>
-                            <br><br>
-                            <a href="Logon.php">Log on</a> 
-                            &nbsp;
-                            <a href="Register.php">Register</a>
-                        </div>
-                    </div>            
-                    &nbsp;
-                    <div class="row">
-                        <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
-                            <h1>Who are we?</h1>
-                            <p>We are a dating agency focused on helping single people to find a partner on the island of Ireland. We are a small technologically minded group based in in Limerick and our aim is to help you find your perfect match.</p>
-                            <br>
-                            <p><i>Stock Images curtesy of: <a href="https://www.pexels.com">Pexels.com</a></i> </p>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
+        
+        
     </body>
 </html> 

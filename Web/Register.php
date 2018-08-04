@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="topnav">
         <a class="active">REGISTER</a>
         <div class="topnav-right">
-            <a href="Logon.php" title="Log In"><img height="16" width="16"  src='/images/Logoff.png'/>Log In</a>
+            <a href="Logon.php" title="Log In"><img height="16" width="16"  src='http://hive.csis.ul.ie/4065/group05/images/Logoff.png'/>Log In</a>
         </div>
     </div>
 
