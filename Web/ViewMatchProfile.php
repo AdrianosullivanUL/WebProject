@@ -263,7 +263,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
             ?>
 
 
-        </a>
+        
         <div class="topnav-right">
             <a href="MatchFind.php" title="Find People"><img height="16" width="16"   src='http://hive.csis.ul.ie/4065/group05/images/Find.png'/>Match Finder</a>
             <a href="UpdateProfile.php">Update Profile</a>
@@ -297,7 +297,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
                 <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">View Your Selected Match</legend>
                 <div class="container-fluid">
                     <div class ="row">
-                        <div class="col-xs-12 col-sm-12 col-lg-12 col-xs-12 " style="border-style: solid;border-color: silver;background-color:transparent; opacity: 0.0;">
+                        <div class=" col-sm-12 col-lg-12 col-xs-12 " style="border-style: solid;border-color: silver;background-color:transparent; opacity: 0.0;">
                         </div> 
                     </div>
                 </div>
