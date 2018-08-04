@@ -156,19 +156,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="column">
                             <h3>Who Are We ?</h3>
                             <h5>We are a dating agency focused on helping single people to find a partner on the island of Ireland. We are a small technologically minded group based in in Limerick and our aim is to help you find your perfect match.</h5>
-
                             </div>
-                        
-                       
-                        
                     </div>
                 </div>
             </div>
-            
         </div>
-
-        
-        
-        
     </body>
 </html> 
