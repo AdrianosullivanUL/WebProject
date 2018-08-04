@@ -2,24 +2,86 @@
 require_once 'database_config.php';
 include 'group05_library.php';
 session_start();
-
-$_SESSION['user_id'] = 0;
-$_SESSION['matching_user_id'] = 0;
-
+$_SESSION['is_administrator'] = 0;
+$message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $logon = 0;
     // check the button selected (these are at the end of this form
-    if ($_POST['btnAction'] == "MeetingSpace") { // Call Edit Profile
-        header("Location: MeetingSpace.php");
+    if ($_POST['btnAction'] == "ForgotPassword") { // Call Edit Profile
+        header("Location: PasswordReset.php");
         exit();
     }
-    if ($_POST['btnAction'] == "ViewMatchingProfile") { // Call Edit Profile
-        header("Location: ViewMatchProfile.php");
+    if ($_POST['btnAction'] == "Cancel") { // Call Edit Profile
+        header("Location: index.php");
         exit();
     }
-    if ($_POST['btnAction'] == "UpdateProfile") { // Call Edit Profile
-        header("Location: UpdateProfile.php");
+    if ($_POST['btnAction'] == "Register") { // Call Edit Profile
+        header("Location: Register.php");
         exit();
     }
+
+    if ($_POST['btnAction'] == "Logon") { // Call Edit Profile
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $isAdmin = 0;
+        $logon = 0;
+        $sql = "select * from user_profile where LOWER(trim(email)) = trim('" . strtolower($email) . "') and password_hash = sha2('" . $password . "',256);";
+        //echo $sql;
+        if ($result = mysqli_query($db_connection, $sql)) {
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_array($result)) {
+                    if ($row['user_status_id'] == 4) {
+                        $message = "You have been bared from this system, your account is disabled.";
+                        $logon = 2;
+                    }
+
+                    if ($row['user_status_id'] == 3 && $row['suspended_until_date'] > date("Y-m-d H:i:s")) {
+
+                        $message = "You have been suspended until " . $row['suspended_until_date'] . "> (" . date("Y-m-d H:i:s") . ")";
+                        $logon = 2;
+                    }
+                    if ($row['user_status_id'] == 3 && $row['suspended_until_date'] < date("Y-m-d H:i:s")) {
+                        $message = "Your suspension has been lifted. Please provide your credentials again to continue.";
+                        // reactivate the account
+                        $sql = "update user_profile set user_status_id  = 1, user_status_date = now() where id = " . $row['id'];
+                        execute_sql_update($db_connection, $sql);
+                        $logon = 2;
+                    }
+
+                    if ($logon != 2) {
+                        // Assign a newly encrypted session identifier when the log on, store this on their user_profile. If not matching on other screens then logon is rejected
+                        $session_hash = hash('sha256', get_GUID());
+                        //echo "$session_hash " . $session_hash;
+                        $sql = "update user_profile set session_hash = '" . $session_hash . "' where id = " . $row['id'];
+                        execute_sql_update($db_connection, $sql);
+                        $_SESSION['session_hash'] = $session_hash;
+                        $_SESSION['user_id'] = $row['id'];
+                        $logon = 1;
+                        if ($row['is_administrator'] == 1) {
+                            $isAdmin = 1;
+                        }
+                    }
+                }
+            }
+            if ($logon == 1) {
+                if ($isAdmin == 1) {
+                    $_SESSION['user_logged_in'] = 1;
+                    $_SESSION['is_administrator'] = $isAdmin;
+                    header("Location: AdminScreen.php");
+                    exit();
+                } else {
+                    $_SESSION['user_logged_in'] = 1;
+                    header("Location: MeetingSpace.php");
+                    exit();
+                }
+            } else {
+                if ($logon != 2)
+                    $message = 'Logon failed, please ensure you are entering the correct email address and password';
+            }
+        }
+    }
+} else {
+    $message = 'Please input your email address and password and then press logon';
 }
 ?>
 <!DOCTYPE html>
@@ -28,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <title>Chance Dating</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
@@ -46,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             .navbar {
                 overflow: hidden;
                 background-color: #333;
+
                 font-family: Arial, Helvetica, sans-serif;
             }
 
@@ -59,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             .dropdown {
-                float: left;
+                float: right;
                 overflow: hidden;
             }
 
@@ -92,6 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 background: purple;
                 padding: 16px;
                 color: white;
+
             }
 
             .dropdown:hover .dropdown-content {
@@ -104,7 +168,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 width: 33.33%;
                 padding: 10px;
                 background-color: #ccc;
-                height: 250px;
+                height: 400px;
+            }
+            .container{
+                float: center;
+                width: 33.33%;
+                padding: 10px;
+                background-color: transparent;
+                height: 300px;
+                opacity: 0.9;
+                vertical-align: middle;
+                text-align: center;
             }
 
             .column a {
@@ -126,101 +200,111 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 display: table;
                 clear: both;
             }
-        </style>
-    </head>
-    <body >
-        <div class="navbar">
-            <a href="#home">Chance Dating</a>
+            .register{
+                vertical-align: middle;
+                text-align: center;
+                color: #fff;
+                font-size: 20px;
+                cursor:pointer;
+                background: Purple;
+                line-height: 50px;
+                margin-left: 0px;
+                margin-bottom: 5px;
+                float: left;
+                border: none;
+                border-radius: 7px;
+                box-shadow: 0px 1px 0px 0px rgba(18, 17, 12, 1.0);
+                width: 95%;
+                height: 48px;
+            }
+            @media only screen and (max-width: 768px) 
+            {
+                /* For mobile phones: */
+                [class = "container"]{
+                    width: 100%;
+                }
+                .footer {
+                    background-color: purple;
+                    color: #ffffff;
+                    text-align: center;
+                    font-size: 12px;
+                    padding: 15px;
+                }
+
+            </style>
+        </head>
+        <body >
+            <div class="navbar">
+                <a href="#home">Chance Dating</a>
                 <div class="dropdown">
-                <button class="dropbtn">Take that CHANCE 
-                    <i class="fa fa-caret-down"></i>
-                </button>
-                <div class="dropdown-content">
-                    <div class="header">
-                        <h2>Chance Dating will help you make up your mind <br>
-                            with eligible partners in line<br>
-                            Honey are you still free ?<br>
-                            Take that CHANCE......there's no Fee </h2>
-                    </div>   
-                    <div class="row">
-                        <div class="column">
-                            <h3>New to Chance Dating</h3>
-                            <a href="Register.php">Register</a>
-                            
-                        </div>
-                        <div class="column">
-                            <h3>Already a Member</h3>
-                            <a href="Logon.php">Log In</a>
+                    <button class="dropbtn">Take that CHANCE 
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <div class="header">
+                            <h2>Chance Dating will help you make up your mind <br>
+                                with eligible partners in line<br>
+                                Honey are you still free ?<br>
+                                Take that CHANCE......there's no Fee </h2>
+                        </div>   
+                        <div class="row">
+                            <div class="column">
+                                <h3>New to Chance Dating</h3>
+                                <a href="Register.php">Register</a>
+
                             </div>
-                        
+                            <div class="column">
+                                <h3>Already a Member</h3>
+                                <a href="Logon.php">Log In</a>
+                            </div>
+                            <div class="column">
+                                <h3>Who Are We ?</h3>
+                                <h>We are a dating agency focused on helping single people to find a partner on the island of Ireland. We are a small technologically minded group based in in Limerick and our aim is to help you find your perfect match.</h5>
+
+                            </div>
+
+
+                        </div>
                     </div>
                 </div>
+
             </div>
-            <div id="Help" class="collapse container">
-            <fieldset class="landscape_nomargin" style="max-width: min-width 0;padding:.75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .9;">                                                                
-                <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Help</legend>
-                <div class="container">
-                    <h5>You are now in <b>Meeting Space screen</b></h5>
-                    <br>
-                    <br><b> What do i do next?</b>
-                    <br>The Navigation Bar consists of the following links:<br>
-                    <b>&nbsp;&nbsp;&nbsp;User Name</b> - Click on your name at any point to return to the Meeting Space screen<br>
-                    <b>&nbsp;&nbsp;&nbsp;Edit Profile</b> - Fine tune your preferences to allow the system make better matches<br>
-                    <b>&nbsp;&nbsp;&nbsp;Match Finder</b> - Do wild card searches and see a wider range of people on our site<br>
-                    <b>&nbsp;&nbsp;&nbsp;Remove Profile</b> - Remove your profile from this system<br>
-                    <b>&nbsp;&nbsp;&nbsp;Help</b> - Get information on how the current screen works<br>
-                    <b>&nbsp;&nbsp;&nbsp;Logoff</b> - Log off and return to the log on screen<br>
-                    <br><br><b>In this screen you can see the following sections:</b>
-                    <ul >
-                        <li><b>Possible Matches</b><br>These are people who the system have identified <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/SystemGenerated.png"/> as meeting your profile match criteria or people who you have searched for and marked as a Maybe</li>
-                        <li><b>People who I like</b><br>These I have selected and then Liked them, they are "pending" they liking you and will progress to the Chat section when they do so</li>
-                        <li><b>People who like me</b><br>These are people who like me and are pending you liking them</li>
-                        <li><b>You are chatting with</b><br>After you both like each other, people are shown in this window you are free to chat with the people listed here</li>
-                    </ul>
-                    <br>In each section a set of buttons are provided relevant to that section, click on the user image first and then select from one of the following:
-                    <ul>
-                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Like.png"/>Like<br>You like this person and would like to chat with them. When you use this option, the person is moved to your <b>People who I like</b> section.</li>
-                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/View.png"/>View<br>Have a look at this persons profile, from there you can also action their profile</li>
-                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Maybe.png"/>Maybe<br>If you are not sure about a person, you can click this button to have them remain in your <b>Possible Matches</b>,
-                            <br> Please note: by default <img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/SystemGenerated.png"/> system generate matches expire after one month</li>
-                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Goodbye.png"/>Goodbye<br>If you are not interested, click this to remove the profile from your meeting space</li>
-                        <li><img height="16" width="16" title="View" src="http://hive.csis.ul.ie/4065/group05/images/Report.png"/>Report<br>Feel offended by they persons profile, an in appropriate image for instance? Click to have their profile reviewed by the system moderator</li>
-                    </ul>
 
-                </div>
-            </fieldset>
-        </div>
-        </div>
 
-        
-        <div class="container-fluid"> 
-            <div class="col-md-10 col-md-offset-1" >
-            <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
-                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:lavender; opacity: .8;">
 
-                    <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Chance Dating</legend>
+            <div class='row'>
+                <div class="container" >
+                    <form method="post" name="challenge"  class="form-horizontal" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" >
+                        <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .35em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color: white; opacity: .9;">
 
-                    <div class="row">
-                        <div class="col-sm-7 container border border-primary rounded bg-light text-dark">
-                            <h1>Reach Out to your future partner</h1>
-                            <p>Connecting singles across the Ireland to their ideal partner</p>
-                            <br><br>
-                            <a href="Logon.php">Log on</a> 
-                            &nbsp;
-                            <a href="Register.php">Register</a>
-                        </div>
-                    </div>            
-                    &nbsp;
-                    <div class="row">
-                        <div class="col-sm-6 container border border-primary rounded bg-light text-dark">
-                            <h1>Who are we?</h1>
-                            <p>We are a dating agency focused on helping single people to find a partner on the island of Ireland. We are a small technologically minded group based in in Limerick and our aim is to help you find your perfect match.</p>
+                            <b> <h1>Take that Chance</h1></b>
+
+                            <b><i> <h2>The Exclusive Dating Site for Irish Singles</h2></b></i>
+
                             <br>
-                            <p><i>Stock Images curtesy of: <a href="https://www.pexels.com">Pexels.com</a></i> </p>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
-    </body>
-</html> 
+                            <b><h3> 3 Easy Steps</h3></b>
+                            <br> 
+                            <p>   1. <button name="btnAction" class="btn btn-info" type="submit" value="Register">Register</button>
+                            <p>   2. Complete your Profile details</p>
+                            <p>   3. Chat with your potential partner </p><br>
+
+                            <button name="btnAction" class="register" type="register" value="Register">Register Now</button><br>
+                            <br>
+                            <br>
+                            <br>
+
+                        </fieldset>
+                    </form>
+                </div>
+
+            </div>
+            <div class='row'>
+                <div class="container" ></div>
+
+            </div>
+            <div class="footer">
+                <p><i>Stock Images curtesy of: <a href="https://www.pexels.com">Pexels.com</a></i> </p>
+            </div>
+
+        </body>
+    </html> 
