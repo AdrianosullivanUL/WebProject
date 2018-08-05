@@ -165,9 +165,9 @@ if ($result = mysqli_query($db_connection, $sql)) {
                             <div class="form-group">
                                 <div class="col-sm-8 col-md-8 col-lg-12 col-xs-10 mobileLabel" ></div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-10 mobileLabel">
+                            <div class="col-sm-8 col-md-8 col-lg-4 col-xs-10 mobileLabel">
 
-                                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .625em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:whitesmoke; opacity: .9;">
+                                <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .75em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:whitesmoke; opacity: .9;">
                                     <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Photo</legend>
                                     <div class="form-group">
                                         <?php
@@ -196,7 +196,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
                                     </div>
                                 </fieldset>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-lg-5 col-xs-10 mobileLabel" >
+                            <div class="col-sm-8 col-md-8 col-lg-5 col-xs-12 mobileLabel" >
                                 <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .75em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:whitesmoke; opacity: .9;">
                                     <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Profile Bio</legend>
                                     <div class="form-group">
@@ -212,7 +212,7 @@ if ($result = mysqli_query($db_connection, $sql)) {
                             </div>
                             <!--// Get user Interests   -->
 
-                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-10 mobileLabel">
+                            <div class="col-sm-8 col-md-8 col-lg-3 col-xs-12 mobileLabel">
 
                                 <fieldset class="landscape_nomargin" style="min-width: 0;padding:    .75em .75em .75em!important;margin:0 2px;border: 2px solid silver!important;margin-bottom: 10em;background-color:whitesmoke; opacity: .9;">
                                     <legend style="border-bottom: none;width: inherit;padding:inherit;" class="legend">Interests</legend>
